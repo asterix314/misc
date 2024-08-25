@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Генератор паролей для продуктов Wolfram</title>
+        <script>
+            'use strict';
+
+            var defaultActivationKey = '3893-9258-K6XJLE';
+
+            function genKeyValStr(mathID, activationKey=defaultActivationKey, maxLicenseProcessesSubprocesses="", licenseType="", licenseExpirationDate="", licenseClass="") {
+                var keyValStr = "";
+                if (typeof mathID !== "undefined" && mathID.length != 0)
+                {
+                    keyValStr = mathID;
+                    if (typeof licenseExpirationDate           !== "undefined" && licenseExpirationDate          .length != 0) {keyValStr += "@" + licenseExpirationDate          };
+                    if (typeof maxLicenseProcessesSubprocesses !== "undefined" && maxLicenseProcessesSubprocesses.length != 0) {keyValStr += ":" + maxLicenseProcessesSubprocesses};
+                    if (typeof licenseClass                    !== "undefined" && licenseClass                   .length != 0) {keyValStr += "*" + licenseClass                   };
+                    if (typeof licenseType                     !== "undefined" && licenseType                    .length != 0) {keyValStr += "$" + licenseType                    };
+                    if (typeof activationKey                   !== "undefined" && activationKey                  .length != 0) {keyValStr += "&" + activationKey                  }
+                    else                                                                                                       {keyValStr += "&" + defaultActivationKey           };
+
+                };
+                return keyValStr;
+            };
+
+            function keyValStr2licenseExpirationDate(keyValStr) {
+                var licenseExpirationDate = "";
+                var index1 = keyValStr.indexOf("@");
+                var index2 = keyValStr.indexOf(":");
+                var index3 = keyValStr.indexOf("*");
+                var index4 = keyValStr.indexOf("$");
+                var index5 = keyValStr.indexOf("&");
+                if (index1 >= 0) {
+                    if        (index2 >= 0) {
+                        licenseExpirationDate = keyValStr.substring(index1 + 1, index2);
+                    } else if (index3 >= 0) {
+                        licenseExpirationDate = keyValStr.substring(index1 + 1, index3);
+                    } else if (index4 >= 0) {
+                        licenseExpirationDate = keyValStr.substring(index1 + 1, index4);
+                    } else if (index5 >= 0) {
+                        licenseExpirationDate = keyValStr.substring(index1 + 1, index5);
+                    };
+                };
+                return licenseExpirationDate;
+            };
+
+            function keyValStr2maxLicenseProcessesSubprocesses(keyValStr) {
+                var maxLicenseProcessesSubprocesses = "";
+                var index2 = keyValStr.indexOf(":");
+                var index3 = keyValStr.indexOf("*");
+                var index4 = keyValStr.indexOf("$");
+                var index5 = keyValStr.indexOf("&");
+                if (index2 >= 0) {
+                    if        (index3 >= 0) {
+                        maxLicenseProcessesSubprocesses = keyValStr.substring(index2 + 1, index3);
+                    } else if (index4 >= 0) {
+                        maxLicenseProcessesSubprocesses = keyValStr.substring(index2 + 1, index4);
+                    } else if (index5 >= 0) {
+                        maxLicenseProcessesSubprocesses = keyValStr.substring(index2 + 1, index5);
+                    };
+                };
+                return maxLicenseProcessesSubprocesses;
+            };
+
+            function keyValStr2licenseClass(keyValStr) {
+                var licenseClass = "";
+                var index3 = keyValStr.indexOf("*");
+                var index4 = keyValStr.indexOf("$");
+                var index5 = keyValStr.indexOf("&");
+                if (index3 >= 0) {
+                    if        (index4 >= 0) {
+                        licenseClass = keyValStr.substring(index3 + 1, index4);
+                    } else if (index5 >= 0) {
+                        licenseClass = keyValStr.substring(index3 + 1, index5);
+                    };
+                };
+                return licenseClass;
+            };
+
+            function keyValStr2licenseType(keyValStr) {
+                var licenseType = "";
+                var index4 = keyValStr.indexOf("$");
+                var index5 = keyValStr.indexOf("&");
+                if (index4 >= 0) {
+                    if        (index5 >= 0) {
+                        licenseType = keyValStr.substring(index4 + 1, index5);
+                    };
+                };
+                return licenseType;
+            };
+
+            function testSalt(n, byte, c) {
+                for (var bitIndex = 0; bitIndex <= 7; bitIndex += 1) {
+                    var bit = (byte >> bitIndex) & 1;
+                    if (bit + ((n - bit) & ~1) == n) {
+                        n = (n - bit) >> 1;
+                    } else {
+                        n = ((c - bit) ^ n) >> 1;
+                    };
+                };
+
+                return n;
+            };
+
+            function genPassword(keyValStr, salt) {
+                var licenseExpirationDate           = keyValStr2licenseExpirationDate          (keyValStr);
+                var maxLicenseProcessesSubprocesses = keyValStr2maxLicenseProcessesSubprocesses(keyValStr);
+                var licenseClass                    = keyValStr2licenseClass                   (keyValStr);
+                var licenseType                     = keyValStr2licenseType                    (keyValStr);
+
+                salt = parseInt(salt);
+                var uuid = keyValStr.split('').map(function(x){return x.charCodeAt()});
+                var salt1 = salt;
+                for (var byteIndex = uuid.length - 1; byteIndex >= 0; byteIndex -= 1) {
+                    salt1 = testSalt(salt1, uuid[byteIndex], 0x105C3);
+                };
+
+/*
+                var offset1 = 0;
+                while (testSalt(testSalt(salt1, offset1 & 0xFF, 0x105C3), offset1 >> 8, 0x105C3) !== 0xA5B6) {
+                    offset1 ++;
+                    if (offset1 >= 0xFFFF) {
+                        return '';
+                    }
+                }
+*/
+                salt1 = salt1 ^ 0xCEDF;
+
+                salt1 = Math.trunc(((salt1 + 0x72FA) & 0xFFFF) * 99999 / 0xFFFF);
+                var offset1 = '0000' + salt1;
+                offset1 = offset1.substring(offset1.length - 5);
+                var salt2 = parseInt(offset1.substring(0, 2) + offset1.substring(3, 5) + offset1.substring(2, 3));
+                salt2 = Math.trunc((salt2 / 99999.0) * 0xFFFF, 10) + 1;
+                salt2 = testSalt(testSalt(0, salt2 & 0xFF, 0x1064B), salt2 >> 8, 0x1064B);
+                for (var i = uuid.length - 1; i >= 0; i -= 1) {
+                    salt2 = testSalt(salt2, uuid[i], 0x1064B);
+                };
+
+/*
+                var offset2 = 0;
+                while(testSalt(testSalt(salt2, offset2 & 0xFF, 0x1064B),
+                                offset2 >> 8, 0x1064B) !== 0xA5B6) {
+                    offset2 += 1;
+                    if (offset2 >= 0xFFFF) { return ''; }
+                }
+*/
+                salt2 = salt2 ^ 0xEF22;
+
+                salt2 = Math.trunc((salt2 & 0xFFFF) * 99999 / 0xFFFF);
+                var offset2 = '0000' + salt2;
+                offset2 = offset2.substring(offset2.length - 5);
+                var password = [
+                    offset2.charAt(3),
+                    offset1.charAt(3),
+                    offset1.charAt(1),
+                    offset1.charAt(0),
+                    '-',
+                    offset2.charAt(4),
+                    offset1.charAt(2),
+                    offset2.charAt(0),
+                    '-',
+                    offset2.charAt(2),
+                    offset1.charAt(4),
+                    offset2.charAt(1)
+                ].join('');
+                if ((maxLicenseProcessesSubprocesses.length > 0) || (licenseType.length > 0) || (licenseExpirationDate.length > 0) || (licenseClass.length > 0)) {password += ":" + maxLicenseProcessesSubprocesses};
+                if (                                                (licenseType.length > 0) || (licenseExpirationDate.length > 0) || (licenseClass.length > 0)) {password += ":" + licenseType                    };
+                if (                                                                            (licenseExpirationDate.length > 0) || (licenseClass.length > 0)) {password += ":" + licenseExpirationDate          };
+                if                                                                                                                    (licenseClass.length > 0)  {password += ":" + licenseClass                   };
+                return password;
+            };
+
+            function printPass(documentTag, outputInnerHTML, passwordText) {
+                var outputMathLMEl;
+                var passwordMathLMEl;
+                var passwordInnerCodeMathLMEl;
+
+                outputMathLMEl = document.querySelector(documentTag);
+                outputMathLMEl.innerHTML = outputInnerHTML;
+                outputMathLMEl.append(document.createElement("br"));
+                passwordMathLMEl = document.createElement("pre");
+                passwordInnerCodeMathLMEl = document.createElement("code");
+                passwordMathLMEl.append(passwordInnerCodeMathLMEl);
+                passwordInnerCodeMathLMEl.innerText = passwordText;
+                outputMathLMEl.append(passwordMathLMEl);
+            };
+
+            function genPass(event) {
+                event.preventDefault();
+
+                var formEl = document.querySelector('#form');
+                if(formEl.reportValidity && !formEl.reportValidity()) { return; }
+
+                var weAreEverywhere                 = document.querySelector('#we-are-everywhere'                 ).checked;
+                var mathID                          = document.querySelector('#mathid'                            ).value  ;
+                var activationKey                   = document.querySelector('#activation-key'                    ).value  ;
+                var maxLicenseProcessesSubprocesses = document.querySelector('#max-license-processes-subprocesses').value  ;
+                var licenseType                     = document.querySelector('#license-type'                      ).value  ;
+                var licenseExpirationDate           = document.querySelector('#license-expiration-date'           ).value  ;
+                var licenseClass                    = document.querySelector('#license-class'                     ).value  ;
+                var keyValStr                       = document.querySelector('#key-val-str'                       ).value  ;
+                var salt                            = document.querySelector('#salt'                              ).value  ;
+                var password                        = ""                                                                   ;
+
+                if ((keyValStr == "") && (mathID == "")) {
+                    alert("Укажите Machine ID (Math ID) или строку для генерации пароля");
+                } else if ((keyValStr == "") && !(mathID == "") &&  (weAreEverywhere == true) &&  (licenseClass == "")) {
+                    alert("Снимите флажок \"We Are Everywhere!\" или укажите класс лицензии или укажите строку для генерации пароля")
+                } else if ((keyValStr == "") && !(mathID == "") && !(weAreEverywhere == true) && !(licenseClass == "")) {
+                    alert("Установите флажок \"We Are Everywhere!\" или очистите поле класса лицензии или укажите строку для генерации пароля")
+                } else {
+                    if (keyValStr == "") {
+                        if (weAreEverywhere == true) {
+                          keyValStr = 'We Are Everywhere!' + genKeyValStr(mathID, activationKey, maxLicenseProcessesSubprocesses, licenseType, licenseExpirationDate, licenseClass);
+                        } else {
+                          keyValStr =                        genKeyValStr(mathID, activationKey, maxLicenseProcessesSubprocesses, licenseType, licenseExpirationDate, licenseClass);
+                        };
+                    };
+                    password = genPassword(keyValStr, salt);
+
+                    printPass(
+                        '#output',
+                        'Password для строки<br />\"' + keyValStr + '\":',
+                        password
+                    );
+                };
+            };
+        </script>
+        <style>
+            :root {
+              --background-body: #fff;
+              --background: #efefef;
+              --background-alt: #f7f7f7;
+              --selection: #9e9e9e;
+              --text-main: #363636;
+              --text-bright: #000;
+              --text-muted: #70777f;
+              --links: #0076d1;
+              --focus: #0096bfab;
+              --border: #dbdbdb;
+              --code: #000;
+              --animation-duration: 0.1s;
+              --button-hover: #ddd;
+              --scrollbar-thumb: rgb(213, 213, 213);
+              --scrollbar-thumb-hover: rgb(196, 196, 196);
+              --form-placeholder: #949494;
+              --form-text: #000;
+              --variable: #39a33c;
+              --highlight: #ff0;
+            }
+
+            html {
+              scrollbar-color: rgb(213, 213, 213) #fff;
+              scrollbar-color: var(--scrollbar-thumb) var(--background-body);
+              scrollbar-width: thin;
+            }
+
+            body {
+              font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+              line-height: 1.4;
+              max-width: 800px;
+              margin: 20px auto;
+              padding: 0 10px;
+              word-wrap: break-word;
+              color: #363636;
+              color: var(--text-main);
+              background: #fff;
+              background: var(--background-body);
+              text-rendering: optimizeLegibility;
+            }
+
+            h1 {
+              font-size: 2.2em;
+              margin-top: 0;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+              margin-bottom: 12px;
+              margin-top: 24px;
+            }
+
+            strong {
+              color: #000;
+              color: var(--text-bright);
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            b,
+            strong,
+            th {
+              font-weight: 600;
+            }
+
+            button,
+            select,
+            input[type='submit'],
+            input[type='button'],
+            input[type='checkbox'],
+            input[type='range'],
+            input[type='radio'] {
+              cursor: pointer;
+            }
+
+            input {
+              color: #000;
+              color: var(--form-text);
+              background-color: #efefef;
+              background-color: var(--background);
+              font-family: inherit;
+              font-size: inherit;
+              margin-right: 6px;
+              margin-bottom: 6px;
+              padding: 10px;
+              border: none;
+              border-radius: 6px;
+              outline: none;
+            }
+
+            button {
+              color: #000;
+              color: var(--form-text);
+              background-color: #efefef;
+              background-color: var(--background);
+              font-family: inherit;
+              font-size: inherit;
+              margin-right: 6px;
+              margin-bottom: 6px;
+              padding: 10px;
+              border: none;
+              border-radius: 6px;
+              outline: none;
+            }
+
+            label {
+              vertical-align: middle;
+              margin-bottom: 4px;
+              display: inline-block;
+            }
+
+            button,
+            input[type='submit'],
+            input[type='button'] {
+              padding-right: 30px;
+              padding-left: 30px;
+            }
+
+            button:hover {
+              background: #ddd;
+              background: var(--button-hover);
+            }
+
+            input:focus {
+              box-shadow: 0 0 0 2px #0096bfab;
+              box-shadow: 0 0 0 2px var(--focus);
+            }
+
+            select:focus {
+              box-shadow: 0 0 0 2px #0096bfab;
+              box-shadow: 0 0 0 2px var(--focus);
+            }
+
+            button:focus {
+              box-shadow: 0 0 0 2px #0096bfab;
+              box-shadow: 0 0 0 2px var(--focus);
+            }
+
+            fieldset {
+              border: 1px #0096bfab solid;
+              border: 1px var(--focus) solid;
+              border-radius: 6px;
+              margin: 0;
+              margin-bottom: 12px;
+              padding: 10px;
+            }
+
+            legend {
+              font-size: 0.9em;
+              font-weight: 600;
+            }
+
+            a {
+              text-decoration: none;
+              color: #0076d1;
+              color: var(--links);
+            }
+
+            a:hover {
+              text-decoration: underline;
+            }
+
+            code {
+              background: #efefef;
+              background: var(--background);
+              color: #000;
+              color: var(--code);
+              padding: 2.5px 5px;
+              border-radius: 6px;
+              font-size: 1em;
+            }
+
+            pre > code {
+              padding: 10px;
+              display: block;
+              overflow-x: auto;
+            }
+
+            ::selection {
+              background-color: #9e9e9e;
+              background-color: var(--selection);
+              color: #000;
+              color: var(--text-bright);
+            }
+
+            input[type="text"] {
+                width: calc(100% - 20px);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Генератор паролей для продуктов Wolfram</h1>
+        <ol>
+            <li>Установите <b>Mathematica</b> или <b>Wolfram Finance Platform</b> или <b>Wolfram|One</b> или <b>Wolfram|Alpha Notebook Edition</b>
+             (в версии 14.1+ все эти 4 продукта заменены одним под названием <b>Wolfram</b>) с официального сайта<br />
+             или установите <b>Wolfram Player</b> с официального сайта<br />
+             или установите <b>System Modeler</b> с официального сайта.</li>
+            <li>На экране активации программы нажмите кнопку <b>Other ways to activate</b>, а затем <b>Manual Activation</b> или <b>Activate offline through activation key and requested password</b>.</li>
+            <li>Введите полученный <b>MathID</b> (nnnn-nnnnn-nnnnn), любой <b>Activation Key</b> (nnnn-nnnn-xxxxxx) ниже (достаточно просто оставить Activation Key по умолчанию), введите <b>хэш</b>,
+                а также для версии <b>14.1+</b> продукта под названием <b>Wolfram</b> (который заменяет одновременно Mathematica, Wolfram Finance Platform, Wolfram|One и Wolfram|Alpha Notebook Edition)
+                обязательно укажите <b>тип лицензии (License Type &mdash; см. ниже)</b>
+                и, если нужно, другие данные.<br />
+                Список хэшей:<br />
+                0xD1CF &mdash; для Mathematica                 14.1+, System Modeler 14.1+<br />
+                                                                                          <br />
+                0x5417 &mdash; для Mathematica    13.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0xB013 &mdash; для Mathematica    13.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0xD54F &mdash; для Mathematica    13.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0x66C0 &mdash; для Mathematica    13.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0x22DD &mdash; для Mathematica    13.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0xCD2D &mdash; для Mathematica    13.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0xB4D0 &mdash; для Mathematica    13.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                                                                                          <br />
+                0xE756 &mdash; для Mathematica    12.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0x8C68 &mdash; для Mathematica    12.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0x8250 &mdash; для Mathematica    12.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0xABEB &mdash; для Mathematica    12.0 &ndash; 14.1+, System Modeler 14.1+<br />
+                0x60F0 &mdash; для Mathematica    12.0 &ndash; 14.1                       <br />
+                0x8E3C &mdash; для Mathematica    12.0 &ndash; 14.0                       <br />
+                                                                                          <br />
+                0x44F1 &mdash; для Mathematica    10.2 &ndash; 13.3                       <br />
+                0x29C2 &mdash; для Mathematica    10.2 &ndash; 13.2                       <br />
+                0xEE71 &mdash; для Mathematica    10.2 &ndash; 13.1                       <br />
+                0xDB75 &mdash; для Mathematica    10.2 &ndash; 13.0                       <br />
+                0xD227 &mdash; для Mathematica    10.2 &ndash; 12.3                       <br />
+                0x2FDB &mdash; для Mathematica    10.2 &ndash; 12.2                       <br />
+                                                                                          <br />
+                0xA439 &mdash; для Mathematica    10.0 &ndash; 12.0                       <br />
+                0xE4A8 &mdash; для Mathematica    10.0 &ndash; 12.1                       <br />
+                0xA68B &mdash; для Mathematica    10.0 &ndash; 12.0                       <br />
+                0x29F8 &mdash; для Mathematica    10.0 &ndash; 11.3                       <br />
+                0x6A91 &mdash; для Mathematica    10.0 &ndash; 11.2                       <br />
+                0x42DD &mdash; для Mathematica    10.0 &ndash; 11.1                       <br />
+                0x25DB &mdash; для Mathematica    10.0 &ndash; 11.0                       <br />
+                                                                                          <br />
+                0x8C72 &mdash; для System Modeler 13.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                0x4209 &mdash; для System Modeler 13.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                0x73EE &mdash; для System Modeler 13.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                0x64EC &mdash; для System Modeler 13.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                0x7C53 &mdash; для System Modeler 13.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                                                                                          <br />
+                0x5770 &mdash; для System Modeler  5.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                0x7C91 &mdash; для System Modeler  5.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                0xEEFE &mdash; для System Modeler  5.0 &ndash; 14.1+, Mathematica    14.1+<br />
+                0x1361 &mdash; для System Modeler  5.0 &ndash; 14.1                       <br />
+                0x755E &mdash; для System Modeler  5.0 &ndash; 14.0                       <br />
+                0xA5CE &mdash; для System Modeler  5.0 &ndash; 13.3                       <br />
+                0xF536 &mdash; для System Modeler  5.0 &ndash; 13.2                       <br />
+                0x1330 &mdash; для System Modeler  5.0 &ndash; 13.1                       <br />
+                0xBF47 &mdash; для System Modeler  5.0 &ndash; 13.0                       <br />
+                                                                                          <br />
+                0x6188 &mdash; для System Modeler  4.0 &ndash; 12.3                       <br />
+                0xAB0B &mdash; для System Modeler  4.0 &ndash; 12.2                       <br />
+                0xB4D3 &mdash; для System Modeler  4.0 &ndash; 12.1                       <br />
+                0x47C5 &mdash; для System Modeler  4.0 &ndash; 12.0                       <br />
+                0x81DD &mdash; для System Modeler  4.0 &ndash;  5.1?                      <br />
+                0x8330 &mdash; для System Modeler  4.0 &ndash;  5.0                       <br />
+                0x72C4 &mdash; для System Modeler  4.0 &ndash;  4.2                       <br />
+                0x2F33 &mdash; для System Modeler  4.0 &ndash;  4.2                       <br />
+                0x6897 &mdash; для System Modeler  4.0 &ndash;  4.1                       <br />
+                0x15BF &mdash; для System Modeler  4.0                                    <br />
+                                                                                          <br />
+                0x72A4 &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x29A5 &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x140A &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x3FD1 &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x452D &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x541A &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x3575 &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x7F8C &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x6587 &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                0x5B29 &mdash; для MathLM         10.0 &ndash; 14.0+                      <br />
+                Таким образом, начиная с версии 14.1 у Mathematica и System Modeler общий список хэшей, кроме одного, а со следующей версии скорее всего вообще будут одинаковые списки хэшей.<br />
+                Все хэши от Mathematica и System Modeler подходят также и для соответствующих версий MathLM.<br />
+                Хэши от Mathematica используются также и для Wolfram Player, Wolfram Finance Platform, Wolfram|Alpha Notebook Edition, Wolfram|One, Wolfram Desktop, Wolfram Engine, WolframScript.<br />
+                Списки хэшей приведены в порядке, обратном тому, который зашит в программы, поэтому более долговечные хэши приведены здесь в начале списков.<br />
+                <br />
+                Для генерации пароля для MathLM установите флажок <b>"We Are Everywhere!"</b> и укажите класс лицензии (<b>License Class</b>): CA или CX или CB или CC или CM 
+                (для остальных программ этот флажок не надо ставить и не нужно указывать класс лицензии).
+                Платформы Windows, Mac OS X и некоторые Linux относятся к классу A. Платформы серверного класса относятся к классу B.
+                Для одного и того же Activation Key можно задать по одной лицензии каждого класса.<br />
+                Пароли классов A, X, B, C предназначены для процессов Mathematica (MathKernel, Mathematica, Sub MathKernel, Sub Mathematica).<br />
+                Пароли класса A действительны для клиентов класса A.<br />
+                Пароли класса X действительны для клиентов классов A, X.<br />
+                Пароли класса B действительны для клиентов классов A, X, B.<br />
+                Пароли класса C действительны для клиентов классов A, X, B, C.<br />
+                Пароли класса M предназачены для процессов System Modeler (Modeling Center, Simulation Center, Session Manager).<br />
+                Поэтому скорее всего для MathLM достаточно 2 лицензий: класса C (для клиентов процессов Mathematica) и класса M (для клиентов процессов System Modeler).<br />
+                <br />
+                Лимиты для количества процессов и субпроцессов Mathematica и System Modeler (<b>Max License Processes и Subprocesses</b>)
+                задаются в виде нескольких положительных целых десятичных чисел, перечисленных через запятую без пробелов.
+                Если оставить строку пустой, то количество процессов и субпроцессов будет неограничено.<br />
+                Для Mathematica можно указать до 4 чисел: первое число - максимальное количество процессов (т. е. управляющих процессов) ядра (MathKernel),
+                второе число - максимальное количество процессов Front End (Mathematica),
+                если указать только одно число, то второе будет считаться равным первому,
+                третье и четвёртое числа - максимальное число субпроцессов (т. е. вычислительных процессов) соответственно для ядра (MathKernel) и Front End (Mathematica).
+                Если указать только 2 числа, то 3-е и 4-е будут считаться в 4 раза большими, чем соответственно 1-е и 2-е число.<br />
+                Для System Modeler можно указать до 3 чисел: первое число - максимальное количество процессов Modeling Center,
+                второе число - максимальное количество процессов Simulation Center,
+                третье число - максимальное количество процессов Session Manager,
+                если не указать второе число, то оно будет считаться равным первому,
+                если не указать третье число, то оно будет считаться равным первому.<br />
+                Числа 9999 и более означают бесконечность, т. е. неограниченное количество,
+                т. е. 9999,9999,9999,9999 для Mathematica и 9999,9999,9999 для System Modeler дадут тот же эффект, что и пустая строка.<br />
+                <br />
+                Тип лицензии (<b>License Type</b>) - шестнадцатеричное число (без префикса 0x).
+                Для версий 14.0 и ранее если его не указать, то будет лицензия Professional,
+                для версий 14.1+ нужно указать значение, включающее слагаемое 100000 или 200000 или 400000 или 800000 или 20 или 40 (см. ниже).
+                Значения имеют отдельные биты числа, поэтому тип лицензии можно получить, сложив отдельные шестнадцатеричные слагаемые:<br />
+                1 - вроде бы ничего не означает,<br />
+                2 - Trial (нужно задать ещё и License Expiration Date),<br />
+                4 - Student,<br />
+                8 - вроде бы ничего не означает,<br />
+                10 - Player (Mathematica 13 с такой лицензией будет как Wolfram Player)<br />
+                20 - Player (лицензию можно использовать для Wolfram Player, Mathematica и Wolfram 14.1+ с такой лицензией тоже будет как Wolfram Player)<br />
+                40 - Player Pro (лицензию можно использовать для Wolfram Player - он превратится в Wolfram Player Pro, Mathematica и Wolfram 14.1+ с такой лицензией будет как Wolfram Player Pro)<br />
+                800 - Home (Home Edition)<br />
+                1000 - Enterprise (Mathematica 13 с такой лицензией в окнах "About" и "Welcome Screen" пишет что она "Enterprise Edition", но реально вроде не работает как Enterprise)<br />
+                2000 - Enterprise (Mathematica и Wolfram 14.1+ с такой лицензией при выборе пункта меню "Preview for Wolfram Player" открывает Preview c "WOLFRAM Player Pro" и "Enterprise CDF Preview",
+                       а также позволяет записывать CDF файлы в формате EnterpriseCDF (CDFDeploy с опцией "Target" -> "PlayerPro" по умолчанию, для записи FreeCDF нужно будет явно указывать "Target"->"CDFPlayer"))<br />
+                80000 - такой тип лицензии выдают для бесплатного Wolfram Engine (с нулевым лимитом для Front End Mathematica), возможно, реально ничего не означает<br />
+                100000 - для Wolfram|Alpha Notebook Edition 14.1+.<br />
+                200000 - для Wolfram|One                    14.1+.<br />
+                400000 - для Wolfram Finance Platform       14.1+.<br />
+                800000 - для Wolfram Mathematica            14.1+.<br />
+                Таким образом, для лицензии Mathematica и лицензии для MathLM для Mathematica (т. е. лицензий классов A, X, B, C) лучше всего будет тип лицензии 803000 (для версий меньше 14.1 - достаточно 3000),
+                для Wolfram Player - 40 (если не будет ни 20 ни 40, Player лицензию не примет),
+                для System Modeler - оставить пустую строку "License Type", но можно указать и тип лицензии такой же как для Mathematica (803000) - это вроде не повредит<br />
+                <br />
+                Дата окончания триала (<b>License Expiration Date</b>) задаётся числом в формате ГГГГММДД. Если не указать, то лицензия будет неограниченной во времени.<br />
+                <br />
+                Вместо всех параметров (кроме хэша) можно указать <b>строку для генерации пароля</b> (если строка не пустая, все параметры кроме хэша игнорируются):<br />
+                - для MathLM в формате:<br />
+                <pre>We Are Everywhere!MathID@LicenseExpirationDate:MaxLicenseProcessesSubprocesses*LicenseClass$LicenseType&ActivationKey</pre>
+                - для Mathematica, Wolfram Player и System Modeler в формате:<br />
+                <pre>MathID@LicenseExpirationDate:MaxLicenseProcessesSubprocesses$LicenseType&ActivationKey</pre>
+                Ненужные параметры вместе с соответствующим символом перед ними можно не указывать.<br />
+
+                Примеры для MathID=1234-12345-12345 и Activation Key=3893-9258-K6XJLE:<br />
+
+                - для Mathematica Enterprise, тип лицензии 803000:<br />
+                строка: 1234-12345-12345$803000&3893-9258-K6XJLE<br />
+                С хэшем 0xD1CF (версии 14.1+) пароль будет:<br />
+                9368-487-266::803000<br />
+
+                - для Wolfram Finance Platform Enterprise, тип лицензии 403000:<br />
+                строка: 1234-12345-12345$403000&3893-9258-K6XJLE<br />
+                С хэшем 0xD1CF (версии 14.1+) пароль будет:<br />
+                2658-485-561::403000<br />
+
+                - для Wolfram|One Enterprise, тип лицензии 203000:<br />
+                строка: 1234-12345-12345$203000&3893-9258-K6XJLE<br />
+                С хэшем 0xD1CF (версии 14.1+) пароль будет:<br />
+                9658-398-102::203000<br />
+
+                - для Wolfram|Alpha Notebook Edition Enterprise, тип лицензии 103000:<br />
+                строка: 1234-12345-12345$103000&3893-9258-K6XJLE<br />
+                С хэшем 0xD1CF (версии 14.1+) пароль будет:<br />
+                6068-933-417::103000<br />
+
+                - для Wolfram Player Pro, тип лицензии 40:<br />
+                строка: 1234-12345-12345$40&3893-9258-K6XJLE<br />
+                С хэшем 0xD1CF (версии 14.1+) пароль будет:<br />
+                7095-360-541::40<br />
+
+                - для System Modeler:<br />
+                строка: 1234-12345-12345&3893-9258-K6XJLE<br />
+                С хэшем 0xD1CF (версии 14.1+) пароль будет:<br />
+                0915-289-754<br />
+
+                - для MathLM для Mathematica Enterprise, тип лицензии 803000, класс лицензии C:<br />
+                строка: We Are Everywhere!1234-12345-12345*CC$803000&3893-9258-K6XJLE<br />
+                С хэшем 0x72A4 (версии 10.0 &ndash; 14.1+) пароль будет:<br />
+                4199-578-457::803000::CC<br />
+
+                - для MathLM для System Modeler, класс лицензии M:<br />
+                строка: We Are Everywhere!1234-12345-12345*CM&3893-9258-K6XJLE<br />
+                С хэшем 0x72A4 (версии 10.0 &ndash; 14.1+) пароль будет:<br />
+                9235-965-858::::CM<br />
+
+            </li>
+            <li>Нажмите <b>Сгенерировать Password</b>.</li>
+            <li>В окне активации продукта введите ваш <b>Activation Key</b> и сгенерированный <b>Password</b> чтобы активировать продукт.</li>
+            <li>Игнорируйте запрос <b>Register</b>.</li>
+        </ol>
+        <form id="form">
+            <fieldset>
+                <legend> Генератор </legend>
+
+                <label for="we-are-everywhere">"We Are Everywhere!": </label>
+                <input type="checkbox" id="we-are-everywhere" title="Установите флажок, если лицензия для MathLM"><br />
+
+                <label for="mathid">MachineID (MathID): </label>
+                <input type="text" id="mathid" pattern="\d{4}-\d{5}-\d{5}" title="В формате nnnn-nnnnn-nnnnn, где n - цифра">
+
+                <label for="activation-key">Ключ активации (Activation Key): </label>
+                <input type="text" id="activation-key" pattern="\d{4}-\d{4}-[0-9A-Z]{6}" value="3893-9258-K6XJLE" title="В формате nnnn-nnnn-xxxxxx, где n - цифра, а x - цифра или заглавная латинская буква">
+
+                <label for="max-license-processes-subprocesses">Максимальное количество процессов и субпроцессов (Max License Processes и Subprocesses): </label>
+                <input type="text" id="max-license-processes-subprocesses" pattern="^(\s*|[0-9]\d{0,3}(,[0-9]\d{0,3}){0,3}\s*)$" title="От 1 до 4 чисел от 0 до 9999, разделённых запятыми или пустая строка">
+
+                <label for="license-type">Тип лицензии (License Type): </label>
+                <input type="text" id="license-type" pattern="^(\s*|[1-9A-F][0-9A-F]{0,7}\s*)$" title="Шестнадцатеричное число от 1 до 8 цифр или пустая строка">
+
+                <label for="license-expiration-date">License Expiration Date: </label>
+                <input type="text" id="license-expiration-date" pattern="^(\s*|[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])\s*)$" title="Дата в формате ГГГГММДД или пустая строка">
+
+                <label for="license-class">Класс лицензии (License Class): </label>
+                <input type="text" id="license-class" pattern="^(\s*|CA|CX|CB|CC|CM\s*)$" title="CA или CX или CB или CC или CM (для лицензий MathLM) или пустая строка">
+
+                <label for="key-val-str">Строка для генерации пароля: </label>
+                <input type="text" id="key-val-str" title="Строка для генерации пароля">
+
+                <label for="salt">Хэш: </label>
+                <input type="text" id="salt" required pattern="^(\s*|0x[0-9a-fA-F]{1,4}|[0-9]{1,5}\s*)$" title="Число от 0 до 65535 в десятичном, шестнадцатеричном (0x0000 - 0xFFFF) формате">
+
+                <button id="button" onclick="genPass(event)">Сгенерировать Password</button>
+            </fieldset>
+        </form>
+        <div id="output"></div>
+    </body>
+</html>

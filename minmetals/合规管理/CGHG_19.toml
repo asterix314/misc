@@ -1,0 +1,210 @@
+["基本信息"]
+"类型" = "合规管理"
+"要素" = "价格风险"
+"体征" = "第一中标候选人报价超预算"
+"应用名称" = "CGHG_19"
+"状态" = "完成"
+
+
+["参数"]
+"开始日期" = 2024-01-01
+"结束日期" = 2024-09-01
+
+
+
+[SQL]
+"ETL脚本" = '''
+select
+    uuid,
+    onuse,
+    etl_time,
+    zgqybm,
+    id,
+    auditno,
+    inviteno,
+    schemedesc,
+    invitecorpcode,
+    invitecorpdesc,
+    budget,
+    bidid,
+    dwbm,
+    dwmc,
+    qty_clarify,
+    price_clarify,
+    freight,
+    approvedate
+from
+    (
+        with
+            tbl as (
+                select
+                    row_number() over () as id,
+                    a.auditno,
+                    c.inviteno,
+                    c.schemedesc,
+                    c.invitecorpcode,
+                    c.invitecorpdesc,
+                    c.budget,
+                    t1.bidid,
+                    t1.dwbm,
+                    t1.dwmc,
+                    f.qty_clarify,
+                    f.price_clarify,
+                    f.freight
+                from
+                    dw_dsep.DWD_GYL_ZTB_BID as t1
+                    inner join dw_dsep.DWD_GYL_ZTB_INTEGRATEAUDITSUPP as t2 on t1.bidid = t2.bidid
+                    inner join dw_dsep.DWD_GYL_ZTB_INTEGRATEAUDIT as a on t2.integrateauditid = a.integrateauditid
+                    inner join dw_dsep.DWD_GYL_ZTB_BIDMATERIAL as f on f.bidid = t1.bidid
+                    inner join dw_dsep.DWD_GYL_ZTB_INVITE as i on a.inviteid = i.inviteid
+                    and i.inviteid = t1.inviteid
+                    inner join dw_ods_dsep.ods_cg_ztb_invitescheme as c on c.inviteschemeid = i.inviteschemeid
+                where
+                    t2.awardflag = '1'
+                    and i.abortinvite = '0'
+                    and c.budget <> 0
+            ),
+            main as (
+                select
+                    tbl.*,
+                    cm.approvedate
+                from
+                    tbl
+                    inner join dw_dsep.DWD_GYL_T_AUDIT_COMMENT as cm on tbl.auditno = cm.billid
+                where
+                    cm.tablename = 'ZTB_INTEGRATEAUDIT'
+                    and cm.type = '0'
+            ),
+            ads as (
+                select
+                    md5 (
+                        concat_ws (
+                            '-',
+                            auditno,
+                            inviteno,
+                            schemedesc,
+                            invitecorpcode,
+                            invitecorpdesc,
+                            budget,
+                            bidid,
+                            dwbm,
+                            dwmc,
+                            qty_clarify,
+                            price_clarify,
+                            freight,
+                            approvedate
+                        )
+                    ) as uuid,
+                    '0' as onuse,
+                    cast(null as datetime) as etl_time,
+                    strleft (dwbm, 3) as zgqybm, -- 直管企业编码
+                    main.*
+                from
+                    main
+            ),
+            test as (
+                select
+                    any_value (inviteno) as zbbm,
+                    any_value (schemedesc) as zbmc,
+                    any_value (invitecorpcode) as cgdwbm,
+                    any_value (invitecorpdesc) as cgdwmc,
+                    any_value (budget) as ysje,
+                    any_value (dwbm) as tbrbm,
+                    any_value (dwmc) as tbrmc,
+                    sum(round(qty_clarify * price_clarify, 2) + freight) as tbrbj,
+                    '第一中标候选人报价超预算' as yy
+                from
+                    (
+                        select distinct
+                            id,
+                            auditno,
+                            inviteno,
+                            schemedesc,
+                            invitecorpcode,
+                            invitecorpdesc,
+                            budget,
+                            bidid,
+                            dwbm,
+                            dwmc,
+                            qty_clarify,
+                            price_clarify,
+                            freight
+                        from
+                            ads
+                        where
+                            approvedate >= '2024-01-01' -- #{starttime}
+                            and approvedate < '2024-09-01' -- #{endtime}
+                    ) as t
+                group by
+                    bidid
+                having
+                    tbrbj > ysje
+            )
+        select
+            *
+        from
+            ads
+    ) as ads
+'''
+
+
+"MySQL测试" = '''
+SELECT
+    TT.INVITENO zbbm,
+    TT.SCHEMEDESC zbmc,
+    TT.INVITECORPCODE cgdwbm,
+    TT.INVITECORPDESC cgdwmc,
+    TT.BUDGET ysje,
+    TT.DWBM tbrbm,
+    TT.DWMC tbrmc,
+    TT.BJ tbrbj,
+    '第一中标候选人报价超预算' AS yy
+FROM
+    (
+        SELECT
+            C.INVITENO,
+            C.SCHEMEDESC,
+            C.INVITECORPCODE,
+            C.INVITECORPDESC,
+            C.BUDGET,
+            T1.DWBM,
+            T1.DWMC,
+            SUM(
+                ROUND(F.QTY_CLARIFY * F.PRICE_CLARIFY, 2) + F.FREIGHT
+            ) BJ
+        FROM
+            dw_ods_dsep.ods_cg_ztb_BID T1,
+            dw_ods_dsep.ods_cg_ztb_INTEGRATEAUDITSUPP T2,
+            dw_ods_dsep.ods_cg_ztb_INTEGRATEAUDIT A,
+            dw_ods_dsep.ods_cg_ztb_BIDMATERIAL F,
+            dw_ods_dsep.ods_cg_ztb_INVITE I,
+            dw_ods_dsep.ods_cg_ztb_INVITESCHEME C
+        WHERE
+            T1.BIDID = T2.BIDID
+            AND T2.AWARDFLAG = '1'
+            AND T2.INTEGRATEAUDITID = A.INTEGRATEAUDITID
+            AND A.INVITEID = I.INVITEID
+            AND I.ABORTINVITE = '0'
+            AND C.BUDGET <> 0
+            AND F.BIDID = T1.BIDID
+            AND I.INVITEID = T1.INVITEID
+            AND C.INVITESCHEMEID = I.INVITESCHEMEID
+            AND A.AUDITNO IN (
+                SELECT
+                    CM.BILLID
+                FROM
+                    T_AUDIT_COMMENT CM
+                WHERE
+                    CM.TABLENAME = 'dw_ods_dsep.ods_cg_ztb_INTEGRATEAUDIT'
+                    AND CM.TYPE = '0'
+                    AND CM.APPROVEDATE >= '2024-01-01' -- #{startTime}
+                    AND CM.APPROVEDATE < '2024-09-01' -- #{endTime}
+            )
+        GROUP BY
+            T1.BIDID
+        HAVING
+            BJ > BUDGET
+    ) TT
+'''
+
+

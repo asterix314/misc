@@ -1,0 +1,127 @@
+["基本信息"]
+"类型" = "合规管理"
+"要素" = "操作时间不合规（依法必招）"
+"体征" = "未及时发布资格预审结果"
+"应用名称" = "CGHG_24"
+"状态" = "开始"
+
+
+["参数"]
+"开始日期" = 2023-01-01
+"结束日期" = 2024-09-01
+
+[SQL]
+"ETL脚本" = '''
+select
+    uuid,
+    onuse,
+    etl_time,
+    zgqybm,
+    zbbm,
+    zbmc,
+    cgdwbm,
+    cgdwmc,
+    zgyssj,
+    yy,
+    compare_time
+from
+    (
+        with
+            main as (
+                select
+                    c.inviteno as zbbm,
+                    c.schemedesc as zbmc,
+                    c.invitecorpcode as cgdwbm,
+                    c.invitecorpdesc as cgdwmc,
+                    ysbg.shsj as zgyssj,
+                    '资格预审评审结束后未及时发布资格预审结果' as yy,
+                    date_add (ysbg.shsj, interval 3 day) as compare_time
+                from
+                    dw_ods_dsep.ods_cg_ztb_invitescheme as c
+                    inner join dw_ods_dsep.ods_cg_ztb_zgyswj as wj on c.inviteno = wj.zbbm
+                    inner join dw_ods_dsep.ods_cg_ztb_zgysbg_sc as ysbg on ysbg.zgyswjbm = wj.zgyswjbm
+                where
+                    wj.shbz = '2'
+                    and ysbg.shbz = '2'
+                    and wj.zbbm not in (
+                        select
+                            zbbm
+                        from
+                            dw_ods_dsep.ods_cg_ztb_zgyswj_tzs
+                    )
+            ),
+            ads as (
+                select
+                    md5 (
+                        concat_ws (
+                            '-',
+                            zbbm,
+                            zbmc,
+                            cgdwbm,
+                            cgdwmc,
+                            zgyssj,
+                            compare_time
+                        )
+                    ) as uuid,
+                    '0' as onuse,
+                    cast(null as datetime) as etl_time,
+                    strleft (cgdwbm, 3) as zgqybm, -- 直管企业编码
+                    main.*
+                from
+                    main
+            ),
+            test as (
+                select
+                    zbbm,
+                    zbmc,
+                    cgdwbm,
+                    cgdwmc,
+                    zgyssj,
+                    yy
+                from
+                    ads
+                where
+                    compare_time >= '2023-01-01' -- #{startTime}
+                    and compare_time < '2024-09-01' --  #{endTime}
+            )
+        select
+            *
+        from
+            ads
+    ) as ads
+'''
+
+
+
+
+
+
+
+"MySQL测试" = '''
+SELECT
+    C.INVITENO "zbbm",
+    C.SCHEMEDESC "zbmc",
+    C.INVITECORPCODE "cgdwbm",
+    C.INVITECORPDESC "cgdwmc",
+    YSBG.SHSJ "zgyssj",
+    '资格预审评审结束后未及时发布资格预审结果' AS "yy"
+FROM
+    ZTB_INVITESCHEME C,
+    ZTB_ZGYSWJ WJ,
+    ZTB_ZGYSBG_SC YSBG
+WHERE
+    C.INVITENO = WJ.ZBBM
+    AND YSBG.ZGYSWJBM = WJ.ZGYSWJBM
+    AND NOT EXISTS (
+        SELECT
+            1
+        FROM
+            ZTB_ZGYSWJ_TZS
+        WHERE
+            ZTB_ZGYSWJ_TZS.ZBBM = WJ.ZBBM
+    )
+    AND WJ.SHBZ = '2'
+    AND YSBG.SHBZ = '2'
+    AND DATE_ADD (YSBG.SHSJ, INTERVAL 3 DAY) >= '2024-01-01' -- #{startTime}
+    AND DATE_ADD (YSBG.SHSJ, INTERVAL 3 DAY) < '2024-09-01' --  #{endTime}
+'''

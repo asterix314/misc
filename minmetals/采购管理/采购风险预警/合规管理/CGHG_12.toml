@@ -1,0 +1,153 @@
+["基本信息"]
+"类型" = "合规管理"
+"要素" = "涉嫌违规操作"
+"体征" = "投标人数量可能不够"
+"应用名称" = "CGHG_12"
+"状态" = "完成"
+
+
+["参数"]
+"开始日期" = 2024-01-01
+"结束日期" = 2024-09-01
+
+
+
+[SQL]
+"MySQL测试" = '''
+SELECT
+    C.INVITENO zbbm,
+    C.SCHEMEDESC zbmc,
+    C.INVITECORPCODE cgdwbm,
+    C.INVITECORPDESC cgdwmc,
+    COUNT(1) tbsl
+FROM
+    ZTB_INVITE A,
+    ZTB_BID B,
+    ZTB_INVITESCHEME C
+WHERE
+    A.INVITEID = B.INVITEID
+    AND B.BUSI_RELEASEFLAG = '1'
+    AND A.INVITESCHEMEID = C.INVITESCHEMEID
+    AND DATE_ADD (NOW (), INTERVAL 8 HOUR) > A.BUSI_ENDTIME
+    AND A.BUSIBIDOPEN = '0' -- 未开标
+    AND A.ABORTINVITE = '0' -- 未流标
+    AND A.AUDITFLAG = '2'
+    AND A.YCBZ = '1' -- 已发布
+    AND A.AUDITTIME >= '2024-01-01' -- #{startTime}
+    AND A.AUDITTIME < '2024-09-01' -- #{endTime}
+GROUP BY
+    C.INVITENO,
+    C.SCHEMEDESC,
+    C.INVITECORPCODE,
+    C.INVITECORPDESC
+HAVING
+    COUNT(1) > 3
+'''
+
+
+
+
+"SELECT C.INVITENO       zbbm,
+        C.SCHEMEDESC     zbmc,
+        C.INVITECORPCODE cgdwbm,
+        C.INVITECORPDESC cgdwmc,
+        COUNT(1)         tbsl
+        FROM ZTB_INVITE A,
+        ZTB_BID B,
+        ZTB_INVITESCHEME C
+        WHERE A.INVITEID = B.INVITEID
+        AND B.BUSI_RELEASEFLAG = '1'
+        AND A.INVITESCHEMEID = C.INVITESCHEMEID
+        AND DATE_ADD(NOW(), INTERVAL 8 HOUR) > A.BUSI_ENDTIME
+        AND A.BUSIBIDOPEN = '0' -- 未开标
+        AND A.ABORTINVITE = '0' -- 未流标
+        AND A.AUDITFLAG = '2'
+        AND A.YCBZ = '1'        -- 已发布
+        AND A.AUDITTIME &gt;= #{startTime}
+        AND A.AUDITTIME &lt;= #{endTime}
+        GROUP BY C.INVITENO, C.SCHEMEDESC, C.INVITECORPCODE, C.INVITECORPDESC
+        HAVING COUNT(1) < 3"
+
+
+
+
+
+
+
+
+
+"ETL脚本"= '''
+select
+    uuid,
+    onuse,
+    etl_time,
+    zgqybm, -- 直管企业编码
+    zbbm,
+    zbmc,
+    cgdwbm,
+    cgdwmc,
+    audittime
+from
+    (
+        with
+            main as (
+                select
+                    c.inviteno as zbbm,
+                    c.schemedesc as zbmc,
+                    c.invitecorpcode as cgdwbm,
+                    c.invitecorpdesc as cgdwmc,
+                    a.audittime
+                from
+                    dw_dsep.DWD_GYL_ZTB_INVITE as a
+                    inner join dw_dsep.DWD_GYL_ZTB_BID as b on a.inviteid = b.inviteid
+                    inner join dw_dsep.DWD_GYL_ZTB_INVITESCHEME as c on a.inviteschemeid = c.inviteschemeid
+                where
+                    b.busi_releaseflag = '1'
+                    and date_add (now (), interval 8 hour) > a.busi_endtime
+                    and a.busibidopen = '0' -- 未开标
+                    and a.abortinvite = '0' -- 未流标
+                    and a.auditflag = '2'
+                    and a.ycbz = '1' -- 已发布
+            ),
+            ads as (
+                select
+                    md5 (
+                        concat_ws ('-', zbbm, zbmc, cgdwbm, cgdwmc, audittime)
+                    ) as uuid,
+                    '0' as onuse,
+                    cast(null as datetime) as etl_time,
+                    strleft (cgdwbm, 3) as zgqybm, -- 直管企业编码
+                    main.*
+                from
+                    main
+            ),
+            test as (
+                select
+                    zbbm,
+                    zbmc,
+                    cgdwbm,
+                    cgdwmc,
+                    count(1) as tbsl
+                from
+                    ads
+                where
+                    true
+                    and audittime >= '2024-01-01' -- #{starttime}
+                    and audittime < '2024-09-01' -- #{endtime}
+                group by
+                    zbbm,
+                    zbmc,
+                    cgdwbm,
+                    cgdwmc
+                having
+                    count(1) > 3
+            )
+        select
+            *
+        from
+            ads
+    ) as ads
+'''
+
+
+

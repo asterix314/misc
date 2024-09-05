@@ -1,0 +1,78 @@
+
+[基本信息]
+类型 = '合规管理'
+要素 = '涉嫌违规操作'
+体征 = '合同金额超报价金额'
+应用名称 = 'CGHG_09'
+状态 = '开始'
+
+
+
+[参数]
+开始日期 = 2024-01-01
+结束日期 = 2024-09-01
+
+
+[SQL]
+MySQL测试 = '''
+SELECT
+    T.INVITENO zbbm,
+    T.SCHEMEDESC zbmc,
+    T.INVITECORPCODE cgdwbm,
+    T.INVITECORPDESC cgdwmc,
+    T.DWBM gysbm,
+    T.DWMC gysmc,
+    T.ZBJE zbje,
+    T.HTJE htje
+FROM
+    (
+        SELECT
+            B.INVITENO,
+            B.SCHEMEDESC,
+            B.INVITECORPCODE,
+            B.INVITECORPDESC,
+            D.DWBM,
+            D.DWMC,
+            (
+                SELECT
+                    SUM(
+                        ROUND(M.PRICE_CLARIFY * M.QTY_CLARIFY, 2) + M.FREIGHT_CLARIFY
+                    )
+                FROM
+                    ZTB_BIDMATERIAL M
+                WHERE
+                    M.BIDID = C.BIDID
+            ) ZBJE,
+            (
+                SELECT
+                    SUM(M.JE)
+                FROM
+                    CGHTMXMX M
+                WHERE
+                    M.HTBM = H.HTBM
+                    AND M.BJBM = CAST(C.BIDID AS CHAR)
+            ) HTJE
+        FROM
+            ZTB_INTEGRATEAUDIT A,
+            ZTB_INVITESCHEME B,
+            ZTB_INTEGRATEAUDITSUPP C,
+            ZTB_BID D,
+            CGHT H,
+            CGHTMXMX M
+        WHERE
+            A.AUDITFLAG = '2'
+            AND A.INVITEID = B.INVITESCHEMEID
+            AND C.INTEGRATEAUDITID = A.INTEGRATEAUDITID
+            AND C.AWARDFLAG = '1'
+            AND C.BIDID = D.BIDID
+            AND M.HTBM = H.HTBM
+            AND M.BJBM = C.BIDID
+            AND H.SWBZ = '2'
+            AND H.SPRQ >= '2024-01-01' -- #{startTime}
+            AND H.SPRQ < '2024-09-01' -- #{endTime} 
+        GROUP BY
+            D.BIDID
+    ) T
+WHERE
+    T.HTJE > T.ZBJE
+'''

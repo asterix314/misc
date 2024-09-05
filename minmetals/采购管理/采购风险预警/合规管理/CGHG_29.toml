@@ -1,8 +1,8 @@
 ["基本信息"]
 "类型" = "合规管理"
 "要素" = "操作时间不合规（依法必招）"
-"体征" = "未按时开标"
-"应用名称" = "CGHG_25"
+"体征" = "中标通知书延时"
+"应用名称" = "CGHG_29"
 "状态" = "ODS测试通过"
 
 
@@ -18,31 +18,44 @@ SELECT
     C.SCHEMEDESC zbmc,
     C.INVITECORPCODE cgdwbm,
     C.INVITECORPDESC cgdwmc,
-    I.BUSI_ENDTIME tbjzsj,
-    '开标时间+24小时，仍处于未开标状态' AS yy
+    P.AUDITTIME zbjggsfbsj,
+    '中标结果公示后，未及时发布中标通知书' AS yy
 FROM
     ZTB_INVITESCHEME C,
-    ZTB_INVITE I
+    ZTB_INVITE I,
+    ZTB_INTEGRATEAUDIT A,
+    ZTB_RESULT_PUBLICITY P
 WHERE
     C.INVITESCHEMEID = I.INVITESCHEMEID
-    AND I.AUDITFLAG = '2'
+    AND I.INVITEID = A.INVITEID
+    AND P.AUDITNO = A.AUDITNO
+    AND P.AUDITFLAG = '2'
     AND C.zbxmlx = '1'
-    AND I.BUSIBIDOPEN = '0'
-    AND I.ABORTINVITE = '0'
-    AND DATE_ADD (I.BUSI_BIDOPENTIME, INTERVAL 1 DAY) >= '2024-01-01' --  #{startTime}
-    AND DATE_ADD (I.BUSI_BIDOPENTIME, INTERVAL 1 DAY) < '2024-09-01' -- #{endTime}
+    AND DATE_ADD (P.AUDITTIME, INTERVAL 10 DAY) >= '2024-01-01' -- #{startTime}
+    AND DATE_ADD (P.AUDITTIME, INTERVAL 10 DAY) < '2024-09-01' -- #{endTime}
+    AND NOT EXISTS (
+        SELECT
+            1
+        FROM
+            ZBTZS Z
+        WHERE
+            Z.LXBM = C.INVITENO
+            AND Z.WORKFLOWSTATUS = '2'
+    )
 '''
+
 
 "ETL脚本" = '''
 select
     uuid,
+    onuse,
     etl_time,
-    zgqybm,
+    zgqybm, -- 直管企业编码
     zbbm,
     zbmc,
     cgdwbm,
     cgdwmc,
-    tbjzsj,
+    zbjggsfbsj,
     yy,
     compare_time
 from
@@ -54,18 +67,25 @@ from
                     c.schemedesc as zbmc,
                     c.invitecorpcode as cgdwbm,
                     c.invitecorpdesc as cgdwmc,
-                    i.busi_endtime as tbjzsj,
-                    '开标时间+24小时，仍处于未开标状态' as yy,
-                    date_add (i.busi_bidopentime, interval 1 day) as compare_time
+                    p.audittime as zbjggsfbsj,
+                    '中标结果公示后，未及时发布中标通知书' as yy,
+                    date_add (p.audittime, interval 10 day) as compare_time
                 from
                     dw_ods_dsep.ods_cg_ztb_invitescheme as c
-                    inner join dw_ods_dsep.ods_cg_ztb_invite as i on 
-                        c.inviteschemeid = i.inviteschemeid
+                    inner join dw_ods_dsep.ods_cg_ztb_invite as i on c.inviteschemeid = i.inviteschemeid
+                    inner join dw_ods_dsep.ods_cg_ztb_integrateaudit as a on i.inviteid = a.inviteid
+                    inner join dw_ods_dsep.ods_cg_ztb_result_publicity as p on p.auditno = a.auditno
                 where
-                    i.auditflag = '2'
+                    p.auditflag = '2'
                     and c.zbxmlx = '1'
-                    and i.busibidopen = '0'
-                    and i.abortinvite = '0'
+                    and c.inviteno not in (
+                        select
+                            lxbm
+                        from
+                            dw_ods_dsep.ods_cg_zbtzs
+                        where
+                            workflowstatus = '2'
+                    )
             ),
             ads as (
                 select
@@ -76,7 +96,7 @@ from
                             zbmc,
                             cgdwbm,
                             cgdwmc,
-                            tbjzsj,
+                            zbjggsfbsj,
                             yy,
                             compare_time
                         )
@@ -94,7 +114,7 @@ from
                     zbmc,
                     cgdwbm,
                     cgdwmc,
-                    tbjzsj,
+                    zbjggsfbsj,
                     yy
                 from
                     ads
@@ -109,3 +129,5 @@ from
             ads
     ) as ads
 '''
+
+

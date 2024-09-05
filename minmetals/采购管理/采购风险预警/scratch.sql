@@ -2,12 +2,12 @@ select
     uuid,
     onuse,
     etl_time,
-    zgqybm,
+    zgqybm, -- 直管企业编码
     zbbm,
     zbmc,
     cgdwbm,
     cgdwmc,
-    zgyssj,
+    zbjggsfbsj,
     yy,
     compare_time
 from
@@ -19,21 +19,24 @@ from
                     c.schemedesc as zbmc,
                     c.invitecorpcode as cgdwbm,
                     c.invitecorpdesc as cgdwmc,
-                    ysbg.shsj as zgyssj,
-                    '资格预审评审结束后未及时发布资格预审结果' as yy,
-                    date_add (ysbg.shsj, interval 3 day) as compare_time
+                    p.audittime as zbjggsfbsj,
+                    '中标结果公示后，未及时发布中标通知书' as yy,
+                    date_add (p.audittime, interval 10 day) as compare_time
                 from
                     dw_ods_dsep.ods_cg_ztb_invitescheme as c
-                    inner join dw_ods_dsep.ods_cg_ztb_zgyswj as wj on c.inviteno = wj.zbbm
-                    inner join dw_ods_dsep.ods_cg_ztb_zgysbg_sc as ysbg on ysbg.zgyswjbm = wj.zgyswjbm
+                    inner join dw_ods_dsep.ods_cg_ztb_invite as i on c.inviteschemeid = i.inviteschemeid
+                    inner join dw_ods_dsep.ods_cg_ztb_integrateaudit as a on i.inviteid = a.inviteid
+                    inner join dw_ods_dsep.ods_cg_ztb_result_publicity as p on p.auditno = a.auditno
                 where
-                    wj.shbz = '2'
-                    and ysbg.shbz = '2'
-                    and wj.zbbm not in (
+                    p.auditflag = '2'
+                    and c.zbxmlx = '1'
+                    and c.inviteno not in (
                         select
-                            zbbm
+                            lxbm
                         from
-                            dw_ods_dsep.ods_cg_ztb_zgyswj_tzs
+                            dw_ods_dsep.ods_cg_zbtzs
+                        where
+                            workflowstatus = '2'
                     )
             ),
             ads as (
@@ -45,7 +48,8 @@ from
                             zbmc,
                             cgdwbm,
                             cgdwmc,
-                            zgyssj,
+                            zbjggsfbsj,
+                            yy,
                             compare_time
                         )
                     ) as uuid,
@@ -62,13 +66,14 @@ from
                     zbmc,
                     cgdwbm,
                     cgdwmc,
-                    zgyssj,
+                    zbjggsfbsj,
                     yy
                 from
                     ads
                 where
-                    compare_time >= '2023-01-01' -- #{startTime}
-                    and compare_time < '2024-09-01' --  #{endTime}
+                    true
+                    and compare_time >= '2024-01-01' --  #{startTime}
+                    and compare_time < '2024-09-01' -- #{endTime}
             )
         select
             *

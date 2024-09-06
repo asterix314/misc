@@ -1,0 +1,73 @@
+"功能" = "风险闭环处置监控"
+"表名" = "ADS_FXBHCZJK"
+"编号" = 7
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select
+    (
+        select
+            count(1)
+        from
+            ZTB_JK_YJXX
+    ) ytsczfxx,
+    (
+        select
+            count(1)
+        from
+            ZTB_JK_YJXX
+        where
+            YJFS = '2'
+    ) sqyjts,
+    (
+        select
+            count(1)
+        from
+            ZTB_JK_YJXX
+        where
+            YJFS = '1'
+    ) szjzcz,
+    (
+        select
+            count(1)
+        from
+            ZTB_JK_YJXX
+        where
+            YJFS = '0'
+    ) shpdzg,
+    (
+        select
+            count(1)
+        from
+            ZTB_JK_YJXX
+        where
+            ZT != '2'
+            and YCZT = '1'
+    ) cswcz,
+    (
+        select
+            count(1)
+        from
+            ZTB_JK_YJXX
+        where
+            ZT = '2'
+    ) czwc
+'''
+
+"ETL脚本" = '''
+select
+    md5(uuid()) as id,
+    cast(null as datetime) as etl_time,
+    count(1) as ytsczfxx,
+    sum(YJFS = '2') as sqyjts,
+    sum(YJFS = '1') as szjzcz,
+    sum(YJFS = '0') as shpdzg,
+    sum(
+        ZT != '2'
+        and YCZT = '1'
+    ) as cswcz,
+    sum(ZT = '2') as czwc
+from
+    dw_dsep.DWD_GYL_ZTB_JK_YJXX
+'''
+

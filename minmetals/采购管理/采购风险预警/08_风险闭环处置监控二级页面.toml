@@ -1,0 +1,175 @@
+"功能" = "风险闭环处置监控二级页面"
+"表名" = "ADS_FXBHCZJK_SECOND"
+"编号" = 8
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select
+    id,
+    type
+from
+    (
+        (
+            select
+                id,
+                '2' type
+            from
+                (
+                    select
+                        id
+                    from
+                        ztb_jk_yjxx
+                    where
+                        YJFS = '2'
+                        and TYPE not in ('GYS')
+                        and zt != '2'
+                        and yczt = '0'
+                    group by
+                        YJLXID,
+                        ZBBM
+                    union all
+                    SELECT
+                        id
+                    FROM
+                        ztb_jk_yjxx
+                    WHERE
+                        TYPE in ('GYS')
+                        and YJFS = '2'
+                        and zt != '2'
+                        and yczt = '0'
+                ) b
+            limit
+                500
+        )
+        union all
+        (
+            select
+                id,
+                '1' type
+            from
+                (
+                    select
+                        id
+                    from
+                        ztb_jk_yjxx
+                    where
+                        YJFS = '1'
+                        and TYPE not in ('GYS')
+                        and zt != '2'
+                        and yczt = '0'
+                    group by
+                        YJLXID,
+                        ZBBM
+                    union all
+                    SELECT
+                        id
+                    FROM
+                        ztb_jk_yjxx
+                    WHERE
+                        TYPE in ('GYS')
+                        and YJFS = '1'
+                        and zt != '2'
+                        and yczt = '0'
+                ) b
+            limit
+                500
+        )
+        union all
+        (
+            select
+                id,
+                '0' type
+            from
+                (
+                    select
+                        id
+                    from
+                        ztb_jk_yjxx
+                    where
+                        YJFS = '0'
+                        and TYPE not in ('GYS')
+                        and zt != '2'
+                        and yczt = '0'
+                    group by
+                        YJLXID,
+                        ZBBM
+                    union all
+                    SELECT
+                        id
+                    FROM
+                        ztb_jk_yjxx
+                    WHERE
+                        TYPE in ('GYS')
+                        and YJFS = '0'
+                        and zt != '2'
+                        and yczt = '0'
+                ) b
+            limit
+                500
+        )
+    ) a
+'''
+
+"ETL脚本" = '''
+select
+    uid,
+    etl_time,
+    id,
+    `type`
+from
+    (
+        with
+            main as (
+                select
+                    any_value (id) as id,
+                    yjfs as `type`
+                from
+                    dw_dsep.DWD_GYL_ZTB_JK_YJXX
+                where
+                    yjfs in ('0', '1', '2')
+                    and `type` != 'GYS'
+                    and zt != '2'
+                    and yczt = '0'
+                group by
+                    yjlxid,
+                    zbbm,
+                    yjfs
+                union all
+                select
+                    id,
+                    yjfs as `type`
+                from
+                    dw_dsep.DWD_GYL_ZTB_JK_YJXX
+                where
+                    yjfs in ('0', '1', '2')
+                    and `type` = 'GYS'
+                    and zt != '2'
+                    and yczt = '0'
+            ),
+            ads as (
+                select
+                    md5 (concat_ws ('-', id, "type")) as uid,
+                    null as etl_time,
+                    id,
+                    `type`
+                from
+                    (
+                        select
+                            *,
+                            row_number() over (
+                                partition by
+                                    `type`
+                            ) as n
+                        from
+                            main
+                    ) as foo
+                where
+                    n <= 500
+            )
+        select
+            *
+        from
+            ads
+    ) as ads
+'''
+

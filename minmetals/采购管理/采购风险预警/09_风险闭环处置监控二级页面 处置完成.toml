@@ -1,3 +1,37 @@
+"功能" = "风险闭环处置监控二级页面处置完成"
+"表名" = "ADS_FXBHCZJK_SECOND_CZWC"
+"编号" = 9
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select
+    id
+from
+    (
+        SELECT
+            id
+        FROM
+            ZTB_JK_YJXX A
+        WHERE
+            A.ZT = '2'
+            and TYPE not in ('GYS')
+        group by
+            YJLXID,
+            ZBBM
+        union all
+        SELECT
+            id
+        FROM
+            ZTB_JK_YJXX A
+        WHERE
+            A.ZT = '2'
+            and TYPE in ('GYS')
+    ) b
+limit
+    500
+'''
+
+"ETL脚本" = '''
 select
     uid,
     id,
@@ -38,3 +72,6 @@ from
         from
             ads
     ) as ads
+limit 500
+'''
+

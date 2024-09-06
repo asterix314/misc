@@ -1,0 +1,25 @@
+"功能" = "直管单位编码和名称"
+"表名" = "ADS_ZGDW_BM_MC"
+"编号" = 1
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    inviteno,
+    left (a.djdwbm, 3) zgdwCode,
+    DJDWMC
+FROM
+    ZTB_INVITESCHEME A
+'''
+
+"ETL脚本" = '''
+select
+    md5(concat_ws('-', inviteno, djdwbm)) as id,
+    cast(null as datetime) as etl_time,
+    inviteno as zbbm,
+    strleft (djdwbm, 3) as zgdwbm,
+    djdwmc as dwmc
+from
+    dw_dsep.DWD_GYL_ZTB_INVITESCHEME
+'''
+

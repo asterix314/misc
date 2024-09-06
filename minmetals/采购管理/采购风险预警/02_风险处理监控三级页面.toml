@@ -1,3 +1,30 @@
+"功能" = "风险处理监控三级页面"
+"表名" = "ADS_FXYJ_THREE"
+"编号" = 2
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    A.ID,
+    B.ZGRMC,
+    B.YQWCSJ,
+    B.JSSJSJ,
+    CASE B.ZT
+        WHEN 0 THEN '整改通知未发布'
+        WHEN 1 THEN '整改报告未提交'
+        WHEN 2 THEN '整改报告已提交'
+        WHEN 3 THEN '整改报告不合格'
+        WHEN 9 THEN '整改完成'
+    END ZGZT
+FROM
+    ztb_jk_yjxx A,
+    ZTB_JK_ZGTZ B
+    LEFT JOIN ZTB_JK_DBXX C ON B.ID = C.ZGTZID
+WHERE
+    A.ID = B.YJXXID
+'''
+
+"ETL脚本" = '''
 select
     uid,
     id,
@@ -40,3 +67,5 @@ from
         from
             ads
     ) as ads
+'''
+

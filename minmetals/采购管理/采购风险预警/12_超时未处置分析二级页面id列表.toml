@@ -1,0 +1,75 @@
+"功能" = "超时未处置分析二级页面id列表"
+"表名" = "ADS_CSWCZFX_SECOND_IDS"
+"编号" = 12
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    id,
+    YCYY
+FROM
+    ZTB_JK_YJXX A
+WHERE
+    A.YCZT = '1'
+    and TYPE not in ('GYS')
+group by
+    A.YJLXID,
+    A.ZBBM,
+    A.YCYY
+union all
+SELECT
+    id,
+    YCYY
+FROM
+    ZTB_JK_YJXX A
+WHERE
+    A.YCZT = '1'
+    and TYPE in ('GYS')
+'''
+"ETL脚本" = '''
+select
+    uid,
+    etl_time,
+    id,
+    ycyy
+from
+    (
+        with
+            main as (
+                select
+                    any_value (id) as id,
+                    ycyy
+                from
+                    dw_dsep.DWD_GYL_ZTB_JK_YJXX
+                where
+                    yczt = '1'
+                    and type != 'GYS'
+                group by
+                    yjlxid,
+                    zbbm,
+                    ycyy
+                union all
+                select
+                    id,
+                    ycyy
+                from
+                    dw_dsep.DWD_GYL_ZTB_JK_YJXX
+                where
+                    yczt = '1'
+                    and type = 'GYS'
+            ),
+            ads as (
+                select
+                    id as uid,
+                    cast(null as datetime) as etl_time,
+                    main.*
+                from
+                    main
+            )
+        select
+            *
+        from
+            ads
+    ) as ads
+'''
+

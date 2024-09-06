@@ -1,0 +1,32 @@
+"功能" = "超时未处置分析"
+"表名" = "ADS_CSWCZFX"
+"编号" = 10
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select
+    count(1) sl,
+    YCYY ycyy
+from
+    ZTB_JK_YJXX
+where
+    ZT != '2'
+    and YCZT = '1'
+group by
+    YCYY
+'''
+
+"ETL脚本" = '''
+select
+    md5 (uuid ()) as id,
+    cast(null as datetime) as etl_time,
+    count(1) as sl,
+    ycyy
+from
+    dw_dsep.DWD_GYL_ZTB_JK_YJXX
+where
+    zt != '2'
+    and yczt = '1'
+group by
+    ycyy
+'''

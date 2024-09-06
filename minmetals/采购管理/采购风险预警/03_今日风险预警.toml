@@ -1,0 +1,39 @@
+"功能" = "今日风险预警"
+"表名" = "ADS_JRFXYJ"
+"编号" = 3
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select
+    id,
+    yjsj,
+    zt,
+    yjlxid,
+    zbbm,
+    type,
+    yczt,
+    ycyy
+from
+    ZTB_JK_YJXX
+where
+    yjsj > current_date
+'''
+
+"ETL脚本" = '''
+select
+    md5(id) as uid,
+    cast(null as datetime) as etl_date,
+    id,
+    yjsj,
+    zt,
+    yjlxid,
+    zbbm,
+    type,
+    yczt,
+    ycyy
+from
+    dw_dsep.DWD_GYL_ZTB_JK_YJXX
+where
+    yjsj > curdate()
+'''
+

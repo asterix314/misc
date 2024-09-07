@@ -4,60 +4,129 @@
 "状态" = "完成"
 
 "MySQL原逻辑" = '''
-SELECT
+select
     A.ID,
-    B.ZGRMC,
-    B.YQWCSJ,
-    B.JSSJSJ,
+    ZBZDRMC AS 'ZGRMC',
+    A.JSSJSJ AS 'JSSJSJ',
+    IF (A.ZT != 2, NULL, A.ZTGXSJ) AS 'YQWCSJ',
+    CASE A.ZT
+        WHEN 0 THEN '已发现'
+        WHEN 1 THEN '处理中'
+        WHEN 2 THEN '处理完成'
+    END ZT,
+    CASE A.YCZT
+        WHEN 1 THEN '是'
+        ELSE '否'
+    END YCZT,
+    A.YCYY as "YCYY",
+    CASE J.ZT
+        WHEN '0' THEN '禁止操作未发布'
+        WHEN '1' THEN '禁止操作已发布'
+        WHEN '2' THEN '申请取消禁止操作已提交'
+        WHEN '3' THEN '拒绝取消禁止操作'
+        WHEN '9' THEN '同意取消禁止操作'
+    END 'ZT1',
     CASE B.ZT
-        WHEN 0 THEN '整改通知未发布'
-        WHEN 1 THEN '整改报告未提交'
-        WHEN 2 THEN '整改报告已提交'
-        WHEN 3 THEN '整改报告不合格'
-        WHEN 9 THEN '整改完成'
-    END ZGZT
+        WHEN '0' THEN '整改通知未发布'
+        WHEN '1' THEN '整改通知已发布'
+        WHEN '2' THEN '整改报告已提交'
+        WHEN '3' THEN '整改报告不合格'
+        WHEN '9' THEN '整改完成'
+    END 'ZT2'
 FROM
-    ztb_jk_yjxx A,
-    ZTB_JK_ZGTZ B
-    LEFT JOIN ZTB_JK_DBXX C ON B.ID = C.ZGTZID
-WHERE
-    A.ID = B.YJXXID
+    ZTB_JK_YJXX A
+    LEFT JOIN ZTB_JK_JZCZ J ON J.YJXXID = A.ID
+    LEFT JOIN ZTB_JK_ZGTZ B ON B.YJXXID = A.ID
+    LEFT JOIN ZTB_INVITE I ON I.INVITENO = A.ZBBM
+    AND A.YWLX = 'ZB'
+    LEFT JOIN CGXJ X ON X.XJBM = A.ZBBM
+    AND A.YWLX = 'XJ'
+    LEFT JOIN CGHT H ON H.HTBM = A.ZBBM
+    AND A.YWLX = 'HT'
+    LEFT JOIN B2B_GHDW G ON G.GHDWID = A.ZBBM
+    AND A.YWLX = 'GYS'
+    LEFT JOIN XTGHDW GG ON GG.DWBM = A.ZBBM
+    AND A.YWLX = 'GYS'
 '''
 
 "ETL脚本" = '''
 select
     uid,
+    etl_time,
     id,
     zgrmc,
-    yqwcsj,
     jssjsj,
-    zgzt,
-    etl_time
+    yqwcsj,
+    zt,
+    yczt,
+    ycyy,
+    zt1,
+    zt2
 from
     (
         with
             main as (
                 select
                     a.id,
-                    b.zgrmc,
-                    b.yqwcsj,
-                    b.jssjsj,
+                    zbzdrmc as zgrmc,
+                    a.jssjsj,
+                    if (a.zt != 2, null, a.ztgxsj) as yqwcsj,
+                    case a.zt
+                        when 0 then '已发现'
+                        when 1 then '处理中'
+                        when 2 then '处理完成'
+                    end as zt,
+                    case a.yczt
+                        when 1 then '是'
+                        else '否'
+                    end as yczt,
+                    a.ycyy,
+                    case j.zt
+                        when '0' then '禁止操作未发布'
+                        when '1' then '禁止操作已发布'
+                        when '2' then '申请取消禁止操作已提交'
+                        when '3' then '拒绝取消禁止操作'
+                        when '9' then '同意取消禁止操作'
+                    end as zt1,
                     case b.zt
-                        when 0 then '整改通知未发布'
-                        when 1 then '整改报告未提交'
-                        when 2 then '整改报告已提交'
-                        when 3 then '整改报告不合格'
-                        when 9 then '整改完成'
-                    end as zgzt
+                        when '0' then '整改通知未发布'
+                        when '1' then '整改通知已发布'
+                        when '2' then '整改报告已提交'
+                        when '3' then '整改报告不合格'
+                        when '9' then '整改完成'
+                    end as zt2
                 from
                     dw_dsep.DWD_GYL_ZTB_JK_YJXX as a
-                    inner join dw_dsep.DWD_GYL_ZTB_JK_ZGTZ as b on a.id = b.yjxxid
-                    left join dw_dsep.DWD_GYL_ZTB_JK_DBXX as c on b.id = c.zgtzid
+                    left join dw_dsep.DWD_GYL_ZTB_JK_JZCZ as j on j.yjxxid = a.id
+                    left join dw_dsep.DWD_GYL_ZTB_JK_ZGTZ as b on b.yjxxid = a.id
+                    left join dw_dsep.DWD_GYL_ZTB_INVITE as i on i.inviteno = a.zbbm
+                    and a.ywlx = 'ZB'
+                    left join dw_dsep.DWD_GYL_CGXJ as x on x.xjbm = a.zbbm
+                    and a.ywlx = 'XJ'
+                    left join dw_dsep.DWD_GYL_CGHT as h on h.htbm = a.zbbm
+                    and a.ywlx = 'HT'
+                    left join dw_dsep.DWD_GYL_B2B_GHDW as g on g.ghdwid = a.zbbm
+                    and a.ywlx = 'GYS'
+                    left join dw_dsep.DWD_GYL_XTGHDW as gg on gg.dwbm = a.zbbm
+                    and a.ywlx = 'GYS'
             ),
             ads as (
                 select
-                    md5 (concat_ws ('-', id, zgrmc, yqwcsj, jssjsj, zgzt)) as uid,
-                    cast(null as datetime) as etl_time,
+                    md5 (
+                        concat_ws (
+                            '-',
+                            id,
+                            zgrmc,
+                            jssjsj,
+                            yqwcsj,
+                            zt,
+                            yczt,
+                            ycyy,
+                            zt1,
+                            zt2
+                        )
+                    ) as uid,
+                    null as etl_time,
                     main.*
                 from
                     main

@@ -4,6 +4,7 @@
 "状态" = "完成"
 
 "MySQL原逻辑" = '''
+-- 处理逻辑
 select
     id,
     type
@@ -38,8 +39,6 @@ from
                         and zt != '2'
                         and yczt = '0'
                 ) b
-            limit
-                500
         )
         union all
         (
@@ -71,8 +70,6 @@ from
                         and zt != '2'
                         and yczt = '0'
                 ) b
-            limit
-                500
         )
         union all
         (
@@ -104,11 +101,10 @@ from
                         and zt != '2'
                         and yczt = '0'
                 ) b
-            limit
-                500
         )
     ) a
 '''
+
 
 "ETL脚本" = '''
 select
@@ -148,23 +144,11 @@ from
             ),
             ads as (
                 select
-                    md5 (concat_ws ('-', id, "type")) as uid,
+                    md5 (concat_ws ('-', id, `type`)) as uid,
                     null as etl_time,
-                    id,
-                    `type`
+                    *
                 from
-                    (
-                        select
-                            *,
-                            row_number() over (
-                                partition by
-                                    `type`
-                            ) as n
-                        from
-                            main
-                    ) as foo
-                where
-                    n <= 500
+                    main
             )
         select
             *

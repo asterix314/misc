@@ -1,0 +1,30 @@
+
+[[DWS]]
+"表名" = "DWS_CGHT"
+"SQL" = '''
+select
+    ht.htbm as id,
+    null as etl_time,
+    ht.dwbm,
+    ht.businessclassification,
+    ht.je,
+    ht.sprq,
+    ht.xfdm,
+    ht.cgfs,
+    ht.swbz,
+    ht.wjbz,
+    gys.forebsjbfl,
+    gys.dwmc as gysmc,
+    t3.dwmc as zgdwmc,
+    t6.dwmc as cgdwmc,
+    null as zzjgdwmc
+from
+    dw_dsep.DWD_GYL_CGHT as ht
+    left join dw_dsep.DWD_GYL_XTGHDW as gys on gys.forebsjbfl = '0'
+    and ht.dwbm = gys.dwbm
+    left join dw_dsep.DWD_GYL_XTLLDW as t3 on strleft (ht.xfdm, 3) = t3.dwbm
+    left join dw_dsep.DWD_GYL_XTLLDW as t6 on strleft (ht.xfdm, 6) = t6.dwbm
+where
+    ht.swbz = '2'
+    and ht.wjbz = '0'
+'''

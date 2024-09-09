@@ -1,0 +1,63 @@
+"功能" = "累计采购合同三级页面"
+"表名" = "ADS_LJCGHT_THREE"
+"编号" = 3
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+-- 采购页面总览 年度 三级页面
+-- aggregateThreeLevel
+SELECT
+    (@i:=@i+1) AS sequence,
+    (SELECT DWMC FROM xtlldw WHERE DWBM = LEFT(A.XFDM, 3)) companyName,
+    ROUND(COUNT(1)/10000, 2) contractTotal,
+    ROUND(SUM(A.JE)/100000000, 2) contractMoney
+    FROM cght A,(Select @i:=${(pageNum-1)*pageSize}) B
+WHERE A.SWBZ = '2'
+    AND A.WJBZ = '0'
+    AND LEFT(A.SPRQ, 4) = #{year}
+    AND LEFT(A.XFDM, 3) IN ('201','202','219','204','205','206','207','209','210','217','211','212')
+GROUP BY LEFT(A.XFDM, 3)
+LIMIT ${(pageNum-1)*pageSize},${pageSize}
+
+-- aggregateThreeLevelCount
+SELECT
+    count(1)
+FROM cght A,(Select @i:=0) B
+WHERE A.SWBZ = '2'
+    AND A.WJBZ = '0'
+    AND LEFT(A.SPRQ, 4) = #{year}
+    AND LEFT(A.XFDM, 3) IN ('201','202','219','204','205','206','207','209','210','217','211','212')
+    GROUP BY LEFT(A.XFDM, 3)
+'''
+
+"ETL脚本" = '''
+select
+    md5 (concat_ws ('-', zgdwmc, strleft (sprq, 4))) as id,
+    null as etl_time,
+    zgdwmc,
+    strleft (sprq, 4) as years,
+    round(count(1) / 10000, 2) as sl,
+    round(sum(je) / 100000000, 2) as je
+from
+    dw_dsep.DWS_CGHT
+where
+    year (sprq) > 2020
+    and strleft (xfdm, 3) in (
+        '201',
+        '202',
+        '219',
+        '204',
+        '205',
+        '206',
+        '207',
+        '209',
+        '210',
+        '217',
+        '211',
+        '212'
+    )
+group by
+    zgdwmc,
+    years
+'''
+

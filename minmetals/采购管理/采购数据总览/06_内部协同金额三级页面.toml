@@ -1,0 +1,101 @@
+"功能" = "内部协同金额三级页面"
+"表名" = "ADS_NBXTJE_THREE"
+"编号" = 6
+"状态" = "未开始"
+
+"MySQL原逻辑" = '''
+-- 内部协同采购金额 点击年度 三级页面
+-- purchaseAmountThreeLevel
+select
+    @i := @i + 1 as sequence,
+    (
+        select
+            DWMC
+        from
+            xtlldw
+        where
+            DWBM = LEFT (A.XFDM, 3)
+    ) as companyName,
+    A.BUSINESSCLASSIFICATION as lx,
+    0 as materials,
+    0 as project,
+    0 as serve,
+    ROUND(sum(A.JE) / 100000000, 2) as money,
+    0 as totalMoney
+from
+    cght A,
+    (
+        select @i := 0
+    ) B
+where
+    A.SWBZ = '2'
+    and A.WJBZ = '0'
+    and exists (
+        select
+            1
+        from
+            xtghdw B
+        where
+            A.DWBM = B.DWBM
+            and B.FOREBSJBFL = '0'
+    )
+    and LEFT (A.SPRQ, 4) = #{year}
+    and LEFT (A.XFDM, 3) in (
+        '201',
+        '202',
+        '219',
+        '204',
+        '205',
+        '206',
+        '207',
+        '209',
+        '210',
+        '217',
+        '211',
+        '212'
+    )
+group by
+    LEFT (A.XFDM, 3),
+    A.BUSINESSCLASSIFICATION
+order by
+    A.BUSINESSCLASSIFICATION desc
+LIMIT ${(pageNum-1)*pageSize},${pageSize}
+'''
+
+
+
+"ETL脚本" = '''
+select
+    md5 (
+        concat_ws ('-', strleft (sprq, 4), businessclassification)
+    ) as id,
+    null as etl_time,
+    zgdwmc,
+    businessclassification as lx,
+    strleft (sprq, 4) as years,
+    round(sum(je) / 100000000, 2) as money
+from
+    dw_dsep.DWS_CGHT
+where
+    year (sprq) > 2020
+    and forebsjbfl = '0'
+    and strleft (xfdm, 3) in (
+        '201',
+        '202',
+        '219',
+        '204',
+        '205',
+        '206',
+        '207',
+        '209',
+        '210',
+        '217',
+        '211',
+        '212'
+    )
+group by
+    years,
+    zgdwmc,
+    lx
+'''
+

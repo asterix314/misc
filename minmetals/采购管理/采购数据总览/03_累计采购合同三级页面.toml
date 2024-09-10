@@ -32,16 +32,19 @@ WHERE A.SWBZ = '2'
 
 "ETL脚本" = '''
 select
-    md5 (concat_ws ('-', zgdwmc, strleft (sprq, 4))) as id,
+    md5 (
+        concat_ws ('-', strleft (sprq, 4), businessclassification)
+    ) as id,
     null as etl_time,
     zgdwmc,
+    businessclassification as lx,
     strleft (sprq, 4) as years,
-    round(count(1) / 10000, 2) as sl,
-    round(sum(je) / 100000000, 2) as je
+    round(sum(je) / 100000000, 2) as money
 from
     dw_dsep.DWS_CGHT
 where
-    year (sprq) > 2020
+    year (sprq) = 2023
+    and forebsjbfl = '0'
     and strleft (xfdm, 3) in (
         '201',
         '202',
@@ -57,7 +60,8 @@ where
         '212'
     )
 group by
+    years,
     zgdwmc,
-    years
+    lx
 '''
 

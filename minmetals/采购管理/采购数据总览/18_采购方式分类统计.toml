@@ -1,0 +1,89 @@
+"功能" = "采购方式分类统计"
+"表名" = "ADS_CGFSFBTJ"
+"编号" = 18
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select
+    cgfs,
+    sum(je) je,
+    sum(sl) sl,
+    sum(rate) rate
+from
+    (
+        select
+            case A.CGFS
+                when '01' then '公开招标'
+                when '02' then '邀请招标'
+                when '14' then '单一来源'
+                when '22' then '直接竞价'
+                when '51' then '其他采购'
+                when '52' then '其他采购'
+                when '11' then '询比采购'
+                when '12' then '询比采购'
+            end as cgfs,
+            ROUND(sum(A.JE) / 100000000, 2) as je,
+            count(1) as sl,
+            0 as rate
+        from
+            cght A
+        where
+            LEFT (A.SPRQ, 4) = #{year}
+            and A.SWBZ = '2'
+            and A.WJBZ = '0'
+        group by
+            A.CGFS
+    ) a
+WHERE
+    a.cgfs is not NULL
+group by
+    cgfs
+'''
+
+"ETL脚本" = '''
+select
+    md5 (fs) as id,
+    null as etl_time,
+    fs as cgfs,
+    je,
+    sl
+from
+    (
+        select
+            case cgfs
+                when '01' then '公开招标'
+                when '02' then '邀请招标'
+                when '14' then '单一来源'
+                when '22' then '直接竞价'
+                when '51' then '其他采购'
+                when '52' then '其他采购'
+                when '11' then '询比采购'
+                when '12' then '询比采购'
+            end as fs,
+            round(sum(je) / 100000000, 2) as je,
+            count(1) as sl
+        from
+            dw_dsep.DWD_GYL_CGHT
+        where
+            year (sprq) = year (curdate ())
+            and swbz = '2'
+            and wjbz = '0'
+        group by
+            fs
+        having
+            fs is not null
+    ) as ads
+'''
+
+
+"ADS查询" = '''
+select
+    cgfs, -- 采购方式
+    je, -- 金额
+    sl -- 数量
+from
+    ADS_CGFSFBTJ
+order by
+    sl
+'''
+

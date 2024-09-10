@@ -1,0 +1,92 @@
+"功能" = "采购方式分类统计二级页面"
+"表名" = "ADS_CGFSFBTJ_SECOND"
+"编号" = 19
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select 
+    (@i:=@i+1) AS sequence,
+    t.*
+from
+    (
+        select
+            (
+                SELECT
+                    DWMC
+                FROM
+                    XTLLDW
+                WHERE
+                    DWBM = LEFT (A.XFDM, 3)
+            ) companyName,
+            ROUND(sum(A.JE) / 100000000, 2) as totalManey,
+            count(1) as contractCount
+        from
+            cght A
+        where
+            A.SPRQ like #{year}
+            and A.SWBZ = '2'
+            and A.WJBZ = '0'
+            and A.CGFS IN ()
+            <foreach collection="cgfsList" item="cgfs" open="(" separator="," close=")">
+                #{cgfs}
+            </foreach>
+        group by
+            LEFT (A.XFDM, 3)
+    ) t,
+    (
+        Select
+            @i:=${(pageNum-1)*pageSize}
+    ) B
+LIMIT
+    ${(pageNum-1)*pageSize},${pageSize}
+'''
+
+"ETL脚本" = '''
+select
+    md5 (concat_ws ('-', fs, zgdwmc)) as id,
+    null as etl_time,
+    fs as cgfs,
+    zgdwmc,
+    je,
+    sl
+from
+    (
+        select
+            case cgfs
+                when '01' then '公开招标'
+                when '02' then '邀请招标'
+                when '14' then '单一来源'
+                when '22' then '直接竞价'
+                when '51' then '其他采购'
+                when '52' then '其他采购'
+                when '11' then '询比采购'
+                when '12' then '询比采购'
+            end as fs,
+            b.dwmc as zgdwmc,
+            round(sum(a.JE) / 100000000, 2) as je,
+            count(1) as sl
+        from
+            dw_dsep.DWD_GYL_CGHT as a
+            left join dw_dsep.DWD_GYL_XTLLDW as b on strleft (a.xfdm, 3) = b.dwbm
+        where
+            year (a.SPRQ) = year (curdate ())
+            and a.SWBZ = '2'
+            and a.WJBZ = '0'
+        group by
+            fs,
+            zgdwmc
+        having
+            fs is not null
+    ) as main
+'''
+
+"ADS查询" = '''
+select
+    cgfs, -- 采购方式
+    zgdwmc, -- 直管单位名称
+    je, -- 金额
+    sl -- 数量
+from
+    ADS_CGFSFBTJ_SECOND
+'''
+

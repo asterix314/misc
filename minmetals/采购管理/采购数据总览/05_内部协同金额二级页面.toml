@@ -1,7 +1,7 @@
 "功能" = "内部协同金额二级页面"
 "表名" = "ADS_NBXTJE_SECOND"
 "编号" = 5
-"状态" = "开始"
+"状态" = "完成"
 
 "MySQL原逻辑" = '''
 -- 内部协同采购金额、点击后 二级页面
@@ -24,6 +24,7 @@ GROUP BY LEFT(A.SPRQ, 4) ,A.BUSINESSCLASSIFICATION
 ORDER BY LEFT(A.SPRQ, 4) DESC ,A.BUSINESSCLASSIFICATION DESC
 '''
 
+
 "ETL脚本" = '''
 select
     md5 (
@@ -43,3 +44,15 @@ group by
     businessclassification
 '''
 
+
+"ADS查询" = '''
+select
+    years, -- 年度
+    lx, -- 协同类型
+    je -- 累计金额：亿元
+from
+    ADS_NBXTJE_SECOND
+order by
+    years desc,
+    lx desc
+'''

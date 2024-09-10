@@ -21,20 +21,6 @@ ORDER BY
     LEFT(A.SPRQ,4)
     DESC
 LIMIT ${(pageNum-1)*pageSize},${pageSize}
-----
-SELECT
-    count(1)
-FROM
-    cght A,(Select @i:=0) B
-WHERE
-    A.SWBZ = '2'
-    AND A.WJBZ = '0'
-    AND LEFT(A.SPRQ,4) > 2020
-GROUP BY
-    LEFT(A.SPRQ,4)
-ORDER BY
-    LEFT(A.SPRQ,4)
-    DESC
 '''
 
 "ETL脚本" = '''
@@ -51,4 +37,16 @@ where
 group by
     years
 '''
+
+"ADS查询" = '''
+select
+    years, -- 年度
+    ljcghtfs, -- 累计采购合同份数：万份
+    ljhtje -- 累计采购合同金额：亿元
+from
+    ADS_LJCGHT_SECOND
+order by
+    years desc
+'''
+
 

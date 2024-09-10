@@ -1,7 +1,7 @@
 "功能" = "内部协同金额三级页面"
 "表名" = "ADS_NBXTJE_THREE"
 "编号" = 6
-"状态" = "未开始"
+"状态" = "取消"
 
 "MySQL原逻辑" = '''
 -- 内部协同采购金额 点击年度 三级页面
@@ -67,7 +67,7 @@ LIMIT ${(pageNum-1)*pageSize},${pageSize}
 "ETL脚本" = '''
 select
     md5 (
-        concat_ws ('-', strleft (sprq, 4), businessclassification)
+        concat_ws ('-', strleft (sprq, 4), businessclassification, zgdwmc)
     ) as id,
     null as etl_time,
     zgdwmc,
@@ -97,5 +97,18 @@ group by
     years,
     zgdwmc,
     lx
+'''
+
+"ADS查询" = '''
+select
+    zgdwmc, -- 直管单位名称（采购单位）
+    lx, -- 协同类型
+    money -- 累计金额：亿元
+from
+    ADS_NBXTJE_THREE
+where
+    years = '2023'
+order by
+    lx desc
 '''
 

@@ -1,7 +1,7 @@
 "功能" = "内部协同金额四级页面"
 "表名" = "ADS_NBXTJE_FOUR"
 "编号" = 7
-"状态" = "未开始"
+"状态" = "取消"
 
 "MySQL原逻辑" = '''
 -- 内部协同采购金额 点击直管单位 四级页面
@@ -84,3 +84,17 @@ group by
     lx
 '''
 
+"ADS查询" = '''
+select
+    cgdwmc, -- 采购单位名称（三级单位名称）
+    lx, -- 协同类型
+    money -- 累计合同额(亿元)
+from
+    ADS_NBXTJE_FOUR
+where
+    years = '2023'
+    and zgdwmc = '五矿地产有限公司'
+order by
+    cgdwmc,
+    lx
+'''

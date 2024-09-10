@@ -47,3 +47,12 @@ where
     year (sprq) > 2020
 '''
 
+"ADS查询" = '''
+select
+    ljcght, -- 累计采购合同
+    ljcghtje, -- 累计采购合同金额
+    nbxtje -- 内部协同金额
+from
+    ADS_LJCGHT
+'''
+

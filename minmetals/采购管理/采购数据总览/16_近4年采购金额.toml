@@ -1,0 +1,49 @@
+"功能" = "近4年采购金额"
+"表名" = "ADS_JSNCGJE"
+"编号" = 16
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    left (A.SPRQ, 4) nf,
+    ROUND(SUM(A.JE) / 100000000, 2) je
+FROM
+    cght A
+WHERE
+    A.SWBZ = '2'
+    AND A.WJBZ = '0'
+    AND (A.SPRQ like #{year} OR A.SPRQ like #{year1} OR A.SPRQ like #{year2} OR A.SPRQ like #{year3})
+GROUP BY
+    SUBSTR (A.SPRQ, 1, 4)
+ORDER BY
+    SUBSTR (A.SPRQ, 1, 4)
+'''
+
+
+"ETL脚本" = '''
+select
+    md5 (strleft (sprq, 4)) as id,
+    null as etl_time,
+    strleft (sprq, 4) as years,
+    round(sum(je) / 100000000, 2) as je
+from
+    dw_dsep.DWD_GYL_CGHT
+where
+    swbz = '2'
+    and wjbz = '0'
+    and year (sprq) > year (curdate ()) - 4
+group by
+    years
+'''
+
+
+
+"ADS查询" = '''
+select
+    years, -- 年份
+    je -- 金额
+from
+    ADS_JSNCGJE
+order by
+    years
+'''

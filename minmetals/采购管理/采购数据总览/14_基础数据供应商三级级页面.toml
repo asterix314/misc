@@ -1,0 +1,36 @@
+"功能" = "基础数据供应商三级级页面"
+"表名" = "ADS_JCSJ_GYS_THREE"
+"编号" = 14
+"状态" = "取消"
+
+"MySQL原逻辑" = '''
+SELECT
+    CASE A.BUSINESSCLASSIFICATION
+        when '100' THEN '物资'
+        when '010' THEN '工程'
+        when '001' THEN '服务'
+    END AS lx,
+    COUNT(1) as sl
+FROM
+    xtghdw A
+WHERE
+    A.TCBZ = '0'
+    AND A.SFZR = '1'
+    AND A.TYBZ = '0'
+    AND A.SHBZ = '2'
+    AND A.TJDWBM IN (
+        SELECT
+            DWBM
+        FROM
+            XTLLDW
+        WHERE
+            DWMC = #{tjdwbm}
+    ) 
+GROUP BY
+    A.BUSINESSCLASSIFICATION
+'''
+
+"ETL脚本" = '''
+
+'''
+

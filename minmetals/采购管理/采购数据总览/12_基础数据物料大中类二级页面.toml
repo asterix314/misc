@@ -1,0 +1,86 @@
+"功能" = "基础数据物料大中类二级页面"
+"表名" = "ADS_JCSJ_WL_SECOND"
+"编号" = 12
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    (@i:=@i+1) AS sequence,
+    A.LBMC name,
+    IFNULL (B.SL, 0) count
+FROM
+    XTWZLB A
+    LEFT JOIN (
+        SELECT
+            LEFT (LBBM, 2) LBBM,
+            COUNT(1) SL
+        FROM
+            XTWZLB B
+        WHERE
+            LENGTH (LBBM) = '4'
+            AND NOUSE = '0'
+        GROUP BY
+            LEFT (LBBM, 2)
+    ) B ON A.LBBM = B.LBBM,
+    (
+        Select
+            @i:=${(pageNum-1)*pageSize}
+    ) C
+WHERE
+    A.NOUSE = '0'
+    AND LENGTH (A.LBBM) = '2'
+ORDER BY
+    sequence asc
+LIMIT  
+    ${(pageNum-1)*pageSize},${pageSize}
+'''
+
+"ETL脚本" = '''
+select
+    id,
+    etl_time,
+    name,
+    sl
+from
+    (
+        with
+            dl as (
+                select
+                    lbbm,
+                    lbmc as name
+                from
+                    dw_dsep.DWD_GYL_XTWZLB
+                where
+                    length (trim(lbbm)) = 2
+                    and nouse = '0'
+            ),
+            zl as (
+                select
+                    strleft (lbbm, 2) as dlbm,
+                    count(1) as sl
+                from
+                    dw_dsep.DWD_GYL_XTWZLB
+                where
+                    length (trim(lbbm)) = 4
+                    and nouse = '0'
+                group by
+                    dlbm
+            )
+        select
+            md5 (dl.lbbm) as id,
+            null as etl_time,
+            dl.name,
+            greatest (zl.sl, 0) as sl
+        from
+            dl
+            left join zl on dl.lbbm = zl.dlbm
+    ) as ads
+'''
+
+"ADS查询" = '''
+select
+    name, -- 物料大类
+    sl -- 包含中类数量
+from
+    ADS_JCSJ_WL_SECOND
+'''

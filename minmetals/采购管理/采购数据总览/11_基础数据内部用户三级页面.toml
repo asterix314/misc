@@ -1,0 +1,43 @@
+"功能" = "基础数据内部用户三级页面"
+"表名" = "ADS_JCSJ_NBYH_THREE"
+"编号" = 11
+"状态" = "取消"
+
+"MySQL原逻辑" = '''
+SELECT
+    (@i:=@i+1) AS sequence,
+    (
+        SELECT
+            DWMC
+        FROM
+            xtlldw
+        WHERE
+            DWBM = LEFT (A.DWDM, 6)
+    ) AS companyName,
+    COUNT(1) AS userCount
+FROM
+    t_wh_userinfo A,
+    (
+        Select
+            @i:=${(pageNum-1)*pageSize}
+    ) B
+WHERE
+    A.NOUSE = '0'
+    AND A.DWDM IN (
+        SELECT
+            DWBM
+        FROM
+            XTLLDW
+        WHERE
+            DWMC = #{xfdm}
+    ) 
+GROUP BY
+    LEFT (A.DWDM, 6)
+LIMIT
+    ${(pageNum-1)*pageSize},${pageSize}
+'''
+
+"ETL脚本" = '''
+
+'''
+

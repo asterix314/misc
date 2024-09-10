@@ -1,0 +1,91 @@
+"功能" = "基础数据内部用户二级页面"
+"表名" = "ADS_JCSJ_NBYH_SECOND"
+"编号" = 10
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+select
+    @i := @i + 1 as sequence,
+    t.*
+from
+    (
+        select
+            (
+                select
+                    DWMC
+                from
+                    xtlldw
+                where
+                    DWBM = left (A.DWDM, 3)
+            ) as companyName,
+            count(1) as userCount
+        from
+            t_wh_userinfo A
+        where
+            A.NOUSE = '0'
+            and left (A.DWDM, 3) in (
+                '201',
+                '202',
+                '219',
+                '204',
+                '205',
+                '206',
+                '207',
+                '209',
+                '210',
+                '217',
+                '211',
+                '212'
+            )
+        group by
+            left (A.DWDM, 3)
+    ) t,
+    (
+        select
+            @i:=${(pageNum-1)*pageSize}
+    ) B
+LIMIT
+    ${(pageNum-1)*pageSize},${pageSize}
+'''
+
+"ETL脚本" = '''
+select
+    row_number() over () as id,
+    null as etl_time,
+    b.dwmc as zgdwmc,
+    count(1) as sl
+from
+    dw_dsep.DWD_GYL_T_WH_USERINFO as a
+    left join dw_dsep.DWD_GYL_XTLLDW as b on strleft (a.dwdm, 3) = b.dwbm
+where
+    a.nouse = '0'
+    and strleft (a.dwdm, 3) in (
+        '201',
+        '202',
+        '204',
+        '205',
+        '206',
+        '207',
+        '208',
+        '209',
+        '210',
+        '211',
+        '212',
+        '214',
+        '215',
+        '216',
+        '217',
+        '219'
+    )
+group by
+    b.dwmc
+'''
+
+
+"ADS查询" = '''
+select
+    zgdwmc, -- 直管单位名称
+    sl -- 采购单位数量
+from
+    ADS_JCSJ_NBYH_SECOND
+'''

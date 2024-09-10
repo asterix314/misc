@@ -1,0 +1,81 @@
+"功能" = "基础数据供应商二级页面"
+"表名" = "ADS_JCSJ_GYS_SECOND"
+"编号" = 13
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    (
+        SELECT
+            DWMC
+        FROM
+            xtlldw
+        WHERE
+            DWBM = LEFT (A.TJDWBM, 3)
+    ) companyName,
+    COUNT(1) count
+FROM
+    xtghdw A
+WHERE
+    A.TCBZ = '0'
+    AND A.SFZR = '1'
+    AND A.TYBZ = '0'
+    AND A.SHBZ = '2'
+    AND LEFT (A.TJDWBM, 3) IN (
+        '201',
+        '202',
+        '219',
+        '204',
+        '205',
+        '206',
+        '207',
+        '209',
+        '210',
+        '217',
+        '211',
+        '212'
+    )
+GROUP BY
+    LEFT (A.TJDWBM, 3)
+'''
+
+"ETL脚本" = '''
+select
+    md5 (b.dwbm) as id,
+    null as etl_time,
+    any_value (b.dwmc) as zgdwmc,
+    count(1) as sl
+from
+    dw_dsep.DWD_GYL_XTGHDW as a
+    left join dw_dsep.DWD_GYL_XTLLDW as b on 
+        strleft (a.TJDWBM, 3) = b.dwbm
+where
+    a.tcbz = '0'
+    and a.sfzr = '1'
+    and a.tybz = '0'
+    and a.shbz = '2'
+    and left (a.tjdwbm, 3) in (
+        '201',
+        '202',
+        '219',
+        '204',
+        '205',
+        '206',
+        '207',
+        '209',
+        '210',
+        '217',
+        '211',
+        '212'
+    )
+group by
+    b.dwbm
+'''
+
+"ADS查询" = '''
+select
+    zgdwmc, -- 直管单位名称
+    sl -- 供应商数量
+from
+    ADS_JCSJ_GYS_SECOND
+'''

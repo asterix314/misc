@@ -1,0 +1,103 @@
+"功能" = "基础数据采购单位二级页面"
+"表名" = "ADS_JCSJ_CGDW_SECOND"
+"编号" = 9
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    (@i:=@i+1) AS sequence,
+    t.DWMC dwmc,
+    t.sl
+FROM
+    (
+        SELECT
+            LEFT (A.DWBM, 3) DWBM,
+            (
+                SELECT
+                    DWMC
+                FROM
+                    XTLLDW
+                WHERE
+                    DWBM = LEFT (A.DWBM, 3)
+            ) DWMC,
+            COUNT(1) sl
+        FROM
+            XTLLDW A
+        WHERE
+            A.ORGTYPE = '0'
+            AND A.TYBZ = '0'
+            AND left (A.DWBM, 3) in (
+                '201',
+                '202',
+                '204',
+                '205',
+                '206',
+                '207',
+                '208',
+                '209',
+                '210',
+                '211',
+                '212',
+                '214',
+                '215',
+                '216',
+                '217',
+                '219'
+            )
+            AND LENGTH (A.DWBM) >= '3'
+        GROUP BY
+            LEFT (A.DWBM, 3)
+    ) t,
+    (
+        select
+            @i := ${(pageNum-1)*pageSize}
+    ) p
+LIMIT
+    ${(pageNum-1)*pageSize},${pageSize}
+'''
+
+"ETL脚本" = '''
+select
+    md5(b.dwmc) as id,
+    null as etl_time,
+    b.dwmc as zgdwmc,
+    count(1) as sl
+from
+    dw_dsep.DWD_GYL_XTLLDW as a
+    left join dw_dsep.DWD_GYL_XTLLDW as b on 
+        strleft(a.dwbm, 3) = b.dwbm
+where
+    a.orgtype = '0'
+    and a.tybz = '0'
+    and length(a.dwbm) >= 3
+    and strleft(a.dwbm, 3) in (
+        '201',
+        '202',
+        '204',
+        '205',
+        '206',
+        '207',
+        '208',
+        '209',
+        '210',
+        '211',
+        '212',
+        '214',
+        '215',
+        '216',
+        '217',
+        '219'
+    )
+group by
+    b.dwmc
+'''
+
+"ADS查询" = '''
+select
+    zgdwmc, -- 直管单位名称
+    sl -- 采购单位数量
+from
+    ADS_JCSJ_CGDW_SECOND
+'''
+
+

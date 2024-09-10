@@ -1,0 +1,161 @@
+"功能" = "基础数据"
+"表名" = "ADS_JCSJ"
+"编号" = 8
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+-- cgdwList
+SELECT
+    COUNT(1)
+FROM
+    xtlldw
+where
+    orgtype = '0'
+    and tybz = '0'
+    and left (DWBM, 3) in (
+        '201',
+        '202',
+        '204',
+        '205',
+        '206',
+        '207',
+        '208',
+        '209',
+        '210',
+        '211',
+        '212',
+        '214',
+        '215',
+        '216',
+        '217',
+        '219'
+    )
+
+-- 内部用户 internalUser
+SELECT COUNT(1) FROM t_wh_userinfo A WHERE A.NOUSE = '0'
+
+-- 外部用户 externalUser
+SELECT COUNT(1) FROM b2b_ghdwuser A WHERE A.TYBZ = '0' AND A.SXBZ = '1' AND A.ZXBZ = '0'
+
+-- 供应商 supplier
+SELECT COUNT(1) FROM xtghdw A WHERE A.TCBZ = '0' AND A.SFZR = '1' AND A.TYBZ = '0'
+
+-- 大类 category
+SELECT COUNT(1) FROM xtwzlb A WHERE LENGTH(A.LBBM) = 2 AND A.NOUSE = '0'
+
+-- 中类 middleClass
+SELECT COUNT(1) FROM xtwzlb A WHERE LENGTH(A.LBBM) = 4 AND A.NOUSE = '0'
+
+-- 黑名单供应商 smallClass
+SELECT COUNT(1) FROM xtghdw A WHERE A.TCBZ = '1' AND A.SHBZ = '2'
+'''
+
+"ETL脚本" = '''
+select
+    md5(uuid()) as id,
+    null as etl_time,
+    cgdw,
+    nbyh,
+    gys,
+    gysyh,
+    hmdgys,
+    wldl,
+    wlzl
+from
+    (
+        with
+            xtlldw as (
+                select
+                    count(1) as cgdw
+                from
+                    dw_dsep.DWD_GYL_XTLLDW
+                where
+                    orgtype = '0'
+                    and tybz = '0'
+                    and left (dwbm, 3) in (
+                        '201',
+                        '202',
+                        '204',
+                        '205',
+                        '206',
+                        '207',
+                        '208',
+                        '209',
+                        '210',
+                        '211',
+                        '212',
+                        '214',
+                        '215',
+                        '216',
+                        '217',
+                        '219'
+                    )
+            ),
+            userinfo as (
+                select
+                    count(1) as nbyh -- 内部用户 internaluser
+                from
+                    dw_dsep.DWD_GYL_T_WH_USERINFO
+                where
+                    nouse = '0'
+            ),
+            ghdwuser as (
+                select
+                    count(1) as gys -- 外部用户 externaluser
+                from
+                    dw_dsep.DWD_GYL_B2B_GHDWUSER
+                where
+                    tybz = '0'
+                    and sxbz = '1'
+                    and zxbz = '0'
+            ),
+            xtghdw as (
+                select
+                    sum(
+                        tcbz = '0'
+                        and sfzr = '1'
+                        and tybz = '0'
+                    ) as gysyh, -- 供应商 supplier
+                    sum(
+                        tcbz = '1'
+                        and shbz = '2'
+                    ) as hmdgys -- 黑名单供应商 smallclass
+                from
+                    dw_dsep.DWD_GYL_XTGHDW
+            ),
+            xtwzlb as (
+                select
+                    sum(
+                        length (lbbm) = 2
+                        and nouse = '0'
+                    ) as wldl, -- 中类 middleclass
+                    sum(
+                        length (lbbm) = 4
+                        and nouse = '0'
+                    ) as wlzl -- 中类 middleclass
+                from
+                    dw_dsep.DWD_GYL_XTWZLB
+            )
+        select
+            *
+        from
+            xtlldw
+            cross join userinfo
+            cross join ghdwuser
+            cross join xtghdw
+            cross join xtwzlb
+    ) as ads
+'''
+
+"ADS查询" = '''
+select
+    cgdw, -- 采购单位
+    nbyh, -- 内部用户
+    gys, -- 供应商
+    gysyh, -- 供应商用户
+    hmdgys, -- 黑名单供应商
+    wldl, -- 物料大类
+    wlzl -- 物料中类
+from
+    ADS_JCSJ
+'''

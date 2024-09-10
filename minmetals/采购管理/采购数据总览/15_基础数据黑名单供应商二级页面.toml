@@ -1,0 +1,40 @@
+"功能" = "基础数据黑名单供应商二级页面"
+"表名" = "ADS_JCSJ_HMDGYS_SECOND"
+"编号" = 15
+"状态" = "完成"
+
+"MySQL原逻辑" = '''
+SELECT
+    (@i:=@i+1) AS sequence,
+    DWMC blacklist
+FROM
+    xtghdw A,
+    (
+        Select
+            @i:=${(pageNum-1)*pageSize}
+    ) B
+WHERE
+    A.TCBZ = '1'
+    AND A.SHBZ = '2'
+LIMIT
+    ${(pageNum-1)*pageSize},${pageSize}
+'''
+
+"ETL脚本" = '''
+select
+    md5(dwmc) as id,
+    null as etl_time,
+    dwmc as gysmc
+from
+    dw_dsep.DWD_GYL_XTGHDW
+where
+    tcbz = '1'
+    and shbz = '2'
+'''
+
+"ADS查询" = '''
+select
+    gysmc, -- 黑名单供应商名称
+from
+    ADS_JCSJ_HMDGYS_SECOND
+'''

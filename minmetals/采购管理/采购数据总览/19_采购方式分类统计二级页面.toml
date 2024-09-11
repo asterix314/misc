@@ -1,7 +1,7 @@
 "功能" = "采购方式分类统计二级页面"
 "表名" = "ADS_CGFSFBTJ_SECOND"
 "编号" = 19
-"状态" = "完成"
+"状态" = "未配置ETL"
 
 "MySQL原逻辑" = '''
 select 
@@ -79,6 +79,7 @@ from
             fs is not null
     ) as main
 '''
+
 
 "ADS查询" = '''
 select

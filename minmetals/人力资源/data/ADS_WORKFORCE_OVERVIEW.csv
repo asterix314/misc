@@ -1,0 +1,7 @@
+字段,类型,说明,约束
+age,string,年龄,
+gender,enum,性别：男、女,
+diploma,enum,学历：专科以下、本科、硕士、博士,
+contracted,bool,是否为职工,
+on_duty,bool,是否在职,
+company_code,string,直管企业编码,FK:company.code

@@ -1,30 +1,23 @@
-#import "@preview/modern-technique-report:0.1.0": *
+// 基础字体设定
+#set text(font: "SimSun", size: 12pt, lang: "zh")
 
-#show: modern-technique-report.with(
-  title: [人力资源系统数据建模],
-  subtitle: [
-    （草稿）
-  ],
-  series: [五矿集团“数字化企业大脑”项目 \ 数据治理文档],
-  /*author: grid(
-    align: left + horizon,
-    columns: 3,
-    inset: 7pt,
-    [*Member*], [B. Alice], [qwertyuiop\@youremail.com],
-    [], [B. Alice], [qwertyuiop\@youremail.com],
-    [], [B. Alice], [qwertyuiop\@youremail.com],
-    [*Advisor*], [E. Eric], [qwertyuiop\@youremail.com],
-  ),*/
-  date: datetime.today().display("[year] 年 [month] 月 [day] 日"),
-//  background: image("bg.jpg"),
-  theme-color: rgb(21, 74, 135),
-  font: ("Fira Code", "SimSun"),
-  title-font: "SimHei",
-)
+
+五矿集团“数字化企业大脑”项目 \
+数据治理文档
+
+#v(30%)
+
+#align(center, text(26pt, font: "SimHei")[
+  *人力资源系统数据建模*\
+  （草稿）
+])
+
+#align(right + bottom, 
+  datetime.today().display("[year] 年 [month] 月 [day] 日"))
 
 #show table.cell.where(y: 0): set text(weight: "bold")
 
-
+#pagebreak()
 
 = 应用层（ADS）设计
 
@@ -48,20 +41,20 @@
   - 劳务派遣人员。
 
 #figure(
-  image("resource/人数分布.png",fit: "contain"),
+  image("resource/人数分布.png", width: 60%),
   caption: [概览：人数分布],
   placement: auto
 ) <概览-人数分布图>
 
 
 #figure(
-  image("resource/人数按直管企业分布.png",fit: "contain"),
+  image("resource/人数按直管企业分布.png", width: 60%),
   caption: [概览：人数按直管企业分布],
   placement: auto
 ) <概览-人数按直管企业分布图>
 
 #figure(
-  image("resource/人员近年变化情况.png",fit: "contain"),
+  image("resource/人员近年变化情况.png", width: 60%),
   caption: [人员近年变化情况],
   placement: auto
 ) <概览-人员近年变化情况图>
@@ -76,7 +69,7 @@
     align: horizon + left,
     fill: (_, y) => if y == 0 {gray},
     ..ADS_WORKFORCE_BREAKDOWN.flatten()
-  ), caption: [应用层表：人员概览（ADS_WORKFORCE_OVERVIEW）]
+  ), // caption: [应用层表：人员概览（ADS_WORKFORCE_OVERVIEW）]
 ) <ADS_WORKFORCE_OVERVIEW>
 
 
@@ -156,4 +149,3 @@ from DWS_TEST
 
 
 = 标准层（DWD）设计
-

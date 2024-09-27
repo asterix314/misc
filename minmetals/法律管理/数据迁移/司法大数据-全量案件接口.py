@@ -628,10 +628,10 @@ mappings = {
 }
 
 db_config = {
-    'host': '10.201.132.8',
-    'user': 'zhangyc6',
-    'password': 'zhangyc6@123456',
-    'database': 'dw_ods_dsep',
+    'host': '*',
+    'user': 'xxx',
+    'password': 'xxx',
+    'database': 'xxx',
     'port': 9030
 }
 

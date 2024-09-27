@@ -172,22 +172,22 @@ for company in companies:
 # 将原本的mappings.json内容直接放入代码中
 mappings = {
     "list_to_table": {
-        "msysList": "ODS_xzlamsys",
-        "xzysList": "ODS_xzlaxzys",
-        "mszsList": "ODS_xzlamszs",
-        "msesList": "ODS_xzlamses",
-        "xsesList": "ODS_xzlaxses",
-        "sczxList": "ODS_xzlasczx",
-        "xszsList": "ODS_xzlaxszs",
-        "xzzsList": "ODS_xzlaxzzs",
-        "ccbqzxList": "ODS_xzlaccbqzx",
-        "xzesList": "ODS_xzlaxzes",
-        "hfzxList": "ODS_xzlahfzx",
-        "zxyyList": "ODS_xzlazxyy",
-        "xsysList": "ODS_xzlaxsys"
+        "msysList": "ODS_FL_XZLAMSYS",
+        "xzysList": "ODS_FL_XZLAXZYS",
+        "mszsList": "ODS_FL_XZLAMSZS",
+        "msesList": "ODS_FL_XZLAMSES",
+        "xsesList": "ODS_FL_XZLAXSES",
+        "sczxList": "ODS_FL_XZLASCZX",
+        "xszsList": "ODS_FL_XZLAXSZS",
+        "xzzsList": "ODS_FL_XZLAXZZS",
+        "ccbqzxList": "ODS_FL_XZLACCBQZX",
+        "xzesList": "ODS_FL_XZLAXZES",
+        "hfzxList": "ODS_FL_XZLAHFZX",
+        "zxyyList": "ODS_FL_XZLAZXYY",
+        "xsysList": "ODS_FL_XZLAXSYS"
     },
     "field_mappings": {
-        "ODS_xzlamsys": {
+        "ODS_FL_XZLAMSYS": {
             "id": "id",
             "ccompany": "ccompany",
             "cajmc": "cajmc",
@@ -219,7 +219,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlaxzys": {
+        "ODS_FL_XZLAXZYS": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -248,7 +248,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlamszs": {
+        "ODS_FL_XZLAMSZS": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -283,7 +283,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlamses": {
+        "ODS_FL_XZLAMSES": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -316,7 +316,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlaxses": {
+        "ODS_FL_XZLAXSES": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -353,7 +353,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlasczx": {
+        "ODS_FL_XZLASCZX": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -396,7 +396,7 @@ mappings = {
             "sqcylxlx": "sqcylxlx",
             "cssdw": "cssdw"
         },
-        "ODS_xzlaxszs": {
+        "ODS_FL_XZLAXSZS": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -432,7 +432,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlaxzzs": {
+        "ODS_FL_XZLAXZZS": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -466,7 +466,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlaccbqzx": {
+        "ODS_FL_XZLACCBQZX": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -499,7 +499,7 @@ mappings = {
             "cssdw": "cssdw",
             "csqr": "csqr"
         },
-        "ODS_xzlaxzes": {
+        "ODS_FL_XZLAXZES": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -530,7 +530,7 @@ mappings = {
             "claaymc": "claaymc",
             "cssdw": "cssdw"
         },
-        "ODS_xzlahfzx": {
+        "ODS_FL_XZLAHFZX": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -569,7 +569,7 @@ mappings = {
             "nsqcylxj": "nsqcylxj",
             "nsqcylxlx": "nsqcylxlx"
         },
-        "ODS_xzlazxyy": {
+        "ODS_FL_XZLAZXYY": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",
@@ -591,7 +591,7 @@ mappings = {
             "nbdse": "nbdse",
             "claaymc": "claaymc"
         },
-        "ODS_xzlaxsys": {
+        "ODS_FL_XZLAXSYS": {
             "id": "id",
             "ccompany": "ccompany",
             "cjafs": "cjafs",

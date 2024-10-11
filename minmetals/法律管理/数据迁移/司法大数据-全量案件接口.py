@@ -627,12 +627,21 @@ mappings = {
 
 }
 
+# db_config = {
+#     'host': '10.201.132.8',
+#     'user': 'zhangyc6',
+#     'password': 'zhangyc6@123456',
+#     'database': 'dw_ods_dsep',
+#     'port': 9030
+# }
+
 db_config = {
-    'host': '10.201.132.8',
-    'user': 'zhangyc6',
-    'password': 'zhangyc6@123456',
-    'database': 'dw_ods_dsep',
-    'port': 9030
+    'host': 'localhost',
+    'user': 'root',
+    'password': ''
+    'database': 'ods_prod',
+    'port': 3306
 }
+
 
 insert_data_to_doris(all_data, db_config, mappings)

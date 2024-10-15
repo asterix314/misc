@@ -1,6 +1,6 @@
-#import "模板.typ": 模板, 菜单
+#import "template.typ": template, menu
 
-#show: 模板
+#show: template
 
 = 数据开发(TODO)
 

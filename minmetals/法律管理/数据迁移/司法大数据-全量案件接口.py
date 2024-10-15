@@ -59,31 +59,31 @@ def fetch_data(api_url, key, ticket, company, loginName, passWord, pageSize=100)
         response = requests.post(api_url, data=encrypted_payload, headers=headers)
 
         if response.status_code != 200:
-            print(f"Request failed with status code {response.status_code}")
+            print "Request failed with status code " + str(response.status_code)
             break
 
         try:
             decrypted_response = aes_cipher.decrypt(response.text)
         except Exception as e:
-            print(f"Decryption failed for page {pageNum}")
-            print(f"Response text: {response.text}")
+            print "Decryption failed for page " + str(pageNum)
+            print "Response text: " + response.text
             break
 
         response_data = json.loads(decrypted_response)
 
         if "code" not in response_data or response_data["code"] != 1000:
-            print(f"Error in response: {response_data.get('msg', 'No message')}")
-            print(f"Full response: {response_data}")
+            print "Error in response: " + response_data.get('msg', 'No message')
+            print "Full response: " + response_data
             break
 
         data = response_data.get("data")
         if not data:
-            print("No data field in response")
+            print "No data field in response"
             break
 
         hashMap = data.get("hashMap")
         if not hashMap:
-            print("No hashMap field in data")
+            print "No hashMap field in data"
             break
 
         for table_name in all_data.keys():
@@ -113,16 +113,16 @@ def insert_data_to_doris(all_data, db_config, mappings, batch_size=1000):
     list_to_table = mappings.get("list_to_table", {})
     field_mappings = mappings.get("field_mappings", {})
 
-    print(field_mappings)
+    print field_mappings
     for list_name, data in all_data.items():
         table_name = list_to_table.get(list_name)
         if not table_name:
-            print(f"No table mapping for list {list_name}")
+            print "No table mapping for list " + list_name
             continue
 
         field_mapping = field_mappings.get(table_name)
         if not field_mapping:
-            print(f"No field mapping for table {table_name}")
+            print "No field mapping for table " + table_name
             continue
 
         total_records = len(data)
@@ -136,13 +136,13 @@ def insert_data_to_doris(all_data, db_config, mappings, batch_size=1000):
 
             columns = ', '.join(field_mapping.values())
             placeholders = ','.join(['%s'] * len(field_mapping))
-            sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
-
+            sql = "INSERT INTO {} ({}) VALUES ({})".format(table_name, columns, placeholders)
+            
             try:
                 cursor.executemany(sql, values_list)
             except Exception as e:
-                print(f"Error inserting data into {table_name}: {e}")
-                print(f"Batch start index: {i}")
+                print "Error inserting data into " + table_name + ": " + str(e)
+                print "Batch start index: " + str(i)
 
     connection.commit()
     cursor.close()

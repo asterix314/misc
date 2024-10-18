@@ -1,4 +1,4 @@
-#import "模板.typ": 模板
+#import "template.typ": template
 
 #set text(
   font: "FangSong", 
@@ -30,7 +30,7 @@
 
 #pagebreak()
 
-#show: 模板
+#show: template
 
 #outline()
 

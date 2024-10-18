@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.log
+.eggs/
+.pytest_cache/
+.coverage
+.cache
+.tox/
+.hypothesis/
+dist/
+build/
+*.egg-info/
+.mypy_cache/
+.pyre/
+.venv/
+.env/
+.vscode/
+.idea/
+.DS_Store
+.ipynb_checkpoints/
+.python-version
+*.*~

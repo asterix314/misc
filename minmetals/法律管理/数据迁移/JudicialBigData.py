@@ -116,8 +116,8 @@ class JudicialBigData:
                 continue
             
             if t.pageNum == 1 and pages > 1:
-                tasks.extend([t._replace(pageNum=p, pages=pages, retry=0) 
-                              for p in range(2, pages+1)])
+                tasks.extendleft([t._replace(pageNum=p, pages=pages, retry=0) 
+                              for p in range(pages, 1, -1)])
                 
             for label, rows in cases.items():
                 all_cases[label].extend(rows)
@@ -157,8 +157,8 @@ class JudicialBigData:
             dbconn.commit()
         finally:
             dbconn.close()
-            
-            
+
+
     def import_cases(self, incremental=True):
         cases = self.request_cases(incremental)
         self.save_cases(cases)

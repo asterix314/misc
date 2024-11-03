@@ -12,14 +12,13 @@
 
 #show: cv.with(
   metadata,
-  profilePhoto: image("./src/avatar.png"),
+  profilePhoto: image("./src/me.jpg"),
 )
 #importModules((
+  "skills",
   "education",
   "professional",
-  "professional",
   "projects",
-  "certificates",
-  "publications",
-  "skills",
+//  "certificates",
+//  "publications",
 ))

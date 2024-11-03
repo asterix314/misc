@@ -5,16 +5,38 @@
 #let cvEntry = cvEntry.with(metadata: metadata)
 
 
-#cvSection("Projects & Associations")
+#cvSection("Projects")
 
 #cvEntry(
-  title: [Volunteer Data Analyst],
-  society: [ABC Nonprofit Organization],
+  title: [Expert System for DevInsight],
+  society: [Merico],
   date: [2019 - Present],
-  location: [New York, NY],
+  location: [Beijing],
   description: list(
-    [Analyze donor and fundraising data to identify trends and opportunities for growth],
-    [Create data visualizations and dashboards to communicate insights to the board of directors],
-    [Collaborate with other volunteers to develop and implement data-driven strategies],
+    [Created an expert system for software development diagnosis and evaluation, integrating FastAPI for web API interfacing and CLIPS for diagnostic rule matching.],
+    [Derived expert rule parameters from statistical analysis of client historical data, enhancing the accuracy of development team performance evaluations.],
+  ),
+)
+
+#cvEntry(
+  title: [E-commerce Automatic Reporting],
+  society: [BigoneLab],
+  date: [2019 - Present],
+  location: [Beijing],
+  description: list(
+    [Implemented algorithms for label aggregation, GMV estimation, and outlier detection, using a combination of textual analysis, Bayesian networks, and statistical techniques.],
+    [Optimized storage parameters of Hive and Greenplum databases to handle large data volumes efficiently.],
+  ),
+)
+
+#cvEntry(
+  title: [MX.3 Platform Implementation for Industrial Bank of Taiwan],
+  society: [Murex China],
+  date: [Apr 2015 - Jan 2016],
+  location: [Taipei],
+  description: list(
+    [Design and implementation of the bank's financial accounting module, covering fixed income, FX cash, derivatives and structured products, and meeting the regulatory requirement of IFRS9 compliance],
+    [Established a set of general and efficient accounting schemes under close collaboration with the bank's accounting department],
+    [On-site deployment and user training.],
   ),
 )

@@ -1,0 +1,25 @@
+{
+    "connection": {
+        "db.host": "localhost",
+        "db.user": "root",
+        "db.password": "",
+        "db.database": "ods_prod",
+        "db.port": 3306
+    },
+    "fields": [
+        {
+            "table_name": "ODS_BUS_EMPLOYEE",
+            "unique_key": "EMP_ID",
+            "ciphertext": "EMP_NAME",
+            "cleartext": "EMP_NAME_CLEAR",
+            "password": "83BCE225D9FD151A"
+        },
+        {
+            "table_name": "ODS_BUS_EMPLOYEE",
+            "unique_key": "EMP_ID",
+            "ciphertext": "MOBILE_PHONE",
+            "cleartext": "MOBILE_PHONE_CLEAR",
+            "password": "83BCE225D9FD151A"
+        }
+    ]
+}

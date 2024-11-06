@@ -90,7 +90,7 @@ class JudicialBigData:
             for company in self.companies
             for api_type in api_types
         ])
-        
+
         all_cases = defaultdict(list)
         while tasks:
             t = tasks.popleft()

@@ -3,7 +3,8 @@
 """解密数据表中用 MySQL 的 DES_ENCRYPT() 函数加密过的字段，并将解密结果写入指定列。
 
 修改历史：
-    2024-11-06: 初始版本，张晨晖
+    2023-11-11: 性能优化    张晨晖
+    2024-11-06: 初始版本    张晨晖
 
 
 用法：
@@ -81,40 +82,61 @@ class MyDES:
         """
         解密单个列
         """
-        sql = """
-            SELECT `{}`, `{}` FROM `{}`
-            WHERE `{}` IS NULL and `{}` IS NOT NULL
-            """.format(
-                field['unique_key'],
-                field['ciphertext'],
-                field['table_name'],
-                field['cleartext'],
-                field['ciphertext']
-            )
-        print "{}.{} 有 {} 条记录需要解密。".format(
-            field['table_name'],
-            field['ciphertext'],
-            cursor.execute(sql)
+        sql_drop_temp = """
+            DROP TABLE IF EXISTS `TEMP_MYDES`
+        """
+        sql_create_temp = """
+            CREATE TABLE `TEMP_MYDES`
+            UNIQUE KEY(`UID`) AS
+            SELECT `{}` AS `UID`, `{}` AS `CLEARTEXT`
+            FROM `{}`
+            WHERE FALSE
+        """.format(
+            field['unique_key'],
+            field['cleartext'],
+            field['table_name']
         )
-        
-        sql = """
-            UPDATE `{}`
-            SET `{}` = %s
-            WHERE `{}` = %s
-            """.format(
-                field['table_name'],
-                field['cleartext'],
-                field['unique_key']
-            )
-        result = [(self.mysql_des_decrypt(text, field['password']), uid)
-                  for uid, text in cursor.fetchall()]
-        records = cursor.executemany(sql, result)
-        if records:
-            print "{}.{} 有 {} 条记录完成解密。".format(
-                field['table_name'],
-                field['ciphertext'],
-                records
-            )
+        sql_select = """
+            SELECT `{}`, `{}`
+            FROM `{}`
+            WHERE `{}` IS NULL and `{}` LIKE 'FF%'
+        """.format(
+            field['unique_key'],
+            field['ciphertext'],
+            field['table_name'],
+            field['cleartext'],
+            field['ciphertext']
+        )
+        sql_insert = """
+            INSERT INTO TEMP_MYDES VALUES(%s, %s)
+        """
+        sql_update = """
+            UPDATE `{}` AS T
+            SET T.`{}` = S.`CLEARTEXT`
+            FROM `TEMP_MYDES` AS S
+            WHERE T.`{}` = S.`UID`
+        """.format(
+            field['table_name'],
+            field['cleartext'],
+            field['unique_key']
+        )
+
+        try:
+            cursor.execute(sql_drop_temp)
+            cursor.execute(sql_create_temp)
+            cursor.execute(sql_select)
+            result = [(uid, self.mysql_des_decrypt(text, field['password']))
+                      for uid, text in cursor.fetchall()]
+            records = cursor.executemany(sql_insert, result)
+            records = cursor.execute(sql_update)
+            if records:
+                print "{}.{} 有 {} 条记录完成解密。".format(
+                    field['table_name'],
+                    field['ciphertext'],
+                    records
+                )
+        finally:
+            cursor.execute(sql_drop_temp)        
     
     
     def update(self):
@@ -133,6 +155,6 @@ class MyDES:
             with dbconn.cursor() as cursor:
                 for field in self.fields:
                     self.update_field(field, cursor)
-            dbconn.commit()
+                    dbconn.commit()
         finally:
             dbconn.close()

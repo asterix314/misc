@@ -1,0 +1,358 @@
+{
+	"info": {
+		"_postman_id": "e1d111e6-fd8f-4b97-8212-6afdcaab5164",
+		"name": "统一待办已办V1兼容V2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "待办单条创建及修改",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extSysId\": \"EC\",\r\n  \"bsid\": \"EC\",\r\n  \"srcTodoId\": \"100124\",\r\n  \"appCat\": \"五矿电商\",\r\n  \"appId\": 200000,\r\n  \"title\": \"测试流程2\",\r\n  \"receiver\": \"dengm\",\r\n  \"receiverName\": \"邓萌\",  \r\n  \"todoUrl\": \"bpm/edit.htm?instId=9450&activeStepId=24288\",\r\n  \"isTop\": 0,\r\n  \"sender\": \"stongliu\",\r\n  \"senderName\": \"刘思彤\",\r\n  \"sentDate\": \"2023-06-08T09:02:27+08:00\",\r\n  \"stepName\": \"审批环节一\",\r\n  \"creatorId\": 1,\r\n  \"creatorName\": \"张三\",\r\n  \"creatorDeptName\": \"部门一\",\r\n  \"creatorAccount\": \"zhangsan\",\r\n  \"trustor\": \"stongliu\",\r\n  \"trustorName\": \"刘思彤\",\r\n  \"attr\": {\r\n    \"ext1\": \"扩展属性\"\r\n  },\r\n  \r\n  \"reserveString1\": null,\r\n  \"reserveLong2\":2,\r\n  \"priority\": 0,\r\n  \"instId\": 0,\r\n  \"status\": 0,\r\n  \"module\": \"Workflow\",\r\n  \"todoType\": \"流程\",\r\n  \"openMode\": 5,\r\n  \"stepId\": 0,\r\n  \"processState\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/todo",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "删除指定id接收人待办",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extSysId\": \"EC\",\r\n  \"srcTodoId\": \"100124\",\r\n  \"receiver\": \"stongliu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/todo",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "根据ID查询待办详情",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/todo/stongliu/94364",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"todo",
+						"stongliu",
+						"94364"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查询待办数量",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"expressions\": [\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"title\",\r\n      \"op\": \"like\",\r\n      \"stringValue\": \"%测试%\"\r\n    },\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"extSysId\",\r\n      \"op\": \"eq\",\r\n      \"stringValue\": \"EC\"\r\n    }\r\n  ],\r\n  \"startPosition\": 0,\r\n  \"maxResults\": 10,\r\n  \"orderBy\": \"TITLE asc\",\r\n  \"receiver\": \"stongliu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/todos-count",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"todos-count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "待办分页查询",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"expressions\": [\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"title\",\r\n      \"op\": \"like\",\r\n      \"stringValue\": \"%测试%\"\r\n    },\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"extSysId\",\r\n      \"op\": \"eq\",\r\n      \"stringValue\": \"EC\"\r\n    }\r\n  ],\r\n  \"startPosition\": 0,\r\n  \"maxResults\": 10,\r\n  \"orderBy\": \"sentDate desc\",\r\n  \"receiver\": \"stongliu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/todos-query",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"todos-query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "待办批量创建",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{  \r\n  \"actionType\": \"UT_TODO_CREATE\",\r\n  \"extSysId\": \"EC\",\r\n  \"bsid\": \"EC\",\r\n  \"srcTodoId\": \"100126\",\r\n  \"appCat\": \"五矿电商\",\r\n  \"appId\": 200000,\r\n  \"title\": \"测试流程6\",\r\n  \"receiver\": \"stongliu\",\r\n  \"receiverName\": \"邓萌\",  \r\n  \"todoUrl\": \"bpm/edit.htm?instId=9450&activeStepId=24288\",\r\n  \"isTop\": 0,\r\n  \"sender\": \"stongliu\",\r\n  \"senderName\": \"刘思彤\",\r\n  \"sentDate\": \"2023-06-09T01:49:17Z\",\r\n  \"stepName\": \"审批环节一\",\r\n  \"creatorId\": 1,\r\n  \"creatorName\": \"张三\",\r\n  \"creatorDeptName\": \"部门一\",\r\n  \"creatorAccount\": \"zhangsan\",\r\n  \"trustor\": \"stongliu\",\r\n  \"trustorName\": \"刘思彤\",\r\n  \"attr\": {\r\n    \"ext1\": \"扩展属性\"\r\n  },\r\n  \r\n  \"reserveString1\": null,\r\n  \"reserveLong2\":2,\r\n  \"priority\": 0,\r\n  \"instId\": 0,\r\n  \"status\": 0,\r\n  \"module\": \"Workflow\",\r\n  \"todoType\": \"流程\",\r\n  \"openMode\": 5,\r\n  \"stepId\": 0,\r\n  \"processState\": 0\r\n},{\r\n  \"actionType\": \"UT_TODO_CREATE\",\r\n  \"extSysId\": \"EC\",\r\n  \"bsid\": \"EC\",\r\n  \"srcTodoId\": \"100127\",\r\n  \"appCat\": \"五矿电商\",\r\n  \"appId\": 200000,\r\n  \"title\": \"测试流程7\",\r\n  \"receiver\": \"stongliu\",\r\n  \"receiverName\": \"邓萌\",  \r\n  \"todoUrl\": \"bpm/edit.htm?instId=9450&activeStepId=24288\",\r\n  \"isTop\": 0,\r\n  \"sender\": \"stongliu\",\r\n  \"senderName\": \"刘思彤\",\r\n  \"sentDate\": \"2023-06-09T01:49:17Z\",\r\n  \"stepName\": \"审批环节一\",\r\n  \"creatorId\": 1,\r\n  \"creatorName\": \"张三\",\r\n  \"creatorDeptName\": \"部门一\",\r\n  \"creatorAccount\": \"zhangsan\",\r\n  \"trustor\": \"stongliu\",\r\n  \"trustorName\": \"刘思彤\",\r\n  \"attr\": {\r\n    \"ext1\": \"扩展属性\"\r\n  },\r\n  \r\n  \"reserveString1\": null,\r\n  \"reserveLong2\":2,\r\n  \"priority\": 0,\r\n  \"instId\": 0,\r\n  \"status\": 0,\r\n  \"module\": \"Workflow\",\r\n  \"todoType\": \"流程\",\r\n  \"openMode\": 5,\r\n  \"stepId\": 0,\r\n  \"processState\": 0\r\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/todos/syn",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"todos",
+						"syn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "已办单条新建V1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extSysId\": \"EC\",\r\n  \"appCat\": \"五矿电商\",\r\n  \"appId\": \"200000\",\r\n  \"srcDoneId\": \"200012\",\r\n  \"title\": \"测试已办1\",\r\n  \"doneUrl\": \"/done/instId=9450\",\r\n  \"status\": \"ACTIVATED\",\r\n  \"receiver\": \"dengm\",\r\n  \"receiverName\": \"邓老师\",\r\n  \"sender\": \"stongliu\",\r\n  \"senderName\": \"刘老师\",\r\n  \"creator\": \"dengm\",\r\n  \"creatorName\": \"邓老师\",\r\n  \"creatorDeptName\": \"部门一\",\r\n  \"startDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"finishDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"processDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"alarmDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"dueDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"reserveString5\": \"当前处理人1\",\r\n  \"reserveString6\": \"str6\",\r\n  \"instId\": 0,\r\n  \"stepId\": 0,\r\n  \"stepName\": \"审批环节1\",\r\n  \"creatorId\": 1,\r\n  \"creatorAccount\": \"dengm\",\r\n  \"wfBusiId\": 0\r\n}"
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/done",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"done"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "已办批量新建V1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\r\n  \"actionType\": \"ES_DONE_CREATE\",\r\n  \"extSysId\": \"EC\",\r\n  \"appCat\": \"五矿电商\",\r\n  \"appId\": \"200000\",\r\n  \"srcDoneId\": \"200013\",\r\n  \"title\": \"测试已办1\",\r\n  \"doneUrl\": \"/done/instId=9450\",\r\n  \"status\": \"ACTIVATED\",\r\n  \"receiver\": \"dengm\",\r\n  \"receiverName\": \"邓老师\",\r\n  \"sender\": \"stongliu\",\r\n  \"senderName\": \"刘老师\",\r\n  \"creator\": \"dengm\",\r\n  \"creatorName\": \"邓老师\",\r\n  \"creatorDeptName\": \"部门一\",\r\n  \"consigner\": \"test2\",\r\n  \"consignerName\": \"测试账号2\",\r\n  \"startDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"finishDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"processDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"alarmDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"dueDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"reserveString5\": \"当前处理人1\",\r\n  \"reserveString6\": \"str6\",\r\n  \"reserveString7\": \"str7\",\r\n  \"instId\": 0,\r\n  \"stepId\": 0,\r\n  \"stepName\": \"审批环节1\",\r\n  \"creatorId\": 1,\r\n  \"creatorAccount\": \"dengm\",\r\n  \"extAttr\": {\r\n    \"ext1\": \"扩展属性\"\r\n  },\r\n  \"creationTime\": \"2023-06-09T02:12:50.617Z\",\r\n  \"wfBusiId\": 0\r\n},{\r\n  \"actionType\": \"ES_DONE_CREATE\",\r\n  \"extSysId\": \"EC\",\r\n  \"appCat\": \"五矿电商\",\r\n  \"appId\": \"200000\",\r\n  \"srcDoneId\": \"200014\",\r\n  \"title\": \"测试已办2\",\r\n  \"doneUrl\": \"/done/instId=9450\",\r\n  \"status\": \"ACTIVATED\",\r\n  \"receiver\": \"dengm\",\r\n  \"receiverName\": \"邓老师\",\r\n  \"sender\": \"stongliu\",\r\n  \"senderName\": \"刘老师\",\r\n  \"creator\": \"dengm\",\r\n  \"creatorName\": \"邓老师\",\r\n  \"creatorDeptName\": \"部门一\",\r\n  \"consigner\": \"test2\",\r\n  \"consignerName\": \"测试账号2\",\r\n  \"startDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"finishDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"processDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"alarmDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"dueDate\": \"2023-06-09T02:12:50.617Z\",\r\n  \"reserveString5\": \"当前处理人1\",\r\n  \"reserveString6\": \"str6\",\r\n  \"reserveString7\": \"str7\",\r\n  \"instId\": 0,\r\n  \"stepId\": 0,\r\n  \"stepName\": \"审批环节1\",\r\n  \"creatorId\": 1,\r\n  \"creatorAccount\": \"dengm\",\r\n  \"extAttr\": {\r\n    \"ext1\": \"扩展属性\"\r\n  },\r\n  \"creationTime\": \"2023-06-09T02:12:50.617Z\",\r\n  \"wfBusiId\": 0\r\n}]"
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/dones",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"dones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查询已办数量V1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"expressions\": [\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"title\",\r\n      \"op\": \"like\",\r\n      \"stringValue\": \"%测试%\"\r\n    },\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"extSysId\",\r\n      \"op\": \"eq\",\r\n      \"stringValue\": \"EC\"\r\n    }\r\n  ],\r\n  \"startPosition\": 0,\r\n  \"maxResults\": 10,\r\n  \"orderBy\": \"sentDate desc\",\r\n  \"receiver\": \"dengm\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/dones-count",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"dones-count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "分页查询已办详情V1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"expressions\": [\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"title\",\r\n      \"op\": \"like\",\r\n      \"stringValue\": \"%测试%\"\r\n    },\r\n    {\r\n      \"dataType\": \"str\",\r\n      \"name\": \"extSysId\",\r\n      \"op\": \"eq\",\r\n      \"stringValue\": \"EC\"\r\n    }\r\n  ],\r\n  \"startPosition\": 0,\r\n  \"maxResults\": 10,\r\n  \"orderBy\": \"sentDate desc\",\r\n  \"receiver\": \"dengm\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/dones-query",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"dones-query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "删除已办v1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"extSysId\": \"EC\",\r\n  \"srcDoneId\": \"200012\",\r\n  \"receiver\": \"dengm\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.95.76:9104/done",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"95",
+						"76"
+					],
+					"port": "9104",
+					"path": [
+						"done"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

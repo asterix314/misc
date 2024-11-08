@@ -1,4 +1,5 @@
 // 基础字体设定
+#set page(paper: "a4")
 #set text(font: "SimSun", size: 12pt, lang: "zh")
 
 

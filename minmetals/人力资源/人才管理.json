@@ -1,0 +1,287 @@
+[
+    {
+        "table_name": "ADS_HR_TALENT_OVERVIEW",
+        "table_name_cn": "人才管理 - 人才概况",
+        "generation": "",
+        "topics": [
+            {
+                "path": [
+                    "职工人数"
+                ],
+                "unit": "人",
+                "comment": "与五矿集团或其子公司有正式雇佣关系的员工数量。不包括劳务派遣人员等。"
+            },
+            {
+                "path": [
+                    "从业人数",
+                    "{年份}"
+                ],
+                "unit": "人",
+                "comment": "指所有参与五矿集团经济活动并从中获得收入的人员总数。包含职工和劳务派遣人员等。"
+            },
+            {
+                "path": [
+                    "在岗职工",
+                    "{全集团及直管企业}"
+                ],
+                "unit": "人",
+                "comment": "指那些正在执行工作任务、参与日常运营的职工。为全集团的在岗职工人数。"
+            },
+            {
+                "path": [
+                    "劳务派遣占比"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "学历分布",
+                    "{学历}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "年龄分布",
+                    "{年龄层}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "三类人才",
+                    "{人才大类}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "性别结构分布",
+                    "{性别}"
+                ],
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_TRAINING",
+        "table_name_cn": "人才管理 - 员工培训整体情况",
+        "generation": "",
+        "topics": [
+            {
+                "path": [
+                    "{员工培训分类}",
+                    "{全集团及直管企业}",
+                    "{年份}",
+                    "人均学时"
+                ],
+                "unit": "学时"
+            },
+            {
+                "path": [
+                    "{员工培训分类}",
+                    "{全集团及直管企业}",
+                    "{年份}",
+                    "员工参训率"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "{员工培训分类}",
+                    "{全集团及直管企业}",
+                    "{年份}",
+                    "平台覆盖率"
+                ],
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_POOL",
+        "table_name_cn": "人才管理 - 人才队伍",
+        "generation": "",
+        "topics": [
+            {
+                "path": [
+                    "科技人才整体",
+                    "人才队伍",
+                    "{科技人才分类}"
+                ],
+                "unit": "人"
+            },
+            {
+                "path": [
+                    "科技人才整体",
+                    "学历分布",
+                    "{学历}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "科技人才整体",
+                    "职称分布",
+                    "{职称等级}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "科技人才整体",
+                    "年龄分布",
+                    "{年龄层}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "高层次科技人才",
+                    "学历分布",
+                    "{学历}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "高层次科技人才",
+                    "年龄分布",
+                    "{年龄层}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "技能人才整体",
+                    "{技能等级}"
+                ],
+                "unit": "人"
+            },
+            {
+                "path": [
+                    "技能人才整体",
+                    "年龄分布",
+                    "{年龄层}"
+                ],
+                "unit": "1%"
+            },
+            {
+                "path": [
+                    "高技能领军人才",
+                    "{高技能领军人才分类}"
+                ],
+                "unit": "人"
+            },
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_ALERT",
+        "table_name_cn": "人才管理 - 人才预警",
+        "generation": "",
+        "topics": [
+            {
+                "path": [
+                    "{人才预警类型}"
+                ],
+                "unit": "家"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_CERTIFICATE",
+        "table_name_cn": "人才管理 - 职业技能等级认证",
+        "generation": "",
+        "topics": [
+            {
+                "path": [
+                    "{工种}",
+                    "{年份}",
+                    "报考"
+                ],
+                "unit": "人"
+            },
+            {
+                "path": [
+                    "{工种}",
+                    "{年份}",
+                    "获证"
+                ],
+                "unit": "人"
+            },
+            {
+                "path": [
+                    "{工种}",
+                    "最近三年",
+                    "报考"
+                ],
+                "unit": "人"
+            },
+            {
+                "path": [
+                    "{工种}",
+                    "最近三年",
+                    "获证"
+                ],
+                "unit": "人"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_LIST",
+        "table_name_cn": "人才管理 - 人才队伍 - 人才列表",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "talent_name",
+                "column_cn": "人才姓名",
+                "data_type": "varchar(255)",
+                "key": false
+            },
+            {
+                "column_name": "company",
+                "column_cn": "人才所属单位",
+                "data_type": "varchar(1024)",
+                "key": false
+            },
+            {
+                "column_name": "award",
+                "column_cn": "国家级奖项",
+                "data_type": "varchar(1024)",
+                "key": false
+            },
+            {
+                "column_name": "TODO",
+                "column_cn": "TODO",
+                "data_type": "varchar(1024)",
+                "key": false
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_ALERT_LIST",
+        "table_name_cn": "人才管理 - 人才预警 - 企业列表",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "TODO",
+                "column_cn": "TODO",
+                "data_type": "varchar(1024)",
+                "key": false
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_ALERT_LIST",
+        "table_name_cn": "人才管理 - 职业技能等级认证 - 企业排名",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "TODO",
+                "column_cn": "TODO",
+                "data_type": "varchar(1024)",
+                "key": false
+            }
+        ]
+    }
+
+]

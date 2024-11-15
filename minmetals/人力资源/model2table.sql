@@ -1,4 +1,49 @@
 -- ADS 表建模
+with jsn as (
+    select table_name, table_cn,
+        c.column_name, c.column_cn, c.data_type, c.description, c.unit, c.key
+    from (
+        select table_name, table_cn, unnest(columns) as c
+        from "D:\misc\minmetals\人力资源\干部管理.json") as foo),
+result as (
+    select *
+    from jsn
+    union all
+    select   -- 增加固定列
+        table_name, 
+        table_cn, 
+        unnest(['org_code', 'ord_name', 'biz_date']) as column_name,
+        unnest(['组织代码', '组织名称', '日期']) as column_cn,
+        unnest(['VARCHAR(255)', 'VARCHAR(255)', 'VARCHAR(255)']) as data_type,
+        null as description, null as unit, false as key
+    from (
+        select distinct table_name, table_cn
+        from jsn) as foo)
+select distinct
+    '人力资源' as 业务域,
+    '每日' as 更新频率,
+    'ADS' as 域名,
+    table_name as 表英文名称,
+    table_cn as 表中文名称,
+    column_name as 字段英文名称,
+    column_cn as 字段中文名称,
+    coalesce(unit, '') as 单位,
+    coalesce(description, '') as 字段说明,
+    data_type as 字段类型,
+    case key when true then '是' else '否' end as 是否主键
+from result
+order by 表英文名称, 字段英文名称
+
+
+
+
+
+
+
+
+---------------------------------------------------
+--- scratch history
+-- ADS 表建模
 with numeric_t as (    -- 数值表
     select table_name, table_cn, 1 + unnest(range(max(d))) as i  -- topic index
     from (

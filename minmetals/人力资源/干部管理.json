@@ -1,80 +1,199 @@
 [
     {
-        "table_name": "ADS_HR_CADRE_SERVICE",
-        "table_name_cn": "干部管理 - 党组管理干部到任到期情况",
+        "table_name": "ADS_HR_CADRE_EDU",
+        "table_cn": "干部队伍学历结构",
         "generation": "",
-        "topics": [
+        "columns": [
             {
-                "path": [
-                    "人才概况",
-                    "职工人数"
-                ],
-                "unit": "人",
-                "comment": "与五矿集团或其子公司有正式雇佣关系的员工数量。不包括劳务派遣人员等。"
+                "column_name": "group",
+                "column_cn": "人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "党组管理干部、{直管企业}",
+                "key": true
             },
             {
-                "path": [
-                    "人才概况",
-                    "从业人数",
-                    "年份"
-                ],
-                "unit": "人",
-                "comment": "指所有参与五矿集团经济活动并从中获得收入的人员总数。包含职工和劳务派遣人员等。"
+                "column_name": "diploma",
+                "column_cn": "学历",
+                "data_type": "VARCHAR(255)",
+                "description": "博士研究生、硕士研究生、大学本科、大专及以下。",
+                "key": true
             },
             {
-                "path": [
-                    "人才概况",
-                    "在岗职工"
-                ],
-                "unit": "人",
-                "comment": "指那些正在执行工作任务、参与日常运营的职工。"
+                "column_name": "tally",
+                "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_CADRE_AGE",
+        "table_cn": "干部队伍年龄结构",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "group",
+                "column_cn": "人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "党组管理干部、{直管企业}",
+                "key": true
             },
             {
-                "path": [
-                    "人才概况",
-                    "在岗职工",
-                    "直管企业"
-                ],
+                "column_name": "age_group",
+                "column_cn": "年龄层",
+                "data_type": "VARCHAR(255)",
+                "description": "35岁及以下、36岁至40岁、41岁至45岁、46岁至50岁、51岁至54岁、55岁至59岁、60岁及以上、≥55、≤46、47-55",
+                "key": true
+            },
+            {
+                "column_name": "tally",
+                "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_CADRE_EXPERIENCE",
+        "table_cn": "干部队伍经历结构",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "group",
+                "column_cn": "人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "党组管理干部、{直管企业}",
+                "key": true
+            },
+            {
+                "column_name": "experience",
+                "column_cn": "经历",
+                "data_type": "VARCHAR(255)",
+                "description": "集团总部经历、海外工作经历、京外工作经历",
+                "key": true
+            },
+            {
+                "column_name": "tally",
+                "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_CADRE_EXPERTISE",
+        "table_cn": "三个一批干部队伍结构",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "expertise",
+                "column_cn": "业务专长",
+                "data_type": "VARCHAR(255)",
+                "description": "党务复合型、卓越领导型、业务经营型、专业管理型",
+                "key": true
+            },
+            {
+                "column_name": "tally",
+                "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_CADRE_ALERT_YOUTH",
+        "table_cn": "年轻干部队伍建设情况预警",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "reason",
+                "column_cn": "预警原因",
+                "data_type": "VARCHAR(255)",
+                "description": "二级单位班子成员中45岁左右干部占比低于25%、二级正职中50岁以下干部占比低于25%、二级正职中45岁左右干部占比低于10%",
+                "key": true
+            },
+            {
+                "column_name": "ratio",
+                "column_cn": "占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_CADRE_TRAIN",
+        "table_cn": "参加贯彻落实党和国家重大决策部署集中轮训情况",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "org_name",
+                "column_cn": "组织名称",
+                "data_type": "VARCHAR(255)",
+                "description": "集团公司总部、{直管单位}",
+                "key": true
+            },
+            {
+                "column_name": "group",
+                "column_cn": "干部类型",
+                "data_type": "VARCHAR(255)",
+                "description": "集团公司整体（处级以上干部）、党组管理干部、集团总部处级干部、直管企业党委管理干部、直管企业非党委管理的处级干部",
+                "key": true
+            },
+            {
+                "column_name": "required",
+                "column_cn": "应参训人数",
+                "data_type": "INT",
                 "unit": "人"
             },
             {
-                "path": [
-                    "人才概况",
-                    "劳务派遣占比"
-                ],
-                "unit": "1%"
+                "column_name": "absent",
+                "column_cn": "未参训人数",
+                "data_type": "INT",
+                "unit": "人"
             },
             {
-                "path": [
-                    "人才概况",
-                    "学历分布",
-                    "博士研究生"
-                ],
-                "unit": "1%"
+                "column_name": "duration",
+                "column_cn": "整体人均学时",
+                "data_type": "DOUBLE",
+                "unit": "学时"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_CADRE_ALERT",
+        "table_cn": "干部实时预警",
+        "generation": "todo",
+        "columns": [
+            {
+                "column_name": "alert_type",
+                "column_cn": "预警类别",
+                "data_type": "VARCHAR(255)",
+                "description": "班子老龄化问题、董事长党委书记未落实一肩挑、专职党委副书记应配未配……",
+                "key": true
             },
             {
-                "path": [
-                    "人才概况",
-                    "学历分布",
-                    "硕士研究生"
-                ],
-                "unit": "1%"
+                "column_name": "org_name",
+                "column_cn": "企业名称",
+                "data_type": "VARCHAR(255)",
+                "description": "{直管单位}",
+                "key": true
             },
             {
-                "path": [
-                    "人才概况",
-                    "学历分布",
-                    "大学本科"
-                ],
-                "unit": "1%"
+                "column_name": "cadre_name",
+                "column_cn": "干部姓名",
+                "data_type": "VARCHAR(255)",
+                "description": "{直管单位}",
+                "key": true
             },
             {
-                "path": [
-                    "人才概况",
-                    "学历分布",
-                    "大专及以下"
-                ],
-                "unit": "1%"
+                "column_name": "title",
+                "column_cn": "职务",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "content",
+                "column_cn": "预警内容",
+                "data_type": "VARCHAR(1023)"
             }
         ]
     }

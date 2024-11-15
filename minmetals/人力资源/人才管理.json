@@ -1,283 +1,412 @@
 [
     {
-        "table_name": "ADS_HR_TALENT_OVERVIEW",
-        "table_cn": "人才管理 - 人才概况",
+        "table_name": "ADS_HR_WORKFORCE",
+        "table_cn": "人员从业统计",
         "generation": "",
-        "topics": [
+        "columns": [
             {
-                "path": [
-                    "职工人数"
-                ],
-                "unit": "人",
-                "comment": "与五矿集团或其子公司有正式雇佣关系的员工数量。不包括劳务派遣人员等。"
+                "column_name": "uid",
+                "column_cn": "主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
             },
             {
-                "path": [
-                    "从业人数",
-                    "{年份}"
-                ],
-                "unit": "人",
-                "comment": "指所有参与五矿集团经济活动并从中获得收入的人员总数。包含职工和劳务派遣人员等。"
+                "column_name": "employees",
+                "column_cn": "职工人数",
+                "description": "与五矿集团或其子公司有正式雇佣关系的员工数量。不包括劳务派遣人员等 。全集团。",
+                "data_type": "INT",
+                "unit": "人"
             },
             {
-                "path": [
-                    "在岗职工",
-                    "{全集团及直管企业}"
-                ],
-                "unit": "人",
-                "comment": "指那些正在执行工作任务、参与日常运营的职工。为全集团的在岗职工人数。"
+                "column_name": "workforce",
+                "column_cn": "从业人数",
+                "description": "所有参与五矿集团经济活动并从中获得收入的人员总数。包含职工和劳务派遣人员等。按年份统计。",
+                "data_type": "INT",
+                "unit": "人"
             },
             {
-                "path": [
-                    "劳务派遣占比"
-                ],
+                "column_name": "on_duty",
+                "column_cn": "在岗职工",
+                "description": "指那些正在执行工作任务、参与日常运营的职工。 按直管单位统计。",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "dispatch_ratio",
+                "column_cn": "劳务派遣占比",
+                "data_type": "DOUBLE",
                 "unit": "1%"
             },
             {
-                "path": [
-                    "学历分布",
-                    "{学历}"
-                ],
-                "unit": "1%"
+                "column_name": "org_name",
+                "column_cn": "组织名称",
+                "data_type": "VARCHAR(255)"
             },
             {
-                "path": [
-                    "年龄分布",
-                    "{年龄层}"
-                ],
-                "unit": "1%"
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(255)"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_EDU_DIST",
+        "table_cn": "人员学历占比",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "group",
+                "column_cn": "人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "全集团在岗职工、科技人才整体、高层次科技人才、党组管理干部、{直管企业}",
+                "key": true
             },
             {
-                "path": [
-                    "三类人才",
-                    "{人才大类}"
-                ],
-                "unit": "1%"
+                "column_name": "diploma",
+                "column_cn": "学历",
+                "data_type": "VARCHAR(255)",
+                "description": "博士研究生、硕士研究生、大学本科、大专及以下。",
+                "key": true
             },
             {
-                "path": [
-                    "性别结构分布",
-                    "{性别}"
-                ],
+                "column_name": "ratio",
+                "column_cn": "占比",
+                "data_type": "DOUBLE",
                 "unit": "1%"
             }
         ]
     },
     {
-        "table_name": "ADS_HR_TALENT_TRAINING",
-        "table_cn": "人才管理 - 员工培训整体情况",
+        "table_name": "ADS_HR_AGE_DIST",
+        "table_cn": "人员年龄层分布",
         "generation": "",
-        "topics": [
+        "columns": [
             {
-                "path": [
-                    "{员工培训分类}",
-                    "{全集团及直管企业}",
-                    "{年份}",
-                    "人均学时"
-                ],
+                "column_name": "group",
+                "column_cn": "人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "在岗职工、科技人才整体、技能人才整体、高层次科技人才、党组管理干部、{直管企业}",
+                "key": true
+            },
+            {
+                "column_name": "age_group",
+                "column_cn": "年龄层",
+                "data_type": "VARCHAR(255)",
+                "description": "35岁及以下、36岁至40岁、41岁至45岁、46岁至50岁、51岁至54岁、55岁至59岁、60岁及以上、≥55、≤46、47-55",
+                "key": true
+            },
+            {
+                "column_name": "ratio",
+                "column_cn": "占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TITLE_DIST",
+        "table_cn": "人员职称分布",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "group",
+                "column_cn": "人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "科技人才整体",
+                "key": true
+            },
+            {
+                "column_name": "title",
+                "column_cn": "职称",
+                "data_type": "VARCHAR(255)",
+                "description": "高级职称、中级职称、初级职称、无职称",
+                "key": true
+            },
+            {
+                "column_name": "ratio",
+                "column_cn": "占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TALENT_DIST",
+        "table_cn": "三类人才分布",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "talent_group",
+                "column_cn": "人才类型",
+                "data_type": "VARCHAR(255)",
+                "description": "经营管理人才、科技人才、技能人才",
+                "key": true
+            },
+            {
+                "column_name": "ratio",
+                "column_cn": "占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_GENDER_DIST",
+        "table_cn": "人员性别分布",
+        "generation": "",
+        "columns": [
+            {
+                "column_name": "group",
+                "column_cn": "人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "全集团在岗职工",
+                "key": true
+            },
+            {
+                "column_name": "gender",
+                "column_cn": "性别",
+                "data_type": "VARCHAR(255)",
+                "description": "男性、女性",
+                "key": true
+            },
+            {
+                "column_name": "ratio",
+                "column_cn": "占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_TRAIN",
+        "table_cn": "员工参训情况",
+        "columns": [
+            {
+                "column_name": "group",
+                "column_cn": "参训人员分类",
+                "data_type": "VARCHAR(255)",
+                "description": "全体员工、经营管理人才、技能人才、专业技术人才……",
+                "key": true
+            },
+            {
+                "column_name": "org_name",
+                "column_cn": "组织名称",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "hours",
+                "column_cn": "人均学时",
+                "data_type": "DOUBLE",
                 "unit": "学时"
             },
             {
-                "path": [
-                    "{员工培训分类}",
-                    "{全集团及直管企业}",
-                    "{年份}",
-                    "员工参训率"
-                ],
+                "column_name": "participation",
+                "column_cn": "员工参训率",
+                "data_type": "DOUBLE",
                 "unit": "1%"
             },
             {
-                "path": [
-                    "{员工培训分类}",
-                    "{全集团及直管企业}",
-                    "{年份}",
-                    "平台覆盖率"
-                ],
+                "column_name": "coverage",
+                "column_cn": "平台覆盖率",
+                "data_type": "DOUBLE",
                 "unit": "1%"
             }
         ]
     },
     {
         "table_name": "ADS_HR_TALENT_POOL",
-        "table_cn": "人才管理 - 人才队伍",
-        "generation": "",
-        "topics": [
+        "table_cn": "人才队伍",
+        "columns": [
             {
-                "path": [
-                    "科技人才整体",
-                    "人才队伍",
-                    "{科技人才分类}"
-                ],
-                "unit": "人"
+                "column_name": "group",
+                "column_cn": "人才大类",
+                "data_type": "VARCHAR(255)",
+                "description": "科技人才整体、技能人才整体、高技能领军人才",
+                "key": true
             },
             {
-                "path": [
-                    "科技人才整体",
-                    "学历分布",
-                    "{学历}"
-                ],
-                "unit": "1%"
+                "column_name": "title",
+                "column_cn": "人才等级",
+                "data_type": "VARCHAR(255)",
+                "description": "科技人才整体（杰出人才、领军人才、骨干人才）；技能人才整体：（首席技师、特级技师、高级技师……）；高技能领军人才：（中华技能大奖、全国技术能手、享受国务院政府特殊津贴、世赛/国赛金牌选手",
+                "key": true
             },
             {
-                "path": [
-                    "科技人才整体",
-                    "职称分布",
-                    "{职称等级}"
-                ],
-                "unit": "1%"
-            },
-            {
-                "path": [
-                    "科技人才整体",
-                    "年龄分布",
-                    "{年龄层}"
-                ],
-                "unit": "1%"
-            },
-            {
-                "path": [
-                    "高层次科技人才",
-                    "学历分布",
-                    "{学历}"
-                ],
-                "unit": "1%"
-            },
-            {
-                "path": [
-                    "高层次科技人才",
-                    "年龄分布",
-                    "{年龄层}"
-                ],
-                "unit": "1%"
-            },
-            {
-                "path": [
-                    "技能人才整体",
-                    "{技能等级}"
-                ],
-                "unit": "人"
-            },
-            {
-                "path": [
-                    "技能人才整体",
-                    "年龄分布",
-                    "{年龄层}"
-                ],
-                "unit": "1%"
-            },
-            {
-                "path": [
-                    "高技能领军人才",
-                    "{高技能领军人才分类}"
-                ],
+                "column_name": "tally",
+                "column_cn": "人数",
+                "data_type": "INT",
                 "unit": "人"
             }
         ]
     },
     {
         "table_name": "ADS_HR_TALENT_ALERT",
-        "table_cn": "人才管理 - 人才预警",
-        "generation": "",
-        "topics": [
+        "table_cn": "人才预警",
+        "columns": [
             {
-                "path": [
-                    "{人才预警类型}"
-                ],
+                "column_name": "reason",
+                "column_cn": "预警原因",
+                "data_type": "VARCHAR(255)",
+                "description": "国家重点实验室高层次人才数量不足、三级以上企业高层次科技人才减少、直管企业中高层次科技人才存在年龄结构风险、直管企业中暂无高层次科技人才、技能人才持证率下降、高技能人才占比下降、规模以上企业暂无国家级技能领军人才、规模以上企业暂无国家级工作室",
+                "key": true
+            },
+            {
+                "column_name": "tally",
+                "column_cn": "企业数量",
+                "data_type": "INT",
                 "unit": "家"
             }
         ]
     },
     {
-        "table_name": "ADS_HR_TALENT_CERTIFICATE",
-        "table_cn": "人才管理 - 职业技能等级认证",
-        "generation": "",
-        "topics": [
+        "table_name": "ADS_HR_CERTIFICATE",
+        "table_cn": "职业技能等级认证",
+        "columns": [
             {
-                "path": [
-                    "当年报考",
-                    "{工种}",
-                    "{年份}"
-                ],
+                "column_name": "vocation",
+                "column_cn": "工种",
+                "data_type": "VARCHAR(255)",
+                "description": "冲压工、司泵工……",
+                "key": true
+            },
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "applications",
+                "column_cn": "报考人数",
+                "data_type": "INT",
                 "unit": "人"
             },
             {
-                "path": [
-                    "当年获证",
-                    "{工种}",
-                    "{年份}"
-                ],
-                "unit": "人"
-            },
-            {
-                "path": [
-                    "近三年报考",
-                    "{工种}"
-                ],
-                "unit": "人"
-            },
-            {
-                "path": [
-                    "近三年获证",
-                    "{工种}"
-                ],
+                "column_name": "certificates",
+                "column_cn": "获证人数",
+                "data_type": "INT",
                 "unit": "人"
             }
         ]
     },
     {
         "table_name": "ADS_HR_TALENT_LIST",
-        "table_cn": "人才管理 - 人才队伍 - 高级人才列表",
-        "generation": "",
+        "table_cn": "人才信息列表",
         "columns": [
             {
-                "column_name": "talent_type",
-                "column_cn": "人才分类",
+                "column_name": "talent_group",
+                "column_cn": "人才类型",
                 "data_type": "VARCHAR(255)",
+                "description": "杰出人才、首席技师、特级技师、中华技能大奖、全国技术能手、享受国务院政府特殊津贴、世赛/国赛金牌选手",
                 "key": true
             },
             {
-                "column_name": "data",
-                "column_cn": "人才列表",
-                "data_type": "JSON",
-                "key": false
-            }
-        ]
-    },
-    {
-        "table_name": "ADS_HR_TALENT_ALERT_LIST",
-        "table_cn": "人才管理 - 人才预警 - 企业列表",
-        "generation": "",
-        "columns": [
-            {
-                "column_name": "reason",
-                "column_cn": "预警原因",
-                "data_type": "VARCHAR(255)",
-                "key": true
-            },
-            {
-                "column_name": "data",
-                "column_cn": "企业列表数据",
-                "data_type": "JSON",
-                "key": false
-            }
-        ]
-    },
-    {
-        "table_name": "ADS_HR_TALENT_CERTIFICATE_AUTHORITIES",
-        "table_cn": "人才管理 - 职业技能等级认证 - 认证机构排名",
-        "generation": "",
-        "columns": [
-            {
-                "column_name": "id",
-                "column_cn": "主键",
+                "column_name": "serial",
+                "column_cn": "序号",
                 "data_type": "INT",
                 "key": true
             },
             {
-                "column_name": "data",
-                "column_cn": "认证机构排名表",
-                "data_type": "JSON",
-                "key": false
+                "column_name": "technician_name",
+                "column_cn": "技师姓名",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "birth",
+                "column_cn": "出生日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "gender",
+                "column_cn": "性别",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "political_status",
+                "column_cn": "政治面貌",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "expertise",
+                "column_cn": "专业领域",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "vocation",
+                "column_cn": "职业",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "company",
+                "column_cn": "工作单位",
+                "data_type": "VARCHAR(1024)"
+            },
+            {
+                "column_name": "img_url",
+                "column_cn": "头像地址",
+                "data_type": "VARCHAR(1024)"
+            },
+            {
+                "column_name": "award",
+                "column_cn": "奖项或获奖届次",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "award_year",
+                "column_cn": "获奖年份",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "selection",
+                "column_cn": "获奖方式",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "to_retire",
+                "column_cn": "距离法定退休年龄不满五年",
+                "data_type": "BOOL"
+            }
+        ]
+    },
+    {
+        "table_name": "ADS_HR_ORG_TECHNICIAN",
+        "table_cn": "直管企业技能人才",
+        "columns": [
+            {
+                "column_name": "org_name",
+                "column_cn": "直管企业",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "talent_group",
+                "column_cn": "技能人才等级",
+                "data_type": "VARCHAR(255)",
+                "description": "高级技师、技师、高级工、中级工、初级工、普通工",
+                "key": true
+            },
+            {
+                "column_name": "tally",
+                "column_cn": "人数",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "ratio",
+                "column_cn": "在本企业技能人才队伍占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "to_retire",
+                "column_cn": "距离法定退休年龄不满五年人员占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
             }
         ]
     }

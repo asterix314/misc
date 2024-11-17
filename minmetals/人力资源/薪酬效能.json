@@ -1,199 +1,125 @@
 [
     {
-        "table_name": "ADS_HR_CADRE_EDU",
-        "table_cn": "干部队伍学历结构",
+        "table_name": "ADS_HR_COST_PROFIT",
+        "table_cn": "效益与人工成本情况",
         "generation": "",
         "columns": [
             {
-                "column_name": "group",
-                "column_cn": "人员类型",
+                "column_name": "biz_year",
+                "column_cn": "年份",
                 "data_type": "VARCHAR(255)",
-                "description": "党组管理干部、{直管企业}",
                 "key": true
             },
             {
-                "column_name": "diploma",
-                "column_cn": "学历",
+                "column_name": "org_name",
+                "column_cn": "组织名称",
                 "data_type": "VARCHAR(255)",
-                "description": "博士研究生、硕士研究生、大学本科、大专及以下。",
+                "description": "全集团、{直管企业}",
                 "key": true
             },
             {
-                "column_name": "tally",
-                "column_cn": "人数",
+                "column_name": "total_cost",
+                "column_cn": "营业总成本",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "gross_profit",
+                "column_cn": "利润总额",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "net_profit",
+                "column_cn": "净利润",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "gross_revenue",
+                "column_cn": "营业总收入",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "labor_cost",
+                "column_cn": "企业人工成本",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "wages",
+                "column_cn": "实发职工工资总额",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "employees",
+                "column_cn": "职工人数",
                 "data_type": "INT",
                 "unit": "人"
-            }
-        ]
-    },
-    {
-        "table_name": "ADS_HR_CADRE_AGE",
-        "table_cn": "干部队伍年龄结构",
-        "generation": "",
-        "columns": [
-            {
-                "column_name": "group",
-                "column_cn": "人员类型",
-                "data_type": "VARCHAR(255)",
-                "description": "党组管理干部、{直管企业}",
-                "key": true
             },
             {
-                "column_name": "age_group",
-                "column_cn": "年龄层",
-                "data_type": "VARCHAR(255)",
-                "description": "35岁及以下、36岁至40岁、41岁至45岁、46岁至50岁、51岁至54岁、55岁至59岁、60岁及以上、≥55、≤46、47-55",
-                "key": true
+                "column_name": "mean_wage",
+                "column_cn": "平均工资",
+                "data_type": "DOUBLE",
+                "unit": "元"
             },
             {
-                "column_name": "tally",
-                "column_cn": "人数",
-                "data_type": "INT",
-                "unit": "人"
-            }
-        ]
-    },
-    {
-        "table_name": "ADS_HR_CADRE_EXPERIENCE",
-        "table_cn": "干部队伍经历结构",
-        "generation": "",
-        "columns": [
-            {
-                "column_name": "group",
-                "column_cn": "人员类型",
-                "data_type": "VARCHAR(255)",
-                "description": "党组管理干部、{直管企业}",
-                "key": true
+                "column_name": "productivity",
+                "column_cn": "全员劳动生产率",
+                "data_type": "DOUBLE",
+                "unit": "元"
             },
             {
-                "column_name": "experience",
-                "column_cn": "经历",
-                "data_type": "VARCHAR(255)",
-                "description": "集团总部经历、海外工作经历、京外工作经历",
-                "key": true
+                "column_name": "labor_cost_ratio",
+                "column_cn": "人事费用率",
+                "data_type": "DOUBLE",
+                "unit": "1%"
             },
             {
-                "column_name": "tally",
-                "column_cn": "人数",
-                "data_type": "INT",
-                "unit": "人"
-            }
-        ]
-    },
-    {
-        "table_name": "ADS_HR_CADRE_EXPERTISE",
-        "table_cn": "三个一批干部队伍结构",
-        "generation": "",
-        "columns": [
-            {
-                "column_name": "expertise",
-                "column_cn": "业务专长",
-                "data_type": "VARCHAR(255)",
-                "description": "党务复合型、卓越领导型、业务经营型、专业管理型",
-                "key": true
+                "column_name": "bench_p50",
+                "column_cn": "人事费用率的行业50分分位值",
+                "data_type": "DOUBLE",
+                "unit": "1%"
             },
             {
-                "column_name": "tally",
-                "column_cn": "人数",
-                "data_type": "INT",
-                "unit": "人"
-            }
-        ]
-    },
-    {
-        "table_name": "ADS_HR_CADRE_ALERT_YOUTH",
-        "table_cn": "年轻干部队伍建设情况预警",
-        "generation": "",
-        "columns": [
-            {
-                "column_name": "reason",
-                "column_cn": "预警原因",
-                "data_type": "VARCHAR(255)",
-                "description": "二级单位班子成员中45岁左右干部占比低于25%、二级正职中50岁以下干部占比低于25%、二级正职中45岁左右干部占比低于10%",
-                "key": true
+                "column_name": "bench_quantile",
+                "column_cn": "人事费用率的行业对标分位值",
+                "data_type": "DOUBLE",
+                "unit": "1%"
             },
             {
-                "column_name": "ratio",
-                "column_cn": "占比",
+                "column_name": "profit_margin",
+                "column_cn": "人工成本利润率",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "labor_percentage",
+                "column_cn": "人工成本占总成本比例",
                 "data_type": "DOUBLE",
                 "unit": "1%"
             }
         ]
     },
     {
-        "table_name": "ADS_HR_CADRE_TRAIN",
-        "table_cn": "参加贯彻落实党和国家重大决策部署集中轮训情况",
+        "table_name": "ADS_HR_DISBURSEMENT",
+        "table_cn": "职工工资总额发放进度情况",
         "generation": "",
         "columns": [
             {
                 "column_name": "org_name",
                 "column_cn": "组织名称",
                 "data_type": "VARCHAR(255)",
-                "description": "集团公司总部、{直管单位}",
+                "description": "{直管企业}",
                 "key": true
             },
             {
-                "column_name": "group",
-                "column_cn": "干部类型",
-                "data_type": "VARCHAR(255)",
-                "description": "集团公司整体（处级以上干部）、党组管理干部、集团总部处级干部、直管企业党委管理干部、直管企业非党委管理的处级干部",
-                "key": true
-            },
-            {
-                "column_name": "required",
-                "column_cn": "应参训人数",
-                "data_type": "INT",
-                "unit": "人"
-            },
-            {
-                "column_name": "absent",
-                "column_cn": "未参训人数",
-                "data_type": "INT",
-                "unit": "人"
-            },
-            {
-                "column_name": "duration",
-                "column_cn": "整体人均学时",
+                "column_name": "amount",
+                "column_cn": "已发放总额",
                 "data_type": "DOUBLE",
-                "unit": "学时"
-            }
-        ]
-    },
-    {
-        "table_name": "ADS_HR_CADRE_ALERT",
-        "table_cn": "干部实时预警",
-        "generation": "todo",
-        "columns": [
-            {
-                "column_name": "alert_type",
-                "column_cn": "预警类别",
-                "data_type": "VARCHAR(255)",
-                "description": "班子老龄化问题、董事长党委书记未落实一肩挑、专职党委副书记应配未配……",
-                "key": true
-            },
-            {
-                "column_name": "org_name",
-                "column_cn": "企业名称",
-                "data_type": "VARCHAR(255)",
-                "description": "{直管单位}",
-                "key": true
-            },
-            {
-                "column_name": "cadre_name",
-                "column_cn": "干部姓名",
-                "data_type": "VARCHAR(255)",
-                "description": "{直管单位}",
-                "key": true
-            },
-            {
-                "column_name": "title",
-                "column_cn": "职务",
-                "data_type": "VARCHAR(255)"
-            },
-            {
-                "column_name": "content",
-                "column_cn": "预警内容",
-                "data_type": "VARCHAR(1023)"
+                "unit": "元"
             }
         ]
     }

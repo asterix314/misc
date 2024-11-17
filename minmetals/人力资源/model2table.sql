@@ -4,7 +4,7 @@ with jsn as (
         c.column_name, c.column_cn, c.data_type, c.description, c.unit, c.key
     from (
         select table_name, table_cn, unnest(columns) as c
-        from "D:\misc\minmetals\人力资源\干部管理.json") as foo),
+        from "D:\misc\minmetals\人力资源\薪酬效能.json") as foo),
 result as (
     select *
     from jsn

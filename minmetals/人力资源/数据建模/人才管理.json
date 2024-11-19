@@ -3,7 +3,6 @@
         "page": "人才管理",
         "table_name": "ADS_HR_WORKFORCE",
         "table_cn": "人员从业统计",
-        "generation": "",
         "columns": [
             {
                 "column_name": "uid",
@@ -54,7 +53,6 @@
         "page": "人才管理",
         "table_name": "ADS_HR_EDU_DIST",
         "table_cn": "人员学历占比",
-        "generation": "",
         "columns": [
             {
                 "column_name": "group",
@@ -82,7 +80,6 @@
         "page": "人才管理",
         "table_name": "ADS_HR_AGE_DIST",
         "table_cn": "人员年龄层分布",
-        "generation": "",
         "columns": [
             {
                 "column_name": "group",
@@ -110,7 +107,6 @@
         "page": "人才管理",
         "table_name": "ADS_HR_TITLE_DIST",
         "table_cn": "人员职称分布",
-        "generation": "",
         "columns": [
             {
                 "column_name": "group",
@@ -138,7 +134,6 @@
         "page": "人才管理",
         "table_name": "ADS_HR_TALENT_DIST",
         "table_cn": "三类人才分布",
-        "generation": "",
         "columns": [
             {
                 "column_name": "talent_group",
@@ -159,7 +154,6 @@
         "page": "人才管理",
         "table_name": "ADS_HR_GENDER_DIST",
         "table_cn": "人员性别分布",
-        "generation": "",
         "columns": [
             {
                 "column_name": "group",

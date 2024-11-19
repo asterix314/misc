@@ -3,7 +3,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_EDU",
         "table_cn": "干部队伍学历结构",
-        "generation": "",
         "columns": [
             {
                 "column_name": "group",
@@ -31,7 +30,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_AGE",
         "table_cn": "干部队伍年龄结构",
-        "generation": "",
         "columns": [
             {
                 "column_name": "group",
@@ -59,7 +57,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_EXPERIENCE",
         "table_cn": "干部队伍经历结构",
-        "generation": "",
         "columns": [
             {
                 "column_name": "group",
@@ -87,7 +84,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_EXPERTISE",
         "table_cn": "三个一批干部队伍结构",
-        "generation": "",
         "columns": [
             {
                 "column_name": "expertise",
@@ -108,7 +104,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_ALERT_YOUTH",
         "table_cn": "年轻干部队伍建设情况预警",
-        "generation": "",
         "columns": [
             {
                 "column_name": "reason",
@@ -129,7 +124,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_TRAIN",
         "table_cn": "参加贯彻落实党和国家重大决策部署集中轮训情况",
-        "generation": "",
         "columns": [
             {
                 "column_name": "org_name",
@@ -169,7 +163,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_ALERT",
         "table_cn": "干部实时预警",
-        "generation": "",
         "columns": [
             {
                 "column_name": "alert_type",
@@ -208,7 +201,6 @@
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_LEADERSHIP",
         "table_cn": "领导班子建设情况",
-        "generation": "",
         "columns": [
             {
                 "column_name": "query_type",

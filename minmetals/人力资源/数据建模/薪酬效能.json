@@ -3,7 +3,6 @@
         "page": "薪酬效能",
         "table_name": "ADS_HR_COST_PROFIT",
         "table_cn": "效益与人工成本情况",
-        "generation": "",
         "columns": [
             {
                 "column_name": "biz_year",
@@ -108,7 +107,6 @@
         "page": "薪酬效能",
         "table_name": "ADS_HR_DISBURSEMENT",
         "table_cn": "职工工资总额发放进度情况",
-        "generation": "",
         "columns": [
             {
                 "column_name": "org_name",
@@ -126,3 +124,5 @@
         ]
     }
 ]
+
+

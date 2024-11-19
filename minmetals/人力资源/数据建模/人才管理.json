@@ -1,5 +1,6 @@
 [
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_WORKFORCE",
         "table_cn": "人员从业统计",
         "generation": "",
@@ -50,6 +51,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_EDU_DIST",
         "table_cn": "人员学历占比",
         "generation": "",
@@ -77,6 +79,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_AGE_DIST",
         "table_cn": "人员年龄层分布",
         "generation": "",
@@ -104,6 +107,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_TITLE_DIST",
         "table_cn": "人员职称分布",
         "generation": "",
@@ -131,6 +135,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_TALENT_DIST",
         "table_cn": "三类人才分布",
         "generation": "",
@@ -151,6 +156,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_GENDER_DIST",
         "table_cn": "人员性别分布",
         "generation": "",
@@ -178,6 +184,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_TRAIN",
         "table_cn": "员工参训情况",
         "columns": [
@@ -221,6 +228,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_TALENT_POOL",
         "table_cn": "人才队伍",
         "columns": [
@@ -247,6 +255,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_TALENT_ALERT",
         "table_cn": "人才预警",
         "columns": [
@@ -266,6 +275,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_CERTIFICATE",
         "table_cn": "职业技能等级认证",
         "columns": [
@@ -296,6 +306,7 @@
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_TALENT_LIST",
         "table_cn": "人才信息列表",
         "columns": [
@@ -370,11 +381,12 @@
             {
                 "column_name": "to_retire",
                 "column_cn": "距离法定退休年龄不满五年",
-                "data_type": "BOOL"
+                "data_type": "INT"
             }
         ]
     },
     {
+        "page": "人才管理",
         "table_name": "ADS_HR_ORG_TECHNICIAN",
         "table_cn": "直管企业技能人才",
         "columns": [

@@ -32,14 +32,14 @@
                 "unit": "人"
             },
             {
-                "column_name": "dispatch_ratio",
+                "column_name": "dispatch_prop",
                 "column_cn": "劳务派遣占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
             },
             {
-                "column_name": "org_name",
-                "column_cn": "组织名称",
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
                 "data_type": "VARCHAR(255)"
             },
             {
@@ -62,14 +62,14 @@
                 "key": true
             },
             {
-                "column_name": "diploma",
+                "column_name": "edu",
                 "column_cn": "学历",
                 "data_type": "VARCHAR(255)",
                 "description": "博士研究生、硕士研究生、大学本科、大专及以下。",
                 "key": true
             },
             {
-                "column_name": "ratio",
+                "column_name": "prop",
                 "column_cn": "占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -96,7 +96,7 @@
                 "key": true
             },
             {
-                "column_name": "ratio",
+                "column_name": "prop",
                 "column_cn": "占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -116,14 +116,14 @@
                 "key": true
             },
             {
-                "column_name": "title",
+                "column_name": "ttl",
                 "column_cn": "职称",
                 "data_type": "VARCHAR(255)",
                 "description": "高级职称、中级职称、初级职称、无职称",
                 "key": true
             },
             {
-                "column_name": "ratio",
+                "column_name": "prop",
                 "column_cn": "占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -143,7 +143,7 @@
                 "key": true
             },
             {
-                "column_name": "ratio",
+                "column_name": "prop",
                 "column_cn": "占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -163,14 +163,14 @@
                 "key": true
             },
             {
-                "column_name": "gender",
+                "column_name": "sex",
                 "column_cn": "性别",
                 "data_type": "VARCHAR(255)",
                 "description": "男性、女性",
                 "key": true
             },
             {
-                "column_name": "ratio",
+                "column_name": "prop",
                 "column_cn": "占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -190,8 +190,8 @@
                 "key": true
             },
             {
-                "column_name": "org_name",
-                "column_cn": "组织名称",
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
                 "data_type": "VARCHAR(255)",
                 "key": true
             },
@@ -202,7 +202,7 @@
                 "key": true
             },
             {
-                "column_name": "hours",
+                "column_name": "class_hrs_per_cap",
                 "column_cn": "人均学时",
                 "data_type": "DOUBLE",
                 "unit": "学时"
@@ -214,7 +214,7 @@
                 "unit": "1%"
             },
             {
-                "column_name": "coverage",
+                "column_name": "cov_rate",
                 "column_cn": "平台覆盖率",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -234,14 +234,14 @@
                 "key": true
             },
             {
-                "column_name": "title",
+                "column_name": "grade",
                 "column_cn": "人才等级",
                 "data_type": "VARCHAR(255)",
                 "description": "科技人才整体（杰出人才、领军人才、骨干人才）；技能人才整体：（首席技师、特级技师、高级技师……）；高技能领军人才：（中华技能大奖、全国技术能手、享受国务院政府特殊津贴、世赛/国赛金牌选手",
                 "key": true
             },
             {
-                "column_name": "tally",
+                "column_name": "num_ppl",
                 "column_cn": "人数",
                 "data_type": "INT",
                 "unit": "人"
@@ -261,10 +261,15 @@
                 "key": true
             },
             {
-                "column_name": "tally",
+                "column_name": "num_ppl",
                 "column_cn": "企业数量",
                 "data_type": "INT",
                 "unit": "家"
+            },
+            {
+                "column_name": "detail",
+                "column_cn": "详情列表",
+                "data_type": "JSON"
             }
         ]
     },
@@ -292,7 +297,7 @@
                 "unit": "人"
             },
             {
-                "column_name": "certificates",
+                "column_name": "obt_cert_ppl",
                 "column_cn": "获证人数",
                 "data_type": "INT",
                 "unit": "人"
@@ -385,31 +390,31 @@
         "table_cn": "直管企业技能人才",
         "columns": [
             {
-                "column_name": "org_name",
+                "column_name": "org_cn_abbr",
                 "column_cn": "直管企业",
                 "data_type": "VARCHAR(255)",
                 "key": true
             },
             {
-                "column_name": "talent_group",
+                "column_name": "grade",
                 "column_cn": "技能人才等级",
                 "data_type": "VARCHAR(255)",
                 "description": "高级技师、技师、高级工、中级工、初级工、普通工",
                 "key": true
             },
             {
-                "column_name": "tally",
+                "column_name": "num_ppl",
                 "column_cn": "人数",
                 "data_type": "INT"
             },
             {
-                "column_name": "ratio",
+                "column_name": "prop",
                 "column_cn": "在本企业技能人才队伍占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
             },
             {
-                "column_name": "to_retire",
+                "column_name": "rtrm_prop",
                 "column_cn": "距离法定退休年龄不满五年人员占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"

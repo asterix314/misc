@@ -11,32 +11,32 @@
                 "key": true
             },
             {
-                "column_name": "org_name",
-                "column_cn": "组织名称",
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
                 "data_type": "VARCHAR(255)",
                 "description": "全集团、{直管企业}",
                 "key": true
             },
             {
-                "column_name": "total_cost",
+                "column_name": "tot_cost",
                 "column_cn": "营业总成本",
                 "data_type": "DOUBLE",
                 "unit": "元"
             },
             {
-                "column_name": "gross_profit",
+                "column_name": "gross_prof",
                 "column_cn": "利润总额",
                 "data_type": "DOUBLE",
                 "unit": "元"
             },
             {
-                "column_name": "net_profit",
+                "column_name": "net_prof",
                 "column_cn": "净利润",
                 "data_type": "DOUBLE",
                 "unit": "元"
             },
             {
-                "column_name": "gross_revenue",
+                "column_name": "biz_income",
                 "column_cn": "营业总收入",
                 "data_type": "DOUBLE",
                 "unit": "元"
@@ -48,19 +48,31 @@
                 "unit": "元"
             },
             {
+                "column_name": "labor_cost_yoy",
+                "column_cn": "企业人工成本增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
                 "column_name": "wages",
                 "column_cn": "实发职工工资总额",
                 "data_type": "DOUBLE",
                 "unit": "元"
             },
             {
-                "column_name": "employees",
+                "column_name": "wages_yoy",
+                "column_cn": "实发职工工资总额增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "wrks",
                 "column_cn": "职工人数",
                 "data_type": "INT",
                 "unit": "人"
             },
             {
-                "column_name": "mean_wage",
+                "column_name": "wages_per_cap",
                 "column_cn": "平均工资",
                 "data_type": "DOUBLE",
                 "unit": "元"
@@ -90,13 +102,13 @@
                 "unit": "1%"
             },
             {
-                "column_name": "profit_margin",
+                "column_name": "prof_mrgn",
                 "column_cn": "人工成本利润率",
                 "data_type": "DOUBLE",
                 "unit": "1%"
             },
             {
-                "column_name": "labor_percentage",
+                "column_name": "labor_prop",
                 "column_cn": "人工成本占总成本比例",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -109,14 +121,14 @@
         "table_cn": "职工工资总额发放进度情况",
         "columns": [
             {
-                "column_name": "org_name",
-                "column_cn": "组织名称",
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
                 "data_type": "VARCHAR(255)",
                 "description": "{直管企业}",
                 "key": true
             },
             {
-                "column_name": "amount",
+                "column_name": "grnt_amount",
                 "column_cn": "已发放总额",
                 "data_type": "DOUBLE",
                 "unit": "元"

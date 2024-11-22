@@ -12,14 +12,14 @@
                 "key": true
             },
             {
-                "column_name": "diploma",
+                "column_name": "edu",
                 "column_cn": "学历",
                 "data_type": "VARCHAR(255)",
                 "description": "博士研究生、硕士研究生、大学本科、大专及以下。",
                 "key": true
             },
             {
-                "column_name": "tally",
+                "column_name": "num_ppl",
                 "column_cn": "人数",
                 "data_type": "INT",
                 "unit": "人"
@@ -46,7 +46,7 @@
                 "key": true
             },
             {
-                "column_name": "tally",
+                "column_name": "num_ppl",
                 "column_cn": "人数",
                 "data_type": "INT",
                 "unit": "人"
@@ -66,14 +66,14 @@
                 "key": true
             },
             {
-                "column_name": "experience",
+                "column_name": "exp",
                 "column_cn": "经历",
                 "data_type": "VARCHAR(255)",
                 "description": "集团总部经历、海外工作经历、京外工作经历",
                 "key": true
             },
             {
-                "column_name": "tally",
+                "column_name": "num_ppl",
                 "column_cn": "人数",
                 "data_type": "INT",
                 "unit": "人"
@@ -93,7 +93,7 @@
                 "key": true
             },
             {
-                "column_name": "tally",
+                "column_name": "num_ppl",
                 "column_cn": "人数",
                 "data_type": "INT",
                 "unit": "人"
@@ -113,7 +113,7 @@
                 "key": true
             },
             {
-                "column_name": "ratio",
+                "column_name": "prop",
                 "column_cn": "占比",
                 "data_type": "DOUBLE",
                 "unit": "1%"
@@ -126,8 +126,8 @@
         "table_cn": "参加贯彻落实党和国家重大决策部署集中轮训情况",
         "columns": [
             {
-                "column_name": "org_name",
-                "column_cn": "组织名称",
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
                 "data_type": "VARCHAR(255)",
                 "description": "集团公司总部、{直管单位}",
                 "key": true
@@ -146,13 +146,13 @@
                 "unit": "人"
             },
             {
-                "column_name": "absent",
+                "column_name": "no_training",
                 "column_cn": "未参训人数",
                 "data_type": "INT",
                 "unit": "人"
             },
             {
-                "column_name": "duration",
+                "column_name": "class_hrs_per_cap",
                 "column_cn": "整体人均学时",
                 "data_type": "DOUBLE",
                 "unit": "学时"
@@ -161,32 +161,32 @@
     },
     {
         "page": "干部管理",
-        "table_name": "ADS_HR_CADRE_ALERT",
+        "table_name": "ADS_HR_CADRE_WARN",
         "table_cn": "干部实时预警",
         "columns": [
             {
-                "column_name": "alert_type",
+                "column_name": "warn_cat",
                 "column_cn": "预警类别",
                 "data_type": "VARCHAR(255)",
                 "description": "班子老龄化问题、董事长党委书记未落实一肩挑、专职党委副书记应配未配……",
                 "key": true
             },
             {
-                "column_name": "org_name",
+                "column_name": "org_cn_abbr",
                 "column_cn": "企业名称",
                 "data_type": "VARCHAR(255)",
                 "description": "{直管单位}",
                 "key": true
             },
             {
-                "column_name": "cadre_name",
+                "column_name": "cdr_name",
                 "column_cn": "干部姓名",
                 "data_type": "VARCHAR(255)",
                 "description": "{直管单位}",
                 "key": true
             },
             {
-                "column_name": "title",
+                "column_name": "ttl",
                 "column_cn": "职务",
                 "data_type": "VARCHAR(255)"
             },
@@ -203,14 +203,14 @@
         "table_cn": "领导班子建设情况",
         "columns": [
             {
-                "column_name": "query_type",
+                "column_name": "query_cat",
                 "column_cn": "查询类别",
                 "data_type": "VARCHAR(255)",
                 "description": "总部部门班子配置情况、直管企业班子配置情况、直管企业专职党委副书记配置情况、直管企业专职纪委书记配置情况、党组管理干部绩效情况",
                 "key": true
             },
             {
-                "column_name": "data",
+                "column_name": "detail",
                 "column_cn": "查询结果",
                 "data_type": "JSON"
             }

@@ -6,44 +6,41 @@ with jsn as (
     from (
         select page, table_name, table_cn, unnest(columns) as c
         from "D:\misc\minmetals\人力资源\数据建模\*.json") as foo),
-t as (
-    select *
-    from jsn
-    union all
+fixture as (
     select   -- 增加固定列
         page,
         table_name, 
-        table_cn, 
-        unnest(['org_code', 'org_name', 'biz_date']) as column_name,
-        unnest(['组织代码', '组织名称', '日期']) as column_cn,
+        table_cn,
+        unnest(['org_cd', 'org_cn_abbr', 'biz_date']) as column_name,
+        unnest(['组织机构代码', '组织机构简称', '业务日期']) as column_cn,
         unnest(['VARCHAR(255)', 'VARCHAR(255)', 'VARCHAR(255)']) as data_type,
-        false as key,
         unnest([101, 102, 103]) as r
     from (
         select distinct page, table_name, table_cn
         from jsn) as foo),
-t2 as (
-    select 
-        page,
-        table_name, 
-        any_value(table_cn) as table_cn, 
-        column_name, 
-        any_value(column_cn order by r) as column_cn,
-        any_value(data_type order by r) as data_type, 
-        any_value(key order by r) as key,
-        any_value(r) as r
-    from t
-    group by page, table_name, column_name),
-t3 as (
+c as (
+    select *
+    from jsn
+    union by name
+    select *
+    from fixture
+    where (page, table_name, column_name) not in 
+        (select struct_pack(page, table_name, column_name) from jsn)),
+t as (
     select page, table_name, any_value(table_cn) as table_cn,
         string_agg(format('`{}`', column_name) order by r) filter (key) as key_list,
         string_agg(format('    `{}` {} {} comment ''{}''',
             column_name,
-            data_type,
+            coalesce(data_type, 'VARCHAR(255)'),
             if(key, 'not null', 'null'),
-            column_cn), ',
+            case column_name
+                when 'org_cd' then '组织机构代码' 
+                when 'org_cn_abbr' then '组织机构简称'
+                when 'biz_date' then '业务日期'
+                else column_cn
+            end), ',
 ' order by r) as column_list
-    from t2
+    from c
     group by page, table_name)
 select 
     page as 页面,
@@ -65,7 +62,7 @@ distributed by hash({}) buckets 1;',
     key_list,
     table_cn,
     key_list) as "create table"
-from t3
+from t
 order by page, table_name
 
 
@@ -73,7 +70,8 @@ order by page, table_name
 -- ADS 表字段信息
 with jsn as (
     select table_name, table_cn,
-        c.column_name, c.column_cn, c.data_type, c.description, c.unit, c.key
+        c.column_name, c.column_cn, c.data_type, c.description, c.unit, c.key,
+        row_number() over (partition by table_name) as r
     from (
         select table_name, table_cn, unnest(columns) as c
         from "D:\misc\minmetals\人力资源\数据建模\薪酬效能.json") as foo),
@@ -84,24 +82,26 @@ result as (
     select   -- 增加固定列
         table_name, 
         table_cn, 
-        unnest(['org_code', 'ord_name', 'biz_date']) as column_name,
-        unnest(['组织代码', '组织名称', '日期']) as column_cn,
+        unnest(['org_cd', 'org_cn_abbr', 'biz_date']) as column_name,
+        unnest(['组织机构代码', '组织机构简称', '业务日期']) as column_cn,
         unnest(['VARCHAR(255)', 'VARCHAR(255)', 'VARCHAR(255)']) as data_type,
-        null as description, null as unit, false as key
+        null as description, null as unit, false as key,
+        unnest([101, 102, 103]) as r
     from (
         select distinct table_name, table_cn
         from jsn) as foo)
-select distinct
+select
     table_name as 表英文名称,
-    table_cn as 表中文名称,
+    any_value(table_cn) as 表中文名称,
     column_name as 字段英文名称,
-    column_cn as 字段中文名称,
-    coalesce(unit, '') as 单位,
-    coalesce(description, '') as 字段说明,
-    data_type as 字段类型,
-    case key when true then '是' else '否' end as 是否主键
+    any_value(column_cn) as 字段中文名称,
+    coalesce(any_value(unit), '') as 单位,
+    coalesce(any_value(description), '') as 字段说明,
+    any_value(data_type) as 字段类型,
+    case any_value(key) when true then '是' else '否' end as 是否主键
 from result
-order by 表英文名称, 字段英文名称
+group by table_name, column_name
+order by 1, any_value(r)
 
 
 

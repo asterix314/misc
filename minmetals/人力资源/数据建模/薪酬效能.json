@@ -90,14 +90,8 @@
                 "unit": "1%"
             },
             {
-                "column_name": "bench_p50",
-                "column_cn": "人事费用率的行业50分分位值",
-                "data_type": "DOUBLE",
-                "unit": "1%"
-            },
-            {
-                "column_name": "bench_quantile",
-                "column_cn": "人事费用率的行业对标分位值",
+                "column_name": "labor_cost_ratio_yoy",
+                "column_cn": "人事费用率增幅",
                 "data_type": "DOUBLE",
                 "unit": "1%"
             },
@@ -108,8 +102,20 @@
                 "unit": "1%"
             },
             {
+                "column_name": "prof_mrgn_yoy",
+                "column_cn": "人工成本利润率增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
                 "column_name": "labor_prop",
                 "column_cn": "人工成本占总成本比例",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "labor_prop_yoy",
+                "column_cn": "人工成本占总成本比例增幅",
                 "data_type": "DOUBLE",
                 "unit": "1%"
             }
@@ -134,7 +140,49 @@
                 "unit": "元"
             }
         ]
+    },
+    {
+        "page": "薪酬效能",
+        "table_name": "ADS_HR_BENCHMARK",
+        "table_cn": "直管企业对标情况分析",
+        "columns": [
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "description": "{直管企业}",
+                "key": true
+            },
+            {
+                "column_name": "indictrs_type",
+                "column_cn": "指标类型",
+                "data_type": "VARCHAR(255)",
+                "description": "人事费用率、人工成本利润率、人工成本占总成本比例",
+                "key": true
+            },
+            {
+                "column_name": "indictrs",
+                "column_cn": "指标数值",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "bench_p50",
+                "column_cn": "行业50分分位值",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "bench_quantile",
+                "column_cn": "行业对标分位值",
+                "data_type": "VARCHAR(255)"
+            }
+        ]
     }
 ]
-
-

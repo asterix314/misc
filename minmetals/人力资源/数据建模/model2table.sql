@@ -5,7 +5,7 @@ with jsn as (
         row_number() over (partition by page, table_name) as r
     from (
         select page, table_name, table_cn, unnest(columns) as c
-        from "D:\misc\minmetals\人力资源\数据建模\*.json") as foo),
+        from "D:\misc\minmetals\人力资源\数据建模\薪酬效能.json") as foo),
 fixture as (
     select   -- 增加固定列
         page,

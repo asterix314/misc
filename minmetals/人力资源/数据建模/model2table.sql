@@ -1,32 +1,24 @@
--- ADS 表清单
 with jsn as (
-    select page, table_name, table_cn,
-        c.column_name, c.column_cn, c.data_type, c.key,
-        row_number() over (partition by page, table_name) as r
-    from (
-        select page, table_name, table_cn, unnest(columns) as c
-        from "D:\misc\minmetals\人力资源\数据建模\薪酬效能.json") as foo),
-fixture as (
+    select page, table_name, table_cn, unnest(columns, recursive:=true),
+        generate_subscripts(columns, 1) as r
+    from "D:\misc\minmetals\人力资源\数据建模\人才管理.json"),
+fix as (
     select   -- 增加固定列
         page,
         table_name, 
         table_cn,
-        unnest(['org_cd', 'org_cn_abbr', 'biz_date']) as column_name,
-        unnest(['组织机构代码', '组织机构简称', '业务日期']) as column_cn,
-        unnest(['VARCHAR(255)', 'VARCHAR(255)', 'VARCHAR(255)']) as data_type,
-        unnest([101, 102, 103]) as r
-    from (
-        select distinct page, table_name, table_cn
-        from jsn) as foo),
-c as (
-    select *
+        unnest([
+    {'column_name': 'org_cd',       'column_cn': '组织机构代码',  'data_type': 'VARCHAR(255)', 'r': 101},
+    {'column_name': 'org_cn_abbr',  'column_cn': '组织机构简称',  'data_type': 'VARCHAR(255)', 'r': 102},
+    {'column_name': 'biz_date',     'column_cn': '业务日期',      'data_type': 'VARCHAR(255)', 'r': 103}], recursive:=true)
+    from (select distinct page, table_name, table_cn from jsn)),
+col as (
     from jsn
-    union by name
-    select *
-    from fixture
+    union all by name
+    from fix
     where (page, table_name, column_name) not in 
         (select struct_pack(page, table_name, column_name) from jsn)),
-t as (
+tab as (
     select page, table_name, any_value(table_cn) as table_cn,
         string_agg(format('`{}`', column_name) order by r) filter (key) as key_list,
         string_agg(format('    `{}` {} {} comment ''{}''',
@@ -40,8 +32,23 @@ t as (
                 else column_cn
             end), ',
 ' order by r) as column_list
-    from c
+    from col
     group by page, table_name)
+    
+    
+    
+-- ADS 表字段信息
+--select
+--    table_name as 表英文名称,
+--    table_cn as 表中文名称,
+--    column_name as 字段英文名称,
+--    column_cn as 字段中文名称,
+--    coalesce(unit, '') as 单位,
+--    coalesce(description, '') as 字段说明,
+--    data_type as 字段类型,
+--    if(key, '是', '否') as 是否主键
+--from col
+--order by table_name, r
 select 
     page as 页面,
     '每日' as 频率,
@@ -67,42 +74,37 @@ order by page, table_name
 
 
 
--- ADS 表字段信息
-with jsn as (
-    select table_name, table_cn,
-        c.column_name, c.column_cn, c.data_type, c.description, c.unit, c.key,
-        row_number() over (partition by table_name) as r
-    from (
-        select table_name, table_cn, unnest(columns) as c
-        from "D:\misc\minmetals\人力资源\数据建模\薪酬效能.json") as foo),
-result as (
-    select *
-    from jsn
-    union all
-    select   -- 增加固定列
-        table_name, 
-        table_cn, 
-        unnest(['org_cd', 'org_cn_abbr', 'biz_date']) as column_name,
-        unnest(['组织机构代码', '组织机构简称', '业务日期']) as column_cn,
-        unnest(['VARCHAR(255)', 'VARCHAR(255)', 'VARCHAR(255)']) as data_type,
-        null as description, null as unit, false as key,
-        unnest([101, 102, 103]) as r
-    from (
-        select distinct table_name, table_cn
-        from jsn) as foo)
-select
-    table_name as 表英文名称,
-    any_value(table_cn) as 表中文名称,
-    column_name as 字段英文名称,
-    any_value(column_cn) as 字段中文名称,
-    coalesce(any_value(unit), '') as 单位,
-    coalesce(any_value(description), '') as 字段说明,
-    any_value(data_type) as 字段类型,
-    case any_value(key) when true then '是' else '否' end as 是否主键
-from result
-group by table_name, column_name
-order by 1, any_value(r)
 
+
+
+
+
+
+
+-- 生成 DWD 模型设计 Excel
+select
+    '每天' as 更新频率,
+    'DWD' as 模式名,
+    t.table_name as 表英文名称,
+    t.table_comment as 表中文名称,
+    c.column_name as 字段英文名称,
+    c.column_comment as 字段中文名称,
+    '' as 字段说明,
+    upper(c.column_type) as 字段类型,
+    '' as 字段长度,
+    case column_key
+        when 'UNI' then '是'
+        else '否'
+    end as 是否主键
+from
+    information_schema.columns as c
+    inner join information_schema.tables as t using (table_schema, table_name)
+where
+    t.table_schema = 'dw_prod'
+    and t.table_name like 'DWD\\_HR%'
+order by
+    t.table_name,
+    ordinal_position
 
 
 

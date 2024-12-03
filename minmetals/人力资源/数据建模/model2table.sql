@@ -1,7 +1,7 @@
 with jsn as (
     select page, table_name, table_cn, unnest(columns, recursive:=true),
         generate_subscripts(columns, 1) as r
-    from "D:\misc\minmetals\人力资源\数据建模\人才管理.json"),
+    from "D:\misc\minmetals\人力资源\数据建模\干部管理.json"),
 fix as (
     select   -- 增加固定列
         page,
@@ -34,9 +34,6 @@ tab as (
 ' order by r) as column_list
     from col
     group by page, table_name)
-    
-    
-    
 -- ADS 表字段信息
 --select
 --    table_name as 表英文名称,
@@ -46,18 +43,18 @@ tab as (
 --    coalesce(unit, '') as 单位,
 --    coalesce(description, '') as 字段说明,
 --    data_type as 字段类型,
+--    '' as 字段长度,
 --    if(key, '是', '否') as 是否主键
 --from col
---order by table_name, r
+--order by table_name, r     
 select 
     page as 页面,
     '每日' as 频率,
-    'ADS' as 域名,
     table_name as 表英文名称,
     table_cn as 表中文名称,
     format('
-drop table if exists ads_prod.`{}`;
-create table if not exists ads_prod.`{}` (
+drop table if exists `{}`;
+create table if not exists `{}` (
 {}
 ) engine=olap
 unique key({})
@@ -69,7 +66,7 @@ distributed by hash({}) buckets 1;',
     key_list,
     table_cn,
     key_list) as "create table"
-from t
+from tab
 order by page, table_name
 
 

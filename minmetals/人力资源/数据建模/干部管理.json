@@ -197,7 +197,7 @@
             }
         ]
     },
-    { 
+    {
         "page": "干部管理",
         "table_name": "ADS_HR_CADRE_LEADERSHIP",
         "table_cn": "领导班子建设情况",
@@ -213,6 +213,369 @@
                 "column_name": "detail",
                 "column_cn": "查询结果",
                 "data_type": "JSON"
+            }
+        ]
+    },
+    {
+        "page": "干部管理",
+        "table_name": "DWS_HR_CADRE_ROSTER",
+        "table_cn": "干部花名册（gbdwztqk）",
+        "columns": [
+            {
+                "column_name": "identi_no",
+                "column_cn": "身份证号",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "name",
+                "column_cn": "姓名",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "description": "集团公司总部、{直管单位}"
+            },
+            {
+                "column_name": "position",
+                "column_cn": "职位",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "all_in_one",
+                "column_cn": "是否为一肩挑",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "fulltime_deputy",
+                "column_cn": "是否为专职副书记",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "birth_dt",
+                "column_cn": "出生日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "sex",
+                "column_cn": "性别",
+                "data_type": "VARCHAR(255)",
+                "description": "男性、女性"
+            },
+            {
+                "column_name": "nat",
+                "column_cn": "民族",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "ideo_pol",
+                "column_cn": "政治面貌",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "nat_place",
+                "column_cn": "籍贯",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "hometown",
+                "column_cn": "出生地",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "ttl",
+                "column_cn": "职称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "start_work_dt",
+                "column_cn": "参工时间",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "join_party_dt",
+                "column_cn": "入党时间",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "edu",
+                "column_cn": "学历",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "diploma",
+                "column_cn": "学位",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "univ",
+                "column_cn": "毕业院校",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "major",
+                "column_cn": "专业",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "contact",
+                "column_cn": "联系方式",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "clsfn",
+                "column_cn": "人员类别",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "rmks",
+                "column_cn": "备注",
+                "data_type": "VARCHAR(65533)"
+            },
+            {
+                "column_name": "org_clsfn",
+                "column_cn": "单位类别",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "position_clsfn",
+                "column_cn": "职务类别",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "position_start",
+                "column_cn": "任现职时间",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "position_level",
+                "column_cn": "职务级别",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "level_start",
+                "column_cn": "任现职务级别时间",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "cadre_level",
+                "column_cn": "干部层级",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "cadre_level_start",
+                "column_cn": "任现干部层级时间",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "career_path",
+                "column_cn": "职位序列",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "employee_level",
+                "column_cn": "员工职级",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "employee_level_start",
+                "column_cn": "任现员工职级时间",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "company_cadre_level_start",
+                "column_cn": "同企业现层级任职时间",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "position_rotation_year_limit",
+                "column_cn": "现岗位按规定需交流年限",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "level_rotation_year_limit",
+                "column_cn": "现层级按规定需交流年限",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "position_year_served",
+                "column_cn": "已在现岗位工作年限",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "company_level_year_served",
+                "column_cn": "已在同一企业现层级工作年限",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "need_rotation",
+                "column_cn": "是否需交流",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "dept_reg_pos",
+                "column_cn": "是否部门正职",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "exp_hq",
+                "column_cn": "集团总部经历",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "exp_ovrs",
+                "column_cn": "海外工作经历",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "exp_out_bj",
+                "column_cn": "京外工作经历",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "exp_basic",
+                "column_cn": "基层工作经历",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "exp_frontline",
+                "column_cn": "一线企业经历",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "exp_frontline_reg_pos",
+                "column_cn": "一线企业正职经历",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "exp_org_reg_pos",
+                "column_cn": "直管企业内设机构正职经历",
+                "data_type": "BOOLEAN"
+            },
+            {
+                "column_name": "leadership_alert_cat",
+                "column_cn": "企业领导干部预警类型",
+                "data_type": "VARCHAR(255)",
+                "description": "总部部门班子整体配置情况预警、直管企业班子整体配置情况预警、一类重要骨干子企业班子配置情况预警"
+            }
+
+        ]
+    },
+    {
+        "page": "干部管理",
+        "table_name": "DWS_HR_CADRE_ALERT_EXPIRY",
+        "table_cn": "党组管理干部到任到期预警（dzglgbdrdqyj）",
+        "columns": [
+            {
+                "column_name": "alert_cat",
+                "column_cn": "预警类型",
+                "data_type": "VARCHAR(255)",
+                "description": "两年即将退休的干部、近1年即将任职期满应交流的干部、试用期内的干部",
+                "key": true
+            },
+            {
+                "column_name": "a00",
+                "column_cn": "干部系统编号",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "name",
+                "column_cn": "姓名",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "sex",
+                "column_cn": "性别",
+                "data_type": "VARCHAR(255)",
+                "description": "男性、女性"
+            },
+            {
+                "column_name": "birth_dt",
+                "column_cn": "出生日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "age",
+                "column_cn": "年龄",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "org_branch",
+                "column_cn": "工作单位",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "edu",
+                "column_cn": "学历",
+                "data_type": "VARCHAR(255)",
+                "description": "博士研究生、硕士研究生、大学本科、大专及以下。"
+            },
+            {
+                "column_name": "position",
+                "column_cn": "职位",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "ideo_pol",
+                "column_cn": "政治面貌",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "record_dt",
+                "column_cn": "统计日期",
+                "data_type": "DATE"
+            }
+        ]
+    },
+    {
+        "page": "干部管理",
+        "table_name": "DWS_HR_ORG",
+        "table_cn": "组织机构表（zzjgb）",
+        "columns": [
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "org_cd",
+                "column_cn": "组织机构编码",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "org_cat",
+                "column_cn": "组织机构类型",
+                "data_type": "VARCHAR(255)",
+                "description": "总部部门班子整体、直管企业班子整体、一类重要骨干子企业班子整体"
+            },
+            {
+                "column_name": "dept_id",
+                "column_cn": "部门id",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "tgdme",
+                "column_cn": "所属直管企业",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "org_cn",
+                "column_cn": "组织机构全称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "record_dt",
+                "column_cn": "统计日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "sort",
+                "column_cn": "排序",
+                "data_type": "VARCHAR(255)"
             }
         ]
     }

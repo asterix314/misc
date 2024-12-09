@@ -1,7 +1,7 @@
 with jsn as (
     select page, table_name, table_cn, unnest(columns, recursive:=true),
         generate_subscripts(columns, 1) as r
-    from "D:\misc\minmetals\人力资源\数据建模\干部管理.json"),
+    from "D:\misc\minmetals\人力资源\数据建模\干部监督.json"),
 fix as (
     select   -- 增加固定列
         page,
@@ -10,7 +10,7 @@ fix as (
         unnest([
     {'column_name': 'org_cd',       'column_cn': '组织机构代码',  'data_type': 'VARCHAR(255)', 'r': 101},
     {'column_name': 'org_cn_abbr',  'column_cn': '组织机构简称',  'data_type': 'VARCHAR(255)', 'r': 102},
-    {'column_name': 'biz_date',     'column_cn': '业务日期',      'data_type': 'VARCHAR(255)', 'r': 103}], recursive:=true)
+    {'column_name': 'biz_date',     'column_cn': '业务日期',      'data_type': 'VARCHAR(8)', 'r': 103}], recursive:=true)
     from (select distinct page, table_name, table_cn from jsn)),
 col as (
     from jsn
@@ -43,10 +43,9 @@ tab as (
 --    coalesce(unit, '') as 单位,
 --    coalesce(description, '') as 字段说明,
 --    data_type as 字段类型,
---    '' as 字段长度,
 --    if(key, '是', '否') as 是否主键
 --from col
---order by table_name, r     
+--order by table_name, r        
 select 
     page as 页面,
     '每日' as 频率,
@@ -105,6 +104,26 @@ order by
 
 
 
+
+
+
+
+-- 规范化 varchar 长度
+select concat(
+    'alter table ', table_name, ' modify column ', column_name, ' ',
+    case when character_maximum_length < 255 then 'varchar(255)'
+    when  character_maximum_length < 6000 then 'varchar(6000)'
+    else 'string' end,
+    ';') as dml
+from
+    information_schema.columns
+where
+    table_schema = 'ods_prod' and table_name like 'ODS\\_DAD01\\_%'
+    and column_type like 'varchar%' and column_type not in ('varchar(255)', 'varchar(6000)')
+    and COLUMN_KEY = ''
+order by
+    table_name,
+    ordinal_position    
 
 
 

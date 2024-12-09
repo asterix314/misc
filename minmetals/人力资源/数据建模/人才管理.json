@@ -45,7 +45,7 @@
             {
                 "column_name": "biz_year",
                 "column_cn": "年份",
-                "data_type": "VARCHAR(255)"
+                "data_type": "VARCHAR(4)"
             }
         ]
     },
@@ -198,7 +198,7 @@
             {
                 "column_name": "biz_year",
                 "column_cn": "年份",
-                "data_type": "VARCHAR(255)",
+                "data_type": "VARCHAR(4)",
                 "key": true
             },
             {
@@ -288,7 +288,7 @@
             {
                 "column_name": "biz_year",
                 "column_cn": "年份",
-                "data_type": "VARCHAR(255)"
+                "data_type": "VARCHAR(4)"
             },
             {
                 "column_name": "applications",
@@ -328,7 +328,7 @@
                 "data_type": "VARCHAR(255)"
             },
             {
-                "column_name": "birth",
+                "column_name": "birth_dt",
                 "column_cn": "出生日期",
                 "data_type": "DATE"
             },
@@ -355,12 +355,12 @@
             {
                 "column_name": "company",
                 "column_cn": "工作单位",
-                "data_type": "VARCHAR(1024)"
+                "data_type": "VARCHAR(6000)"
             },
             {
                 "column_name": "img_url",
                 "column_cn": "头像地址",
-                "data_type": "VARCHAR(1024)"
+                "data_type": "VARCHAR(6000)"
             },
             {
                 "column_name": "award",
@@ -380,7 +380,7 @@
             {
                 "column_name": "to_retire",
                 "column_cn": "距离法定退休年龄不满五年",
-                "data_type": "INT"
+                "data_type": "BOOLEAN"
             }
         ]
     },

@@ -7,7 +7,7 @@
             {
                 "column_name": "biz_year",
                 "column_cn": "年份",
-                "data_type": "VARCHAR(255)",
+                "data_type": "VARCHAR(4)",
                 "key": true
             },
             {
@@ -149,7 +149,7 @@
             {
                 "column_name": "biz_year",
                 "column_cn": "年份",
-                "data_type": "VARCHAR(255)",
+                "data_type": "VARCHAR(4)",
                 "key": true
             },
             {

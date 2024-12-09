@@ -193,7 +193,7 @@
             {
                 "column_name": "content",
                 "column_cn": "预警内容",
-                "data_type": "VARCHAR(1023)"
+                "data_type": "VARCHAR(6000)"
             }
         ]
     },
@@ -332,7 +332,7 @@
             {
                 "column_name": "rmks",
                 "column_cn": "备注",
-                "data_type": "VARCHAR(65533)"
+                "data_type": "VARCHAR(6000)"
             },
             {
                 "column_name": "org_clsfn",
@@ -532,7 +532,7 @@
     },
     {
         "page": "干部管理",
-        "table_name": "DWS_HR_ORG",
+        "table_name": "DIM_HR_ORG",
         "table_cn": "组织机构表（zzjgb）",
         "columns": [
             {

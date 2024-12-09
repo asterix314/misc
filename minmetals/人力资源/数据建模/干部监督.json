@@ -1,0 +1,210 @@
+[
+    {
+        "page": "干部监督",
+        "table_name": "ADS_HR_CADSUP_ALERT",
+        "table_cn": "领导人员选拔任用“一报告两评议”情况",
+        "columns": [
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "description": "直管企业整体情况、{直管单位}",
+                "key": true
+            },
+            {
+                "column_name": "reason",
+                "column_cn": "预警原因",
+                "data_type": "VARCHAR(255)",
+                "description": "干部选拔任用工作总体评价低于上年、干部选拔任用工作总体评价连续2年下降……",
+                "key": true
+            },
+            {
+                "column_name": "num_ppl",
+                "column_cn": "企业数量",
+                "data_type": "INT",
+                "unit": "家"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "ADS_HR_CADSUP_EVAL",
+        "table_cn": "选人用人工作民主评议情况",
+        "columns": [
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(4)",
+                "key": true
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "description": "直管企业整体情况、{直管单位}",
+                "key": true
+            },
+            {
+                "column_name": "questionaire",
+                "column_cn": "问卷主题",
+                "data_type": "VARCHAR(255)",
+                "description": "年度选人用人工作民主评议情况、本单位选人用人工作存在的主要问题、新提拔干部民主评议结果",
+                "key": true
+            },
+            {
+                "column_name": "topic",
+                "column_cn": "评价对象",
+                "data_type": "VARCHAR(255)",
+                "description": "对选人用人工作整体评价、对干部监督工作评价、对上一年度评议反映问题整改情况的评价……",
+                "key": true
+            },
+            {
+                "column_name": "choice",
+                "column_cn": "评价选项",
+                "data_type": "VARCHAR(255)",
+                "description": "好、较好、一般、不好/差",
+                "key": true
+            },
+            {
+                "column_name": "prop",
+                "column_cn": "占比",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "ADS_HR_CADSUP_FAMILY_TRADE_PROVINCE",
+        "table_cn": "领导人员配偶、子女及其配偶经商办企地域分布",
+        "columns": [
+            {
+                "column_name": "provne",
+                "column_cn": "省",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "num_ppl",
+                "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "ADS_HR_CADSUP_FAMILY_TRADE_LIST",
+        "table_cn": "领导人员配偶、子女及其配偶经商办企业情况",
+        "columns": [
+            {
+                "column_name": "uid",
+                "column_cn": "主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "name",
+                "column_cn": "姓名",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "company_post",
+                "column_cn": "单位与职务",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "ban_purchase_name",
+                "column_cn": "禁止交易采购单位名称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "family_name",
+                "column_cn": "家人姓名",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "relation",
+                "column_cn": "家人关系",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "engage_info",
+                "column_cn": "经商类型详细描述",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "operat_scope",
+                "column_cn": "经营范围",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "supplier",
+                "column_cn": "供应商名称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "purchase_name",
+                "column_cn": "采购单位名称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "business_name",
+                "column_cn": "采购业务名称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "info_type",
+                "column_cn": "信息类型",
+                "data_type": "VARCHAR(255)"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "ADS_HR_CADSUP_FAMILY_TRADE_COUNTS",
+        "table_cn": "领导人员配偶、子女及其配偶经商办企业分布计数",
+        "columns": [
+            {
+                "column_name": "counter",
+                "column_cn": "计数目标",
+                "data_type": "VARCHAR(255)",
+                "key": true,
+                "description": "领导总人数、不存在配偶子女及其配偶经商办企业领导人员人数、存在配偶子女及其配偶经商办企业领导人员人数、党组管理的领导人员、总部处长、直管企业党委管理领导人员、存在企业数量、吊销企业数量、其它企业数量、相关企业总数量"
+            },
+            {
+                "column_name": "cnt",
+                "column_cn": "计数",
+                "data_type": "INT",
+                "unit": "人/家"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "ADS_HR_CADSUP_FAMILY_TRADE_ENGAGEMENT",
+        "table_cn": "领导人员配偶、子女及其配偶经商办企业参与方式",
+        "columns": [
+            {
+                "column_name": "cadre_type",
+                "column_cn": "领导人员类型",
+                "data_type": "VARCHAR(255)",
+                "description": "党组管理领导人员、总部处长",
+                "key": true
+            },
+            {
+                "column_name": "engagement",
+                "column_cn": "亲属经商办企业参与方式",
+                "data_type": "VARCHAR(255)",
+                "description": "仅为股东、仅担任高级职务、即为股东又担任高级职务、开办有偿社会中介和法律服务机构或者从业、投资私募股权投资基金或者担任高级职务",
+                "key": true
+            },
+            {
+                "column_name": "num",
+                "column_cn": "牵涉企业数目",
+                "data_type": "INT",
+                "unit": "家"
+            }
+        ]
+    }
+]

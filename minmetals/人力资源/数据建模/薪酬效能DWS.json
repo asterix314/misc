@@ -1,0 +1,188 @@
+[
+    {
+        "page": "薪酬效能",
+        "table_name": "ADS_HR_COST_PROFIT",
+        "table_cn": "效益与人工成本情况",
+        "columns": [
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(4)",
+                "key": true
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "description": "全集团、{直管企业}",
+                "key": true
+            },
+            {
+                "column_name": "tot_cost",
+                "column_cn": "营业总成本",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "gross_prof",
+                "column_cn": "利润总额",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "net_prof",
+                "column_cn": "净利润",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "biz_income",
+                "column_cn": "营业总收入",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "labor_cost",
+                "column_cn": "企业人工成本",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "labor_cost_yoy",
+                "column_cn": "企业人工成本增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "wages",
+                "column_cn": "实发职工工资总额",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "wages_yoy",
+                "column_cn": "实发职工工资总额增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "wrks",
+                "column_cn": "职工人数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "wages_per_cap",
+                "column_cn": "平均工资",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "productivity",
+                "column_cn": "全员劳动生产率",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            },
+            {
+                "column_name": "labor_cost_ratio",
+                "column_cn": "人事费用率",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "labor_cost_ratio_yoy",
+                "column_cn": "人事费用率增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "prof_mrgn",
+                "column_cn": "人工成本利润率",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "prof_mrgn_yoy",
+                "column_cn": "人工成本利润率增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "labor_prop",
+                "column_cn": "人工成本占总成本比例",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "labor_prop_yoy",
+                "column_cn": "人工成本占总成本比例增幅",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            }
+        ]
+    },
+    {
+        "page": "薪酬效能",
+        "table_name": "ADS_HR_DISBURSEMENT",
+        "table_cn": "职工工资总额发放进度情况",
+        "columns": [
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "description": "{直管企业}",
+                "key": true
+            },
+            {
+                "column_name": "grnt_amount",
+                "column_cn": "已发放总额",
+                "data_type": "DOUBLE",
+                "unit": "元"
+            }
+        ]
+    },
+    {
+        "page": "薪酬效能",
+        "table_name": "ADS_HR_BENCHMARK",
+        "table_cn": "直管企业对标情况分析",
+        "columns": [
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(4)",
+                "key": true
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "description": "{直管企业}",
+                "key": true
+            },
+            {
+                "column_name": "indictrs_type",
+                "column_cn": "指标类型",
+                "data_type": "VARCHAR(255)",
+                "description": "人事费用率、人工成本利润率、人工成本占总成本比例",
+                "key": true
+            },
+            {
+                "column_name": "indictrs",
+                "column_cn": "指标数值",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "bench_p50",
+                "column_cn": "行业50分分位值",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "bench_quantile",
+                "column_cn": "行业对标分位值",
+                "data_type": "VARCHAR(255)"
+            }
+        ]
+    }
+]

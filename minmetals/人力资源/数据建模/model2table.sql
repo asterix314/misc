@@ -128,7 +128,7 @@ DISTRIBUTED BY HASH(`org_cd`) BUCKETS 1;
 with jsn as (
     select page, table_name, table_cn, unnest(columns, recursive:=true),
         generate_subscripts(columns, 1) as r
-    from "D:\misc\minmetals\人力资源\数据建模\干部监督.json"),
+    from "D:\misc\minmetals\人力资源\数据建模\干部管理DWS.json"),
 fix as (
     select   -- 增加固定列
         page,
@@ -162,17 +162,18 @@ tab as (
     from col
     group by page, table_name)
 -- ADS 表字段信息
---select
---    table_name as 表英文名称,
---    table_cn as 表中文名称,
---    column_name as 字段英文名称,
---    column_cn as 字段中文名称,
---    coalesce(unit, '') as 单位,
---    coalesce(description, '') as 字段说明,
---    data_type as 字段类型,
---    if(key, '是', '否') as 是否主键
---from col
---order by table_name, r        
+select
+    table_name as 表英文名称,
+    table_cn as 表中文名称,
+    column_name as 字段英文名称,
+    column_cn as 字段中文名称,
+    coalesce(unit, '') as 单位,
+    coalesce(description, '') as 字段说明,
+    data_type as 字段类型,
+    if(key, '是', '否') as 是否主键
+from col
+order by table_name, r        
+    
 select 
     page as 页面,
     '每日' as 频率,

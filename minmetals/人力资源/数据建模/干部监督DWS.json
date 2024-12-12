@@ -1,0 +1,479 @@
+[
+    {
+        "page": "干部监督",
+        "table_name": "DWS_HR_CADSUP_ASSESS_MULTIPLE",
+        "table_cn": "一报告两评议多选看法结果",
+        "columns": [
+            {
+                "column_name": "id",
+                "column_cn": "主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(4)"
+            },
+            {
+                "column_name": "org_cn_nm",
+                "column_cn": "直管企业",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "org_cd",
+                "column_cn": "直管企业编码",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "import_type",
+                "column_cn": "接入类型",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "topic",
+                "column_cn": "多选评价内容",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "indictr",
+                "column_cn": "指标",
+                "data_type": "DOUBLE"
+            },
+            {
+                "column_name": "num_ppl",
+                "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "create_time",
+                "column_cn": "创建时间",
+                "data_type": "DATETIME"
+            },
+            {
+                "column_name": "update_time",
+                "column_cn": "更新时间",
+                "data_type": "DATETIME"
+            },
+            {
+                "column_name": "matchup",
+                "column_cn": "值",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "record_dt",
+                "column_cn": "统计日期",
+                "data_type": "DATE"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "DWS_HR_CADSUP_ASSESS_SINGLE",
+        "table_cn": "一报告两评议单选评价结果",
+        "columns": [
+            {
+                "column_name": "id",
+                "column_cn": "主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(4)"
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "直管企业",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "org_cd",
+                "column_cn": "直管企业编码",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "import_type",
+                "column_cn": "接入类型",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "topic",
+                "column_cn": "单选评价内容",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "num_ppl",
+                "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "choice_a",
+                "column_cn": "好",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "choice_b",
+                "column_cn": "一般",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "choice_c",
+                "column_cn": "不好",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "choice_uninformed",
+                "column_cn": "不了解",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "choice_abstain",
+                "column_cn": "弃权",
+                "data_type": "DOUBLE",
+                "unit": "1%"
+            },
+            {
+                "column_name": "record_dt",
+                "column_cn": "统计日期",
+                "data_type": "DATE"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "DWS_HR_CADSUP_ASSESS_PROMOTION",
+        "table_cn": "新提拔干部民主评议结果",
+        "columns": [
+            {
+                "column_name": "id",
+                "column_cn": "主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "biz_year",
+                "column_cn": "年份",
+                "data_type": "VARCHAR(4)"
+            },
+            {
+                "column_name": "org_cn_nm",
+                "column_cn": "直管企业名称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "org_cd",
+                "column_cn": "直管企业编码",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "import_type",
+                "column_cn": "接入类型",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "previous_position",
+                "column_cn": "原任职务",
+                "data_type": "VARCHAR(6000)"
+            },
+            {
+                "column_name": "current_position",
+                "column_cn": "现任职务",
+                "data_type": "VARCHAR(6000)"
+            },
+            {
+                "column_name": "start_month",
+                "column_cn": "任职年月",
+                "data_type": "VARCHAR(6)"
+            },
+            {
+                "column_name": "birth_month",
+                "column_cn": "出生年月",
+                "data_type": "VARCHAR(6)"
+            },
+            {
+                "column_name": "name",
+                "column_cn": "姓名",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "brt_a",
+                "data_type": "DOUBLE"
+            },
+            {
+                "column_name": "blj_u",
+                "data_type": "DOUBLE"
+            },
+            {
+                "column_name": "rt_w",
+                "data_type": "DOUBLE"
+            },
+            {
+                "column_name": "jbrt_u",
+                "data_type": "DOUBLE"
+            },
+            {
+                "column_name": "qq_i",
+                "data_type": "DOUBLE"
+            },
+            {
+                "column_name": "create_time",
+                "column_cn": "创建时间",
+                "data_type": "DATETIME"
+            },
+            {
+                "column_name": "update_time",
+                "column_cn": "更新时间",
+                "data_type": "DATETIME"
+            },
+            {
+                "column_name": "record_dt",
+                "column_cn": "统计日期",
+                "data_type": "DATE"
+            }
+        ]
+    },
+    {
+        "page": "干部监督",
+        "table_name": "DWS_HR_CADSUP_LEADERSHIP_ALERT_DETAIL",
+        "table_cn": "领导班子配置情况预警",
+        "columns": [
+            {
+                "column_name": "id",
+                "column_cn": "主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "org_id",
+                "column_cn": "组织id",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "dept_id",
+                "column_cn": "部门id",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "team_type",
+                "column_cn": "班子类型",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "config",
+                "column_cn": "配置情况",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "board_members",
+                "column_cn": "董事会班子人员配置",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "board_rotation",
+                "column_cn": "董事会班子交流人员",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "board_memo",
+                "column_cn": "董事会班子备注",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "board_vacancy",
+                "column_cn": "董事会班子空编数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "board_actual",
+                "column_cn": "董事会班子实配数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "board_positions",
+                "column_cn": "董事会班子总职数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "party_gov_members",
+                "column_cn": "党政班子人员配置",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "party_gov_rotation",
+                "column_cn": "党政班子交流人员",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "party_gov_memo",
+                "column_cn": "党政班子备注",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "party_gov_vacancy",
+                "column_cn": "党政班子空编数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "party_gov_actual",
+                "column_cn": "党政班子实配数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "party_gov_positions",
+                "column_cn": "党政班子总职数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "supervision_members",
+                "column_cn": "监事会班子人员配置",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "supervision_rotation",
+                "column_cn": "监事会班子交流人员",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "supervision_memo",
+                "column_cn": "监事会班子备注",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "supervision_vacancy",
+                "column_cn": "监事会班子空编数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "supervision_actual",
+                "column_cn": "监事会班子实配数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "supervision_positions",
+                "column_cn": "监事会班子总职数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "commitee_members",
+                "column_cn": "党委班子人员配置",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "commitee_rotation",
+                "column_cn": "党委班子交流人员",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "commitee_memo",
+                "column_cn": "党委班子备注",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "commitee_vacancy",
+                "column_cn": "党委班子空编数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "commitee_actual",
+                "column_cn": "党委班子实配数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "commitee_positions",
+                "column_cn": "党委班子总职数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "group_members",
+                "column_cn": "党组班子人员配置",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "group_rotation",
+                "column_cn": "党组班子交流人员",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "group_memo",
+                "column_cn": "党组班子备注",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "group_vacancy",
+                "column_cn": "党组班子空编数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "group_actual",
+                "column_cn": "党组班子实配数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "group_positions",
+                "column_cn": "党组班子总职数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "management_members",
+                "column_cn": "经理层班子人员配置",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "management_rotation",
+                "column_cn": "经理层班子交流人员",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "management_memo",
+                "column_cn": "经理层班子备注",
+                "data_type": "STRING"
+            },
+            {
+                "column_name": "management_vacancy",
+                "column_cn": "经理层班子空编数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "management_actual",
+                "column_cn": "经理层班子实配数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "management_positions",
+                "column_cn": "经理层班子总职数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "record_dt",
+                "column_cn": "统计日期",
+                "data_type": "DATE"
+            }
+        ]
+    }
+]

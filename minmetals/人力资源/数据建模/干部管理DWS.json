@@ -421,8 +421,8 @@
     },
     {
         "page": "干部管理",
-        "table_name": "DIM_HR_GBRS_NODETREE",
-        "table_cn": "干部人事组织机构节点树",
+        "table_name": "DWS_HR_CADRE_TREE_NODE",
+        "table_cn": "干部人事组织机构树",
         "columns": [
             {
                 "column_name": "node_id",

@@ -1,4 +1,43 @@
--- 主数据整理
+-- 主数据
+
+create table DIM_ORG_PATH(
+    org_cd VARCHAR(255) not null comment '组织机构代码',
+    org_typ VARCHAR(255) comment '组织机构类型',
+    virt_entt BOOLEAN comment '是否虚拟部门',    
+    org_cn_nm VARCHAR(255) comment '组织机构全称',
+    org_cn_abbr VARCHAR(255) comment '组织机构简称',
+    entp_typ VARCHAR(255) comment '企业类型',
+    reg_typ VARCHAR(255) comment '登记注册类型',    
+    unit_soci_crdt_cd VARCHAR(255) comment '统一社会信用代码',
+    reg_no VARCHAR(255) comment '工商注册登记号',
+    natn_org_cd VARCHAR(255) comment '全国组织机构代码',
+    vat_no VARCHAR(255) comment '纳税人登记号',
+    oth_valid_no VARCHAR(255) comment '其他有效证件号',
+    cnty VARCHAR(255) comment '国家',
+    prvn VARCHAR(255) comment '省份/直辖市',
+    city VARCHAR(255) comment '城市',
+    town VARCHAR(255) comment '区县',
+    legl_respn_ps VARCHAR(255) comment '法定代表人/负责人',
+    reg_addr VARCHAR(6000) comment '注册地址',
+    post_cd VARCHAR(255) comment '邮政编码',
+    upr_mng VARCHAR(255) comment '上级管理单位',
+    mng_prox VARCHAR(255) comment '管理组织排序码',
+    grp_diret_mng_entp VARCHAR(255) comment '所属直管企业',
+    equt_typ VARCHAR(255) comment '股权属性',
+    opert_sts VARCHAR(255) comment '经营状态',
+    upr_hr_mng VARCHAR(255) comment '上级人事单位',
+    hr_mng_prox VARCHAR(255) comment '人事组织排序码',
+    upr_equt_mng VARCHAR(255) comment '上级股权单位',
+    equt_mng_prox VARCHAR(255) comment '股权组织排序码',
+    path_mng array<VARCHAR(255)> comment '管理层级路径',
+    path_hr array<VARCHAR(255)> comment '人事层级路径',
+    path_equt array<VARCHAR(255)> comment '股权层级路径'
+) ENGINE=OLAP
+UNIQUE KEY(`org_cd`)
+COMMENT '组织机构主数据标准'
+DISTRIBUTED BY HASH(`org_cd`) BUCKETS 1;
+
+
 load spatial;
 
 insert into DIM_ORG_PATH
@@ -73,42 +112,6 @@ org_ex as (
 from org_ex
 
 
-create table DIM_ORG_PATH(
-    org_cd VARCHAR(255) not null comment '组织机构代码',
-    org_typ VARCHAR(255) comment '组织机构类型',
-    virt_entt BOOLEAN comment '是否虚拟部门',    
-    org_cn_nm VARCHAR(255) comment '组织机构全称',
-    org_cn_abbr VARCHAR(255) comment '组织机构简称',
-    entp_typ VARCHAR(255) comment '企业类型',
-    reg_typ VARCHAR(255) comment '登记注册类型',    
-    unit_soci_crdt_cd VARCHAR(255) comment '统一社会信用代码',
-    reg_no VARCHAR(255) comment '工商注册登记号',
-    natn_org_cd VARCHAR(255) comment '全国组织机构代码',
-    vat_no VARCHAR(255) comment '纳税人登记号',
-    oth_valid_no VARCHAR(255) comment '其他有效证件号',
-    cnty VARCHAR(255) comment '国家',
-    prvn VARCHAR(255) comment '省份/直辖市',
-    city VARCHAR(255) comment '城市',
-    town VARCHAR(255) comment '区县',
-    legl_respn_ps VARCHAR(255) comment '法定代表人/负责人',
-    reg_addr VARCHAR(6000) comment '注册地址',
-    post_cd VARCHAR(255) comment '邮政编码',
-    upr_mng VARCHAR(255) comment '上级管理单位',
-    mng_prox VARCHAR(255) comment '管理组织排序码',
-    grp_diret_mng_entp VARCHAR(255) comment '所属直管企业',
-    equt_typ VARCHAR(255) comment '股权属性',
-    opert_sts VARCHAR(255) comment '经营状态',
-    upr_hr_mng VARCHAR(255) comment '上级人事单位',
-    hr_mng_prox VARCHAR(255) comment '人事组织排序码',
-    upr_equt_mng VARCHAR(255) comment '上级股权单位',
-    equt_mng_prox VARCHAR(255) comment '股权组织排序码',
-    path_mng array<VARCHAR(255)> comment '管理层级路径',
-    path_hr array<VARCHAR(255)> comment '人事层级路径',
-    path_equt array<VARCHAR(255)> comment '股权层级路径'
-) ENGINE=OLAP
-UNIQUE KEY(`org_cd`)
-COMMENT '组织机构主数据标准'
-DISTRIBUTED BY HASH(`org_cd`) BUCKETS 1;
 
 
 
@@ -124,15 +127,15 @@ DISTRIBUTED BY HASH(`org_cd`) BUCKETS 1;
 
 
 
-
+-- 配置文件转换
 with jsn as (
     select page, table_name, table_cn, unnest(columns, recursive:=true),
         generate_subscripts(columns, 1) as r
-    from "D:\misc\minmetals\人力资源\数据建模\干部管理DWS.json"),
+    from "D:\misc\minmetals\人力资源\数据建模\干部监督DWS.json"),
 fix as (
     select   -- 增加固定列
         page,
-        table_name, 
+        table_name,
         table_cn,
         unnest([
     {'column_name': 'org_cd',       'column_cn': '组织机构代码',  'data_type': 'VARCHAR(255)', 'r': 101},
@@ -161,22 +164,22 @@ tab as (
 ' order by r) as column_list
     from col
     group by page, table_name)
--- ADS 表字段信息
+-- 设计文档 spreadsheet
 select
     table_name as 表英文名称,
     table_cn as 表中文名称,
     column_name as 字段英文名称,
     column_cn as 字段中文名称,
     coalesce(unit, '') as 单位,
-    coalesce(description, '') as 字段说明,
+    '' /* coalesce(description, '') */ as 字段说明,
     data_type as 字段类型,
     if(key, '是', '否') as 是否主键
 from col
-order by table_name, r        
-    
+order by table_name, r         
+   
+-- 建表语句    
 select 
     page as 页面,
-    '每日' as 频率,
     table_name as 表英文名称,
     table_cn as 表中文名称,
     format('
@@ -205,13 +208,14 @@ order by page, table_name
 
 
 
--- 生成 DWD 模型设计 Excel
+-- 模型设计文档 ODS -> DWD
+with dwd as (
 select
     '每天' as 更新频率,
     'DWD' as 模式名,
-    t.table_name as 表英文名称,
+    replace(t.table_name, 'ODS_', 'DWD_') as 表英文名称,
     t.table_comment as 表中文名称,
-    c.column_name as 字段英文名称,
+    lower(c.column_name) as 字段英文名称,
     c.column_comment as 字段中文名称,
     '' as 字段说明,
     upper(c.column_type) as 字段类型,
@@ -219,16 +223,32 @@ select
     case column_key
         when 'UNI' then '是'
         else '否'
-    end as 是否主键
+    end as 是否主键,
+    c.ORDINAL_POSITION as 顺序
 from
     information_schema.columns as c
     inner join information_schema.tables as t using (table_schema, table_name)
 where
-    t.table_schema = 'dw_prod'
-    and t.table_name like 'DWD\\_HR%'
-order by
-    t.table_name,
-    ordinal_position
+    t.table_schema = 'ods_prod'
+    and t.table_name like 'ODS\\_HR\\_GBRS\\_%'),
+t as (
+    select distinct 表英文名称, 表中文名称 from dwd),
+res as (
+    select * from dwd
+    union all
+    select '每天', 'DWD', 表英文名称, 表中文名称, 'org_cd', '组织机构代码（主数据标准）', '', 'VARCHAR(255)', '', '否', 500
+    from t
+    union all
+    select '每天', 'DWD', 表英文名称, 表中文名称, 'org_cn_abbr', '组织机构简称（主数据标准）', '', 'VARCHAR(255)', '', '否', 510
+    from t)
+select *
+from res
+order by 表英文名称, 顺序
+
+    
+    
+
+
 
 
 

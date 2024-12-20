@@ -1,66 +1,207 @@
+-- 在 duckdb 执行
+
+load mysql;
+create secret 数字底座 (
+    type mysql,
+    host '10.201.132.224',
+    port 9030,
+    user 'datakits_prod',
+    password 'cisdi@123456'
+);
+create secret 干部人事 (
+    type mysql,
+    host '10.2.136.72',
+    port 3306,
+    user 'databaseuser',
+    password 'hZH2AeEXijZDm1lc@'
+);
+attach 'database=ods_prod' as ods_prod (type mysql, secret 数字底座);
+attach 'database=dw_prod' as dw_prod (type mysql, secret 数字底座);
+attach 'database=information_schema' as infscm (type mysql, secret 数字底座);
+attach 'database=gbrs_minmetals' as gbrs (type mysql, secret 干部人事);
+load spatial;
+
+-- 1. ODS 表通过数字底座同步到 doris 中
+
+-- 1.1 增加入 doris 的表
+select distinct upper(代码表)
+from st_read('C:\Users\zhangch2\Downloads\data\干部管理schema.xlsx',
+    layer = 'schema',
+    open_options = ['HEADERS=FORCE'])
+where len(trim(代码表)) > 0
+except
+select replace(table_name, 'ODS_DAB01_', '')
+from tables
+where table_catalog = 'HR_CADRE'
+order by 1
 
 
--- 自动生成模型文档页或建表语句
+-- 2. doris 中新建表信息导入 duckdb 
+insert into tables by name
+from infscm.tables as i
+where table_schema in ('ods_prod', 'dw_prod', 'ads_prod') and not exists (
+    select 1 from test.tables as t
+    where (i.table_schema, i.table_name) = (t.table_schema, t.table_name))
+
+insert into test.columns by name
+from infscm.columns as i
+where table_schema in ('ods_prod', 'dw_prod', 'ads_prod') and not exists (
+    select 1 from test.columns as c
+    where (i.table_schema, i.table_name) = (c.table_schema, c.table_name))    
+
+    
+-- 3. schema annotation
+-- 3.1 table_catalog, table_type, 
+-- update tables set table_catalog = 'HR_CADRE'
+where table_schema = 'ods_prod' and table_name like 'ODS_DAB01_%'
+-- update tables
+-- set table_type = '维度表'
+where regexp_extract(table_name, 'ODS_DAB01_([A-Z]+)', 1) in ('HR', 'GB', 'GBT', 'ZB', 'TJ')
+
+
+-- 3.2 table comment
+with u as (
+    select upper(代码表) as table_name, any_value(字段中文) as table_comment
+    from st_read('C:\Users\zhangch2\Downloads\data\干部管理schema.xlsx',
+        layer = 'schema',
+        open_options = ['HEADERS=FORCE'])
+    where coalesce(trim(代码表), '') != ''
+    group by 代码表)
+update tables as t
+set table_comment = u.table_comment
+from u
+where t.table_schema = 'ods_prod' and t.table_name = 'ODS_DAB01_' || u.table_name 
+
+-- check for duplicate table comments
+select table_comment
+from tables
+where table_catalog = 'HR_CADRE'
+group by table_comment having count(1) > 1
+
+
+
+-- 3.3 column comment and extras (从外部设计文档)
+create temp table if not exists columns_augment (
+    table_name varchar,
+    column_name varchar,
+    column_comment varchar,
+    extra varchar);
+
+truncate table columns_augment;
+    
+insert into columns_augment by name
+select trim(表名) as table_name, trim(字段名) as column_name, trim(字段中文) as column_comment
+from st_read('C:\Users\zhangch2\Downloads\data\干部管理schema.xlsx',
+    layer = 'schema',
+    open_options = ['HEADERS=FORCE'])
+where coalesce(trim(代码表), '') = ''
+
+-- 在 duckdb 执行生成的结果
+select printf(
+'insert into columns_augment by name
+select ''%s'' as table_name, ''%s'' as column_name, ''%s'' as column_comment,  string_agg(format(''{}：{}'', dmcod, dmcpt), ''
+'' order by inpfrq) as extra
+from gbrs.%s;', trim(表名), trim(字段名), trim(字段中文), coalesce(trim(代码表), '')) as qry
+from st_read('C:\Users\zhangch2\Downloads\data\干部管理schema.xlsx',
+    layer = 'schema',
+    open_options = ['HEADERS=FORCE'])
+where coalesce(trim(代码表), '') != ''
+
+-- 更新 column comment、 extra
+update columns as c set 
+    column_comment = coalesce(nullif(a.column_comment, ''), c.column_comment),  
+    extra = coalesce(nullif(a.extra, ''), c.extra)
+from columns_augment as a
+where c.table_schema = 'ods_prod'
+    and c.table_name = 'ODS_DAB01_' || a.table_name 
+    and c.column_name = a.column_name
+    
+-- in case of extremely long extras
+update columns
+set extra = left(extra, 255) || '……'
+where TABLE_SCHEMA = 'ods_prod' and table_name like 'ODS_DAB01%' and length(extra) > 255
+
+
+-- 4. 生成 doris alter table/column comment 语句 并在 doris 中执行
+select format('alter table {} modify comment "{}";', table_name, table_comment)
+from tables
+where table_catalog = 'HR_CADRE' and trim(table_comment) != ''
+
+select format('alter table {} modify column {} comment "{}";', table_name, column_name, column_comment)
+from columns
+where table_schema = 'ods_prod' and table_name like 'ODS\_DAB01\_%' escape '\' and trim(column_comment) != ''
+
+
+-- 5. 逆向建模 ODS
+
+
+from tables
+where table_catalog = 'HR_CADRE'
+
+
+
+-- 6. 
+-- 自动生成模型文档页或建表语句 (dudkdb)
 with base as (
 -- 源：JSON 配置文件
 --    select page, table_name, table_cn, unnest(columns, recursive:=true),
 --        generate_subscripts(columns, 1) as r
 --    from "D:\misc\minmetals\人力资源\数据建模\干部监督DWS.json"),
 --
--- 源：information_schema
+-- 源：duckdb
     select
-        '干部管理' as page,
-        replace(upper(trim(t.table_name)), 'ODS_DAB01', 'DWD_HR_CADRE') as table_name,
-        trim(t.table_comment) as table_cn,
-        lower(trim(c.column_name)) as column_name,
-        trim(c.column_comment) as column_cn,
-        case 
-            when c.data_type = 'varchar' and (c.character_maximum_length <= 255 or column_key = 'UNI') then 'VARCHAR(255)'
-            when c.data_type = 'varchar' and c.character_maximum_length <= 6000 then 'VARCHAR(6000)'
-            when c.data_type = 'varchar' then 'STRING'
-            when c.data_type = 'bigint' then 'BIGINT'
-            when c.data_type = 'decimal' then 'DOUBLE'
-            else upper(c.column_type)
-        end as data_type,
-        column_key = 'UNI' as key,
+        t.table_catalog as page,    -- 业务域
+        t.table_type,   -- 事实表/维度表
+        upper(trim(t.table_name)) as table_name,
+        coalesce(trim(t.table_comment), '') as table_cn,
+        trim(c.column_name) as column_name,
+        coalesce(trim(c.column_comment), '') as column_cn,  -- 字段中文名称
+        c.data_type,
+        c.character_maximum_length, 
+        c.column_type,
+        c.column_key = 'UNI' as is_key,
+        trim(c.extra) as extra, -- 字段说明
         c.ordinal_position as r
     from
         columns as c
         inner join tables as t using (table_schema, table_name)
     where
-        t.table_schema = 'ods_prod'
-        and t.table_name like 'ODS\_DAB01\_%' escape '\'),
+        t.table_schema = 'ods_prod' and t.table_catalog = 'HR_CADRE'),
 base_col as (
     select page, table_name, any_value(table_cn) as table_cn,
         string_agg(format('`{}`', column_name), ',
     ' order by r) as column_list
     from base
     group by page, table_name),
-fix as (
-    select   -- 增加固定列
+fixture as (
+    select   -- 对事实表增加贯标列
         page,
         table_name,
         table_cn,
+        '事实表' as table_type,
         unnest([
-            {'column_name': 'org_cd',       'column_cn': '组织机构代码',  'data_type': 'VARCHAR(255)', 'r': 101},
-            {'column_name': 'org_cn_abbr',  'column_cn': '组织机构简称',  'data_type': 'VARCHAR(255)', 'r': 102},
-            {'column_name': 'biz_date',     'column_cn': '业务日期',      'data_type': 'VARCHAR(8)', 'r': 103}], recursive:=true)
-    from (select distinct page, table_name, table_cn from base)),
+            {'column_name': 'org_cd',       'column_cn': '组织机构代码',  'column_type': 'VARCHAR(255)', 'r': 101},
+            {'column_name': 'org_cn_abbr',  'column_cn': '组织机构简称',  'column_type': 'VARCHAR(255)', 'r': 102},
+            {'column_name': 'biz_date',     'column_cn': '业务日期',      'column_type': 'VARCHAR(8)', 'r': 103}], recursive:=true)
+    from (
+        select distinct page, table_name, table_cn 
+        from base 
+        where table_type = '事实表')),
 col as (
     from base
     union all by name
-    from fix
+    from fixture
     where (page, table_name, column_name) not in 
         (select struct_pack(page, table_name, column_name) from base)),
 tab as (
-    select page, table_name, any_value(table_cn) as table_cn,
-        string_agg(format('`{}`', column_name) order by r) filter (key) as key_list,
+    select page, table_name, table_type, any_value(table_cn) as table_cn,
+        string_agg(format('`{}`', column_name) order by r) filter (is_key) as key_list,
         string_agg(format('`{}`', column_name), ',
     ' order by r) as column_name_list,
         string_agg(format('    `{}` {} {} comment ''{}''',
             column_name,
             coalesce(data_type, 'VARCHAR(255)'),
-            if(key, 'not null', 'null'),
+            if(is_key, 'not null', 'null'),
             case column_name
                 when 'org_cd' then '组织机构代码' 
                 when 'org_cn_abbr' then '组织机构简称'
@@ -69,40 +210,63 @@ tab as (
             end), ',
     ' order by r) as column_list
     from col
-    group by page, table_name),
-model as (
+    group by all),
+ods_model as (
     select
         page as 业务域,
         '每天' as 更新频率,
-        'DWD' as 模式名,
+        'ODS' as 模式名,
         table_name as 表英文名称,
         table_cn as 表中文名称,
         column_name as 字段英文名称,
         column_cn as 字段中文名称,
-        '' /*coalesce(unit, '')*/ as 单位,
-        '' /*coalesce(description, '')*/  as 字段说明,
-        data_type as 字段类型,
-        if(key, '是', '否') as 是否主键
+        ''  as 字段说明,
+        upper(column_type) as 字段类型,
+        if(is_key, '是', '否') as 是否主键
+    from base
+    order by table_name, r),
+dw_model as (
+    select
+        page as 业务域,
+        '每天' as 更新频率,
+        if(table_type = '事实表', 'DWD', 'DIM') as 模式名,
+        regexp_replace(table_name, 'ODS_[[:alnum:]]+', 模式名 || '_' || page) as 表英文名称,
+        table_cn as 表中文名称,
+        lower(column_name) as 字段英文名称,
+        column_cn as 字段中文名称,
+        coalesce(extra, '') as 字段说明,
+        case 
+            when data_type like '%char' and (character_maximum_length <= 255 or is_key) then 'VARCHAR(255)'
+            when data_type like '%char' and character_maximum_length <= 6000 then 'VARCHAR(6000)'
+            when data_type like '%char' then 'STRING'
+            when data_type = 'bigint' then 'BIGINT'
+            when data_type = 'decimal' then 'DOUBLE'
+            else upper(column_type)
+        end as 字段类型,
+        if(is_key, '是', '否') as 是否主键
     from col
     order by table_name, r),
+dws_model as (
+    select 1
+    ---    coalesce(unit, '')*/ as 单位,
+    ---    coalesce(description, '')  as 字段说明
+),
 ddl as (
     select 
-        table_name as 表英文名称,
+        regexp_replace(table_name, 'ODS_[[:alnum:]]+', if(table_type = '事实表', 'DWD', 'DIM') || '_' || page) as 表英文名称,
         table_cn as 表中文名称,
         format('
-    drop table if exists `{}`;
-    create table if not exists `{}` (
-    {}
+    drop table if exists `{0}`;
+    create table if not exists `{0}` (
+    {1}
     ) engine=olap
-    unique key({})
-    comment ''{}''
-    distributed by hash({}) buckets 1;',
-        table_name,
-        table_name,
+    unique key({2})
+    comment ''{3}''
+    distributed by hash({2}) buckets 1;',
+        表英文名称,
         column_list,
         key_list,
-        table_cn,
-        key_list) as ddl
+        table_cn) as ddl
     from tab
     order by table_name),
 dml as (
@@ -121,55 +285,21 @@ dml as (
         replace(table_name, 'DWD_HR_CADRE', 'ODS_DAB01')) as dml
     from base_col
     order by table_name)
-from dml
+from ddl    
+    
+    
 
 
 
 
-
-
--- 模型设计文档 ODS -> DWD
-with dwd as (
-select
-    '每天' as 更新频率,
-    'DWD' as 模式名,
-    replace(t.table_name, 'ODS_DAB01', 'DWD_HR_CADRE') as 表英文名称,
-    t.table_comment as 表中文名称,
-    lower(c.column_name) as 字段英文名称,
-    c.column_comment as 字段中文名称,
-    '' as 字段说明,
-    case 
-        when c.data_type = 'varchar' and c.character_maximum_length <= 255 then 'VARCHAR(255)'
-        when c.data_type = 'varchar' and c.character_maximum_length <= 6000 then 'VARCHAR(6000)'
-        when c.data_type = 'varchar' and c.character_maximum_length > 6000 then 'STRING'
-        when c.data_type = 'decimal' then 'DOUBLE'
-        else upper(c.column_type)
-    end as 字段类型,
-    '' as 字段长度,
-    case column_key
-        when 'UNI' then '是'
-        else '否'
-    end as 是否主键,
-    c.ORDINAL_POSITION as 顺序
-from
-    columns as c
-    inner join tables as t using (table_schema, table_name)
-where
-    t.table_schema = 'ods_prod'
-    and t.table_name like 'ODS\_DAB01\_%' escape '\'),
-t as (
-    select distinct 表英文名称, 表中文名称 from dwd),
-res as (
-    select * from dwd
-    union all
-    select '每天', 'DWD', 表英文名称, 表中文名称, 'org_cd', '组织机构代码（主数据标准）', '', 'VARCHAR(255)', '', '否', 500
-    from t
-    union all
-    select '每天', 'DWD', 表英文名称, 表中文名称, 'org_cn_abbr', '组织机构简称（主数据标准）', '', 'VARCHAR(255)', '', '否', 510
-    from t)
-select *
-from res
-order by 表英文名称, 顺序
+-- 导入机构映射
+INSERT INTO dw_prod.DIM_ORG_MAP
+(biz, biz_name, biz_code, org_cd, org_cn_nm, org_cn_abbr, valid, update_time)
+select '采购管理', 采购单位名称, 采购单位编码, "4A单位编码", "4A单位名称", 采购单位名称, 1, now()
+from st_read(
+    'C:\Users\zhangch2\Downloads\采购组织机构与主数据匹配一致单位详细.xlsx',
+    layer = 'Sheet1',
+    open_options = ['HEADERS=FORCE']) as x
 
 
 
@@ -178,118 +308,5 @@ order by 表英文名称, 顺序
 
 
 
--- 规范化 varchar 长度
-select concat(
-    'alter table ', table_name, ' modify column ', column_name, ' ',
-    case when character_maximum_length < 255 then 'varchar(255)'
-    when  character_maximum_length < 6000 then 'varchar(6000)'
-    else 'string' end,
-    ';') as dml
-from
-    information_schema.columns
-where
-    table_schema = 'ods_prod' and table_name like 'ODS\\_DAD01\\_%'
-    and column_type like 'varchar%' and column_type not in ('varchar(255)', 'varchar(6000)')
-    and COLUMN_KEY = ''
-order by
-    table_name,
-    ordinal_position    
 
-
-
-
----------------------------------------------------
---- scratch history
--- ADS 表建模
-with numeric_t as (    -- 数值表
-    select table_name, table_cn, 1 + unnest(range(max(d))) as i  -- topic index
-    from (
-        select table_name, table_cn, len(unnest(topics).path) as d
-        from "D:\misc\minmetals\人力资源\人才管理.json"
-        where topics is not null) as foo
-    group by table_name, table_cn),
-non_numeric as (        -- 非数值表，如信息列表
-    select table_name, table_cn, unnest(columns) as c
-    from "D:\misc\minmetals\人力资源\人才管理.json"
-    where topics is null),
-models as (
-    select 
-        table_name,
-        table_cn,
-        'topic_' || i as column_name,
-        '话题' || i as column_cn,
-        'VARCHAR(255)' as data_type,
-        true as key
-    from numeric_t
-    union all
-    select
-        table_name,
-        table_cn,
-        c.column_name,
-        c.column_cn,
-        c.data_type,
-        c.key
-    from non_numeric),
-result as (
-    select *
-    from models
-    union all
-    select  -- 数值表增加数值列
-        table_name, 
-        table_cn, 
-        'val' as column_name,
-        '数值' as column_cn,
-        'DOUBLE' as data_type,
-        false as key
-    from (
-        select distinct table_name, table_cn
-        from numeric_t) as foo
-    union all
-    select      -- 全部表增加固定列
-        table_name, 
-        table_cn, 
-        unnest(['org_code', 'ord_name', 'biz_date']) as column_name,
-        unnest(['组织代码', '组织名称', '日期']) as column_cn,
-        unnest(['VARCHAR(255)', 'VARCHAR(255)', 'VARCHAR(255)']) as data_type,
-        false as key
-    from (
-        select distinct table_name, table_cn
-        from models) as foo)
-select 
-    row_number() over (order by table_name, key desc) as 序号,
-    '人力资源' as 业务域,
-    '每日' as 更新频率,
-    'ADS' as 域名,
-    table_name as 表英文名称,
-    table_cn as 表中文名称,
-    column_name as 字段英文名称,
-    column_cn as 字段中文名称,
-    column_cn as 字段说明,
-    data_type as 字段类型,
-    case key when true then '是' else '否' end as 是否主键
-from result
-
-
-
--- 话题树
-with t as (
-    select table_name, table_cn, unnest(topics) as topic
-    from "D:\misc\minmetals\人力资源\人才管理.json"
-    where topics is not null),
-c as (
-    select category, unnest(items) as item
-    from "D:\misc\minmetals\人力资源\类别展开.json")
-select 
-    table_name as 表英文名称, 
-    table_cn as 表中文名称,
-    coalesce(c1.item, topic.path[1], '') as 话题1, 
-    coalesce(c2.item, topic.path[2], '') as 话题2, 
-    coalesce(c3.item, topic.path[3], '') as 话题3, 
-    coalesce(c4.item, topic.path[4], '') as 话题4,
-    topic.unit as 单位,
-    coalesce(topic.comment, '') as 说明
-from t left join c as c1 on topic.path[1] = '{' || c1.category || '}'
-    left join c as c2 on topic.path[2] = '{' || c2.category || '}'
-    left join c as c3 on topic.path[3] = '{' || c3.category || '}'
-    left join c as c4 on topic.path[4] = '{' || c4.category || '}'
-order by 1,2,3,4,5,6
+--------------------------------

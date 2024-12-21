@@ -492,5 +492,174 @@
                 "data_type": "VARCHAR(255)"
             }
         ]
-    }
+    },
+    {
+        "page": "干部管理",
+        "table_name": "DWS_HR_CADRE_SHARE_JOB_INFORMATION",
+        "table_cn": "数据共享：职务信息",
+        "columns": [
+            {
+                "column_name": "id_person",
+                "column_cn": "人员主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "is_in",
+                "column_cn": "",
+                "data_type": "VARCHAR(255)",
+                "description": "是、否"
+            },
+            {
+                "column_name": "probation_result",
+                "column_cn": "试用期评价",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "work_unit_id",
+                "column_cn": "工作单位代码",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "job_name_plus",
+                "column_cn": "",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "is_full",
+                "column_cn": "",
+                "data_type": "VARCHAR(255)",
+                "description": "是、否"
+            },
+            {
+                "column_name": "probation",
+                "column_cn": "试用期",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "job_name",
+                "column_cn": "职位",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "appoint_status",
+                "column_cn": "在任情况",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "is_only",
+                "column_cn": "",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "appoint_date",
+                "column_cn": "任命日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "com_name",
+                "column_cn": "公司名称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "start_date",
+                "column_cn": "开始日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "post_type",
+                "column_cn": "职位类型",
+                "data_type": "VARCHAR(255)"
+            }
+        ]
+    },
+    {
+        "page": "干部管理",
+        "table_name": "DWS_HR_CADRE_SHARE_PERSONNEL_INFORMATION",
+        "table_cn": "数据共享：人员信息",
+        "columns": [
+            {
+                "column_name": "id_person",
+                "column_cn": "人员主键",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "first_level",
+                "column_cn": "一级机构",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "second_level",
+                "column_cn": "二级",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "third_level",
+                "column_cn": "三级",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "fourth_level",
+                "column_cn": "四级",
+                "data_type": "VARCHAR(255)"
+            },
+
+            {
+                "column_name": "name",
+                "column_cn": "干部姓名",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "id_card",
+                "column_cn": "身份证号",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "is_full",
+                "column_cn": "",
+                "data_type": "VARCHAR(255)",
+                "description": "是、否"
+            },
+            {
+                "column_name": "probation",
+                "column_cn": "试用期",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "job_name",
+                "column_cn": "职位",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "appoint_status",
+                "column_cn": "在任情况",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "is_only",
+                "column_cn": "",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "appoint_date",
+                "column_cn": "任命日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "com_name",
+                "column_cn": "公司名称",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "start_date",
+                "column_cn": "开始日期",
+                "data_type": "DATE"
+            },
+            {
+                "column_name": "post_type",
+                "column_cn": "职位类型",
+                "data_type": "VARCHAR(255)"
+            }
+        ]
 ]

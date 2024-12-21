@@ -1,6 +1,6 @@
 #set page(
   "a4",
-  margin: (x: 5em, y: 4em),
+  margin: (y: 4em),
   flipped: true,
   columns: 2
 )
@@ -11,7 +11,7 @@
 // 创建表格
 #table(
   columns: (1em, 10em, 1fr),
-  stroke: (x: none, y: 0.2pt),
+  stroke: (x: none, y: 0.5pt),
   align: (
     right + horizon, 
     left + horizon, 

@@ -134,39 +134,132 @@ where table_schema = 'ods_prod' and table_name like 'ODS\_DAB01\_%' escape '\' a
 
 -- 5. 逆向建模 ODS
 
-
-from tables
-where table_catalog = 'HR_CADRE'
-
-
-
--- 6. 
--- 自动生成模型文档页或建表语句 (dudkdb)
+-- 6. 自动生成 ODS、DWD、DIM 模型文档页或建表语句 (dudkdb)
 with base as (
--- 源：JSON 配置文件
---    select page, table_name, table_cn, unnest(columns, recursive:=true),
---        generate_subscripts(columns, 1) as r
---    from "D:\misc\minmetals\人力资源\数据建模\干部监督DWS.json"),
---
--- 源：duckdb
+    -- 源：duckdb
     select
-        t.table_catalog as page,    -- 业务域
+        t.table_catalog,    -- 业务域
         t.table_type,   -- 事实表/维度表
-        upper(trim(t.table_name)) as table_name,
+        upper(trim(t.table_name)) as ods_name,
+        regexp_replace(ods_name, 'ODS_[[:alnum:]]+', if(table_type = '事实表', 'DWD', 'DIM') || '_' || t.table_catalog) as dw_name,
         coalesce(trim(t.table_comment), '') as table_cn,
         trim(c.column_name) as column_name,
         coalesce(trim(c.column_comment), '') as column_cn,  -- 字段中文名称
-        c.data_type,
-        c.character_maximum_length, 
-        c.column_type,
         c.column_key = 'UNI' as is_key,
+        c.column_type as ods_dtype,
+        case 
+            when c.data_type like '%char' and (c.character_maximum_length <= 255 or is_key) then 'VARCHAR(255)'
+            when c.data_type like '%char' and character_maximum_length <= 6000 then 'VARCHAR(6000)'
+            when c.data_type like '%char' then 'STRING'
+            when c.data_type = 'decimal' and numeric_scale = 0 then 'BIGINT'
+            when c.data_type = 'decimal' then 'DOUBLE'
+            else upper(c.column_type)
+        end as dw_dtype,
         trim(c.extra) as extra, -- 字段说明
+        true as original,   -- from ODS table 
         c.ordinal_position as r
     from
         columns as c
         inner join tables as t using (table_schema, table_name)
     where
         t.table_schema = 'ods_prod' and t.table_catalog = 'HR_CADRE'),
+fixture as (
+    select   -- 对事实表增加贯标列
+        table_catalog,
+        table_type,
+        ods_name,
+        dw_name,
+        table_cn,
+        false as is_key,
+        false as original,
+        '' as extra,
+        unnest([
+            {'column_name': 'org_cd', 'column_cn': '组织机构代码', 'ods_dtype': 'varchar(255)', 'dw_dtype': 'VARCHAR(255)', 'r': 501},
+            {'column_name': 'org_cn_abbr', 'column_cn': '组织机构简称', 'ods_dtype': 'varchar(255)', 'dw_dtype': 'VARCHAR(255)','r': 502},
+            {'column_name': 'biz_date', 'column_cn': '业务日期', 'ods_dtype': 'varchar(8)', 'dw_dtype': 'VARCHAR(8)', 'r': 503}], recursive:=true)
+    from (
+        select distinct table_catalog, table_type, ods_name, dw_name, table_cn
+        from base 
+        where table_type = '事实表')),        
+clist as (
+    from base
+    union all by name
+    from fixture
+    where (table_catalog, ods_name, column_name) not in 
+        (select struct_pack(table_catalog, ods_name, column_name) from base)),
+ods_model as (
+    select
+        '每天' as 更新频率,
+        'ODS' as 模式名,
+        ods_name as 表英文名称,
+        table_cn as 表中文名称,
+        column_name as 字段英文名称,
+        column_cn as 字段中文名称,
+        ''  as 字段说明,
+        upper(ods_dtype) as 字段类型,
+        if(is_key, '是', '否') as 是否主键
+    from clist where original
+    order by ods_name, r),
+dw_model as (
+    select
+        '每天' as 更新频率,
+        if(table_type = '事实表', 'DWD', 'DIM') as 模式名,
+        dw_name as 表英文名称,
+        table_cn as 表中文名称,
+        lower(column_name) as 字段英文名称,
+        column_cn as 字段中文名称,
+        coalesce(extra, '') as 字段说明,
+        dw_dtype as 字段类型,
+        if(is_key, '是', '否') as 是否主键
+    from clist
+    order by dw_name, r),
+tlist as (
+    select ods_name, dw_name, table_cn,
+        string_agg(format('`{}`', column_name), ', ' order by r) filter (is_key) as key_list,
+        string_agg(format('`{}`', column_name), ', ' order by r) as cname_list,
+        string_agg(format('`{}`', column_name), ', ' order by r) filter (original) as original_list,
+        string_agg(format('`{}` {} {} comment "{}"', 
+            column_name, 
+            dw_dtype, 
+            if(is_key, 'not null', 'null'), 
+            column_cn), ', ' order by r) as cdef_list
+    from clist
+    group by all), 
+dw_ddl as (
+    select 
+        dw_name as 表英文名称,
+        table_cn as 表中文名称,
+        format('drop table if exists `{0}`;
+create table if not exists dw${{env}}.`{0}` ({1}) 
+engine=olap
+unique key({2})
+comment "{3}"
+distributed by hash({2}) buckets 1;',
+            dw_name, cdef_list, key_list, table_cn) as ddl
+    from tlist
+    order by dw_name),
+dw_dml as (
+    select
+        dw_name as 表英文名称,
+        table_cn as 表中文名称,
+        format('insert into dw${{env}}.`{0}`({1})
+select {1}
+from ods${{env}}.`{2}`;',
+            dw_name,
+            original_list,
+            ods_name) as dml
+    from tlist
+    order by dw_name)
+from dw_dml
+    
+    
+
+-- 7. 
+with base as (
+    -- 源：JSON 配置文件
+    select page, table_name, table_cn, unnest(columns, recursive:=true),
+        generate_subscripts(columns, 1) as r
+    from "D:\misc\minmetals\人力资源\数据建模\干部监督DWS.json"),
 base_col as (
     select page, table_name, any_value(table_cn) as table_cn,
         string_agg(format('`{}`', column_name), ',
@@ -285,9 +378,9 @@ dml as (
         replace(table_name, 'DWD_HR_CADRE', 'ODS_DAB01')) as dml
     from base_col
     order by table_name)
-from ddl    
-    
-    
+from ddl 
+
+
 
 
 
@@ -302,6 +395,20 @@ from st_read(
     open_options = ['HEADERS=FORCE']) as x
 
 
+
+-- unnest MAP
+with p as (
+    pivot (
+        select 
+            unnest(map_keys(json)) as key, 
+            unnest(map_values(json)) as value,
+            row_number () over () as i
+        from zbbmdzs)
+    on key
+    using first(value)
+    order by i)
+select * exclude i
+from p
 
 
 

@@ -257,128 +257,65 @@ from dw_dml
 -- 7. 
 with base as (
     -- 源：JSON 配置文件
-    select page, table_name, table_cn, unnest(columns, recursive:=true),
-        generate_subscripts(columns, 1) as r
-    from "D:\misc\minmetals\人力资源\数据建模\干部监督DWS.json"),
-base_col as (
-    select page, table_name, any_value(table_cn) as table_cn,
-        string_agg(format('`{}`', column_name), ',
-    ' order by r) as column_list
-    from base
-    group by page, table_name),
+        select page, table_name, table_cn, unnest(columns, recursive:=true),
+            generate_subscripts(columns, 1) as r
+        from "D:\misc\minmetals\人力资源\数据建模\干部管理DWS.json"),
 fixture as (
     select   -- 对事实表增加贯标列
-        page,
-        table_name,
-        table_cn,
-        '事实表' as table_type,
+        *,
+        false as key,
         unnest([
-            {'column_name': 'org_cd',       'column_cn': '组织机构代码',  'column_type': 'VARCHAR(255)', 'r': 101},
-            {'column_name': 'org_cn_abbr',  'column_cn': '组织机构简称',  'column_type': 'VARCHAR(255)', 'r': 102},
-            {'column_name': 'biz_date',     'column_cn': '业务日期',      'column_type': 'VARCHAR(8)', 'r': 103}], recursive:=true)
+            {'column_name': 'org_cd', 'column_cn': '组织机构代码', 'data_type': 'VARCHAR(8)', 'r': 501},
+            {'column_name': 'org_cn_abbr', 'column_cn': '组织机构简称', 'data_type': 'VARCHAR(200)','r': 502},
+            {'column_name': 'biz_date', 'column_cn': '业务日期', 'data_type': 'VARCHAR(8)', 'r': 503}], recursive:=true)
     from (
-        select distinct page, table_name, table_cn 
-        from base 
-        where table_type = '事实表')),
-col as (
+        select distinct page, table_name, table_cn
+        from base)),        
+clist as (
     from base
     union all by name
     from fixture
     where (page, table_name, column_name) not in 
         (select struct_pack(page, table_name, column_name) from base)),
-tab as (
-    select page, table_name, table_type, any_value(table_cn) as table_cn,
-        string_agg(format('`{}`', column_name) order by r) filter (is_key) as key_list,
-        string_agg(format('`{}`', column_name), ',
-    ' order by r) as column_name_list,
-        string_agg(format('    `{}` {} {} comment ''{}''',
-            column_name,
-            coalesce(data_type, 'VARCHAR(255)'),
-            if(is_key, 'not null', 'null'),
-            case column_name
-                when 'org_cd' then '组织机构代码' 
-                when 'org_cn_abbr' then '组织机构简称'
-                when 'biz_date' then '业务日期'
-                else column_cn
-            end), ',
-    ' order by r) as column_list
-    from col
-    group by all),
-ods_model as (
+model as (
     select
-        page as 业务域,
         '每天' as 更新频率,
-        'ODS' as 模式名,
+        'DWS' as 模式名,
         table_name as 表英文名称,
-        table_cn as 表中文名称,
-        column_name as 字段英文名称,
-        column_cn as 字段中文名称,
-        ''  as 字段说明,
-        upper(column_type) as 字段类型,
-        if(is_key, '是', '否') as 是否主键
-    from base
-    order by table_name, r),
-dw_model as (
-    select
-        page as 业务域,
-        '每天' as 更新频率,
-        if(table_type = '事实表', 'DWD', 'DIM') as 模式名,
-        regexp_replace(table_name, 'ODS_[[:alnum:]]+', 模式名 || '_' || page) as 表英文名称,
         table_cn as 表中文名称,
         lower(column_name) as 字段英文名称,
         column_cn as 字段中文名称,
-        coalesce(extra, '') as 字段说明,
-        case 
-            when data_type like '%char' and (character_maximum_length <= 255 or is_key) then 'VARCHAR(255)'
-            when data_type like '%char' and character_maximum_length <= 6000 then 'VARCHAR(6000)'
-            when data_type like '%char' then 'STRING'
-            when data_type = 'bigint' then 'BIGINT'
-            when data_type = 'decimal' then 'DOUBLE'
-            else upper(column_type)
-        end as 字段类型,
-        if(is_key, '是', '否') as 是否主键
-    from col
+        coalesce(unit, '') as 单位,
+        coalesce(description, '') as 字段说明,
+        data_type as 字段类型,
+        if(key, '是', '否') as 是否主键
+    from clist
     order by table_name, r),
-dws_model as (
-    select 1
-    ---    coalesce(unit, '')*/ as 单位,
-    ---    coalesce(description, '')  as 字段说明
-),
+tlist as (
+    select table_name, table_cn,
+        string_agg(format('`{}`', column_name), ', ' order by r) filter (key) as key_list,
+        string_agg(format('`{}`', column_name), ', ' order by r) as cname_list,
+        string_agg(format('`{}` {} {} comment ''{}''',
+            column_name, 
+            data_type, 
+            if(key, 'not null', 'null'), 
+            column_cn), ', ' order by r) as cdef_list
+    from clist
+    group by all),
 ddl as (
-    select 
-        regexp_replace(table_name, 'ODS_[[:alnum:]]+', if(table_type = '事实表', 'DWD', 'DIM') || '_' || page) as 表英文名称,
-        table_cn as 表中文名称,
-        format('
-    drop table if exists `{0}`;
-    create table if not exists `{0}` (
-    {1}
-    ) engine=olap
-    unique key({2})
-    comment ''{3}''
-    distributed by hash({2}) buckets 1;',
-        表英文名称,
-        column_list,
-        key_list,
-        table_cn) as ddl
-    from tab
-    order by table_name),
-dml as (
     select 
         table_name as 表英文名称,
         table_cn as 表中文名称,
-        format('
-    insert into dw${{env}}.{}(
-    {})
-    select
-    {}
-    from ods${{env}}.{};',
-        table_name,
-        column_list,
-        column_list,
-        replace(table_name, 'DWD_HR_CADRE', 'ODS_DAB01')) as dml
-    from base_col
+        format('drop table if exists `{0}`;
+create table if not exists `{0}` ({1}) 
+engine=olap
+unique key({2})
+comment ''{3}''
+distributed by hash({2}) buckets 1;',
+            table_name, cdef_list, key_list, table_cn) as ddl
+    from tlist
     order by table_name)
-from ddl 
+from ddl
 
 
 

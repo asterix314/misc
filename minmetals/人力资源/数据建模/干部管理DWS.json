@@ -355,18 +355,28 @@
         "table_cn": "干部班子配置情况",
         "columns": [
             {
-                "column_name": "org_cn_abbr",
-                "column_cn": "组织机构简称",
+                "column_name": "b00",
+                "column_cn": "部门编码",
                 "data_type": "VARCHAR(255)",
-                "key": true,
-                "description": "五矿集团、{直管企业}"
+                "key": true
             },
             {
                 "column_name": "team",
                 "column_cn": "班子名称",
                 "data_type": "VARCHAR(255)",
                 "key": true,
-                "description": "办公室、战略发展部、企业管理部、资本运营部、财务总部……、党政班子、党委班子、董事会、经理层"
+                "description": "党政班子、党委班子、董事会、经理层"
+            },
+            {
+                "column_name": "org_cat",
+                "column_cn": "组织机构类型",
+                "data_type": "VARCHAR(255)",
+                "description": "总部部门、直管企业"
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)"
             },
             {
                 "column_name": "positions",
@@ -379,6 +389,11 @@
                 "column_cn": "实际配置人数",
                 "data_type": "INT",
                 "unit": "人"
+            },
+            {
+                "column_name": "members",
+                "column_cn": "人员配置",
+                "data_type": "VARCHAR(6000)"
             },
             {
                 "column_name": "alert",
@@ -453,23 +468,23 @@
     },
     {
         "page": "干部管理",
-        "table_name": "DWS_HR_CADRE_TREE_NODE",
+        "table_name": "DWS_HR_CADRE_B00_PATH",
         "table_cn": "干部人事组织机构树",
         "columns": [
             {
-                "column_name": "node_id",
-                "column_cn": "干部组织树节点ID",
+                "column_name": "b00",
+                "column_cn": "组织机构干部人事系统编码",
                 "data_type": "VARCHAR(255)",
                 "key": true
             },
             {
-                "column_name": "node_name",
-                "column_cn": "干部组织树节点名称",
+                "column_name": "org_cn_nm",
+                "column_cn": "组织机构全称",
                 "data_type": "VARCHAR(255)"
             },
             {
-                "column_name": "parent_id",
-                "column_cn": "干部组织树上级节点ID",
+                "column_name": "parent_b00",
+                "column_cn": "上级机构编码",
                 "data_type": "VARCHAR(255)"
             },
             {
@@ -483,45 +498,19 @@
                 "data_type": "VARCHAR(255)"
             },
             {
-                "column_name": "org_cat",
-                "column_cn": "组织机构类型",
-                "data_type": "VARCHAR(255)",
-                "description": "总部部门班子整体、直管企业班子整体、一类重要骨干子企业班子整体"
-            },
-            {
-                "column_name": "dept_id",
-                "column_cn": "部门id",
-                "data_type": "VARCHAR(255)"
-            },
-            {
-                "column_name": "tgdme",
-                "column_cn": "所属直管企业",
-                "data_type": "VARCHAR(255)"
-            },
-            {
-                "column_name": "org_cn_nm",
-                "column_cn": "组织机构全称",
-                "data_type": "VARCHAR(255)"
-            },
-            {
-                "column_name": "path_id",
-                "column_cn": "干部组织树节点ID层次路径",
+                "column_name": "path_b00",
+                "column_cn": "机构编码层次路径",
                 "data_type": "ARRAY<VARCHAR(255)>"
             },
             {
-                "column_name": "path_name",
-                "column_cn": "干部组织树节点名称层次路径",
-                "data_type": "VARCHAR(255)"
+                "column_name": "path_nm",
+                "column_cn": "组织机构全称层次路径",
+                "data_type": "ARRAY<VARCHAR(255)>"
             },
             {
-                "column_name": "record_dt",
-                "column_cn": "统计日期",
-                "data_type": "DATE"
-            },
-            {
-                "column_name": "sort",
-                "column_cn": "排序",
-                "data_type": "VARCHAR(255)"
+                "column_name": "path_abbr",
+                "column_cn": "组织机构简称层次路径",
+                "data_type": "ARRAY<VARCHAR(255)>"
             }
         ]
     }

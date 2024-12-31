@@ -240,10 +240,11 @@
             }
         ]
     },
+    ,
     {
-        "page": "干部监督",
-        "table_name": "DWS_HR_CADSUP_LEADERSHIP_ALERT_DETAIL",
-        "table_cn": "领导班子配置情况预警",
+        "page": "干部管理",
+        "table_name": "DWS_HR_CADRE_TEAM",
+        "table_cn": "干部班子配置情况",
         "columns": [
             {
                 "column_name": "id",

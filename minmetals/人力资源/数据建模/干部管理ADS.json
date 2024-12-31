@@ -23,6 +23,12 @@
                 "column_cn": "人数",
                 "data_type": "INT",
                 "unit": "人"
+            },
+            {
+                "column_name": "num_tot",
+                "column_cn": "总人数",
+                "data_type": "INT",
+                "unit": "人"
             }
         ]
     },
@@ -39,6 +45,13 @@
                 "key": true
             },
             {
+                "column_name": "division_type",
+                "column_cn": "分层标准",
+                "data_type": "VARCHAR(255)",
+                "description": "年龄结构、年龄分布",
+                "key": true
+            },
+            {
                 "column_name": "age_group",
                 "column_cn": "年龄层",
                 "data_type": "VARCHAR(255)",
@@ -48,6 +61,12 @@
             {
                 "column_name": "num_ppl",
                 "column_cn": "人数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "num_tot",
+                "column_cn": "总人数",
                 "data_type": "INT",
                 "unit": "人"
             }
@@ -69,7 +88,7 @@
                 "column_name": "exp",
                 "column_cn": "经历",
                 "data_type": "VARCHAR(255)",
-                "description": "集团总部经历、海外工作经历、京外工作经历",
+                "description": "集团总部经历、海外工作经历、京外工作经历、基层工作经历、一线企业经历、一线企业正职经历、直管企业内设机构正职经历",
                 "key": true
             },
             {
@@ -199,20 +218,38 @@
     },
     {
         "page": "干部管理",
-        "table_name": "ADS_HR_CADRE_LEADERSHIP",
-        "table_cn": "领导班子建设情况",
+        "table_name": "ADS_HR_CADRE_DEPUTY",
+        "table_cn": "直管企业专职党委副书记、纪委书记配置情况",
         "columns": [
             {
-                "column_name": "query_cat",
-                "column_cn": "查询类别",
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
                 "data_type": "VARCHAR(255)",
-                "description": "总部部门班子配置情况、直管企业班子配置情况、直管企业专职党委副书记配置情况、直管企业专职纪委书记配置情况、党组管理干部绩效情况",
+                "description": "{直管单位}",
                 "key": true
             },
             {
+                "column_name": "leadership",
+                "column_cn": "领导职位",
+                "data_type": "VARCHAR(255)",
+                "description": "专职党委副书记、专职纪委书记",
+                "key": true
+            },
+            {
+                "column_name": "needed",
+                "column_cn": "是否应配",
+                "data_type": "VARCHAR(255)",
+                "description": "是、否"
+            },
+            {
                 "column_name": "detail",
-                "column_cn": "查询结果",
-                "data_type": "JSON"
+                "column_cn": "配置情况",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "warn",
+                "column_cn": "预警信息",
+                "data_type": "VARCHAR(255)"
             }
         ]
     }

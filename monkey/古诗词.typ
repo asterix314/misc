@@ -1,6 +1,6 @@
 #set page(
   "a4",
-  margin: (y: 4em),
+  margin: (bottom: 4em),
   flipped: true,
   columns: 2
 )

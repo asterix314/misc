@@ -1,4 +1,4 @@
--- 在 duckdb 执行
+-- duckdb
 
 load mysql;
 create secret 数字底座 (
@@ -53,7 +53,8 @@ where table_schema in ('ods_prod', 'dw_prod', 'ads_prod') and not exists (
 -- 3. schema annotation
 -- 3.1 table_catalog, table_type, 
 -- update tables set table_catalog = 'HR_CADRE'
-where table_schema = 'ods_prod' and table_name like 'ODS_DAB01_%'
+where table_schema = 'ods_prod' and table_name like 'ODS_ZZZ01_%'
+
 -- update tables
 -- set table_type = '维度表'
 where regexp_extract(table_name, 'ODS_DAB01_([A-Z]+)', 1) in ('HR', 'GB', 'GBT', 'ZB', 'TJ')
@@ -75,7 +76,7 @@ where t.table_schema = 'ods_prod' and t.table_name = 'ODS_DAB01_' || u.table_nam
 -- check for duplicate table comments
 select table_comment
 from tables
-where table_catalog = 'HR_CADRE'
+where table_catalog = 'HR_CADSUP'
 group by table_comment having count(1) > 1
 
 
@@ -125,11 +126,11 @@ where TABLE_SCHEMA = 'ods_prod' and table_name like 'ODS_DAB01%' and length(extr
 -- 4. 生成 doris alter table/column comment 语句 并在 doris 中执行
 select format('alter table {} modify comment "{}";', table_name, table_comment)
 from tables
-where table_catalog = 'HR_CADRE' and trim(table_comment) != ''
+where table_catalog = 'HR_CADSUP' and trim(table_comment) != ''
 
 select format('alter table {} modify column {} comment "{}";', table_name, column_name, column_comment)
 from columns
-where table_schema = 'ods_prod' and table_name like 'ODS\_DAB01\_%' escape '\' and trim(column_comment) != ''
+where table_schema = 'ods_prod' and table_name like 'ODS\_DAD01\_%' escape '\' and trim(column_comment) != ''
 
 
 -- 5. 逆向建模 ODS
@@ -162,7 +163,7 @@ with base as (
         columns as c
         inner join tables as t using (table_schema, table_name)
     where
-        t.table_schema = 'ods_prod' and t.table_catalog = 'HR_CADRE'),
+        t.table_schema = 'ods_prod' and t.table_catalog = 'HR_CADSUP'),
 fixture as (
     select   -- 对事实表增加贯标列
         table_catalog,
@@ -174,9 +175,9 @@ fixture as (
         false as original,
         '' as extra,
         unnest([
-            {'column_name': 'org_cd', 'column_cn': '组织机构代码', 'ods_dtype': 'varchar(255)', 'dw_dtype': 'VARCHAR(255)', 'r': 501},
-            {'column_name': 'org_cn_abbr', 'column_cn': '组织机构简称', 'ods_dtype': 'varchar(255)', 'dw_dtype': 'VARCHAR(255)','r': 502},
-            {'column_name': 'biz_date', 'column_cn': '业务日期', 'ods_dtype': 'varchar(8)', 'dw_dtype': 'VARCHAR(8)', 'r': 503}], recursive:=true)
+            {'column_name': 'org_cd', 'column_cn': '组织机构代码', 'dw_dtype': 'VARCHAR(8)', 'r': 501},
+            {'column_name': 'org_cn_abbr', 'column_cn': '组织机构简称', 'dw_dtype': 'VARCHAR(200)','r': 502},
+            {'column_name': 'biz_date', 'column_cn': '业务日期', 'dw_dtype': 'VARCHAR(8)', 'r': 503}], recursive:=true)
     from (
         select distinct table_catalog, table_type, ods_name, dw_name, table_cn
         from base 
@@ -230,7 +231,7 @@ dw_ddl as (
         dw_name as 表英文名称,
         table_cn as 表中文名称,
         format('drop table if exists `{0}`;
-create table if not exists dw${{env}}.`{0}` ({1}) 
+create table if not exists `{0}` ({1}) 
 engine=olap
 unique key({2})
 comment "{3}"
@@ -242,80 +243,147 @@ dw_dml as (
     select
         dw_name as 表英文名称,
         table_cn as 表中文名称,
-        format('insert into dw${{env}}.`{0}`({1})
+        format('-- {3}
+truncate table dw${{env}}.`{0}`;
+insert into dw${{env}}.`{0}`({1})
 select {1}
 from ods${{env}}.`{2}`;',
             dw_name,
             original_list,
-            ods_name) as dml
+            ods_name, 
+            table_cn) as dml
     from tlist
     order by dw_name)
-from dw_dml
+from dw_ddl
+order by 1
     
     
 
 -- 7. 
 with base as (
     -- 源：JSON 配置文件
-        select page, table_name, table_cn, unnest(columns, recursive:=true),
-            generate_subscripts(columns, 1) as r
-        from "D:\misc\minmetals\人力资源\数据建模\干部管理DWS.json"),
+    select page, table_name, table_cn, unnest(columns, recursive:=true),
+        generate_subscripts(columns, 1) as r
+    from "D:\misc\minmetals\人力资源\数据建模\干部管理.json"),
+base_col as (
+    select page, table_name, any_value(table_cn) as table_cn,
+        string_agg(format('`{}`', column_name), ',
+    ' order by r) as column_list
+    from base
+    group by page, table_name),
 fixture as (
     select   -- 对事实表增加贯标列
-        *,
-        false as key,
+        page,
+        table_name,
+        table_cn,
+        '事实表' as table_type,
         unnest([
-            {'column_name': 'org_cd', 'column_cn': '组织机构代码', 'data_type': 'VARCHAR(8)', 'r': 501},
-            {'column_name': 'org_cn_abbr', 'column_cn': '组织机构简称', 'data_type': 'VARCHAR(200)','r': 502},
-            {'column_name': 'biz_date', 'column_cn': '业务日期', 'data_type': 'VARCHAR(8)', 'r': 503}], recursive:=true)
+            {'column_name': 'org_cd',       'column_cn': '组织机构代码',  'column_type': 'VARCHAR(255)', 'r': 101},
+            {'column_name': 'org_cn_abbr',  'column_cn': '组织机构简称',  'column_type': 'VARCHAR(255)', 'r': 102},
+            {'column_name': 'biz_date',     'column_cn': '业务日期',      'column_type': 'VARCHAR(8)', 'r': 103}], recursive:=true)
     from (
-        select distinct page, table_name, table_cn
-        from base)),        
-clist as (
+        select distinct page, table_name, table_cn 
+        from base 
+        where table_type = '事实表')),
+col as (
     from base
     union all by name
     from fixture
     where (page, table_name, column_name) not in 
         (select struct_pack(page, table_name, column_name) from base)),
-model as (
+tab as (
+    select page, table_name, table_type, any_value(table_cn) as table_cn,
+        string_agg(format('`{}`', column_name) order by r) filter (is_key) as key_list,
+        string_agg(format('`{}`', column_name), ',
+    ' order by r) as column_name_list,
+        string_agg(format('    `{}` {} {} comment ''{}''',
+            column_name,
+            coalesce(data_type, 'VARCHAR(255)'),
+            if(is_key, 'not null', 'null'),
+            case column_name
+                when 'org_cd' then '组织机构代码' 
+                when 'org_cn_abbr' then '组织机构简称'
+                when 'biz_date' then '业务日期'
+                else column_cn
+            end), ',
+    ' order by r) as column_list
+    from col
+    group by all),
+ods_model as (
     select
+        page as 业务域,
         '每天' as 更新频率,
-        'DWS' as 模式名,
+        'ODS' as 模式名,
         table_name as 表英文名称,
+        table_cn as 表中文名称,
+        column_name as 字段英文名称,
+        column_cn as 字段中文名称,
+        ''  as 字段说明,
+        upper(column_type) as 字段类型,
+        if(is_key, '是', '否') as 是否主键
+    from base
+    order by table_name, r),
+dw_model as (
+    select
+        page as 业务域,
+        '每天' as 更新频率,
+        if(table_type = '事实表', 'DWD', 'DIM') as 模式名,
+        regexp_replace(table_name, 'ODS_[[:alnum:]]+', 模式名 || '_' || page) as 表英文名称,
         table_cn as 表中文名称,
         lower(column_name) as 字段英文名称,
         column_cn as 字段中文名称,
-        coalesce(unit, '') as 单位,
-        coalesce(description, '') as 字段说明,
-        data_type as 字段类型,
-        if(key, '是', '否') as 是否主键
-    from clist
+        coalesce(extra, '') as 字段说明,
+        case 
+            when data_type like '%char' and (character_maximum_length <= 255 or is_key) then 'VARCHAR(255)'
+            when data_type like '%char' and character_maximum_length <= 6000 then 'VARCHAR(6000)'
+            when data_type like '%char' then 'STRING'
+            when data_type = 'bigint' then 'BIGINT'
+            when data_type = 'decimal' then 'DOUBLE'
+            else upper(column_type)
+        end as 字段类型,
+        if(is_key, '是', '否') as 是否主键
+    from col
     order by table_name, r),
-tlist as (
-    select table_name, table_cn,
-        string_agg(format('`{}`', column_name), ', ' order by r) filter (key) as key_list,
-        string_agg(format('`{}`', column_name), ', ' order by r) as cname_list,
-        string_agg(format('`{}` {} {} comment ''{}''',
-            column_name, 
-            data_type, 
-            if(key, 'not null', 'null'), 
-            column_cn), ', ' order by r) as cdef_list
-    from clist
-    group by all),
+dws_model as (
+    select 1
+    ---    coalesce(unit, '')*/ as 单位,
+    ---    coalesce(description, '')  as 字段说明
+),
 ddl as (
+    select 
+        regexp_replace(table_name, 'ODS_[[:alnum:]]+', if(table_type = '事实表', 'DWD', 'DIM') || '_' || page) as 表英文名称,
+        table_cn as 表中文名称,
+        format('
+    drop table if exists `{0}`;
+    create table if not exists `{0}` (
+    {1}
+    ) engine=olap
+    unique key({2})
+    comment ''{3}''
+    distributed by hash({2}) buckets 1;',
+        表英文名称,
+        column_list,
+        key_list,
+        table_cn) as ddl
+    from tab
+    order by table_name),
+dml as (
     select 
         table_name as 表英文名称,
         table_cn as 表中文名称,
-        format('drop table if exists `{0}`;
-create table if not exists `{0}` ({1}) 
-engine=olap
-unique key({2})
-comment ''{3}''
-distributed by hash({2}) buckets 1;',
-            table_name, cdef_list, key_list, table_cn) as ddl
-    from tlist
+        format('
+    insert into dw${{env}}.{}(
+    {})
+    select
+    {}
+    from ods${{env}}.{};',
+        table_name,
+        column_list,
+        column_list,
+        replace(table_name, 'DWD_HR_CADRE', 'ODS_DAB01')) as dml
+    from base_col
     order by table_name)
-from ddl
+from ddl 
 
 
 
@@ -347,10 +415,103 @@ with p as (
 select * exclude i
 from p
 
+UNPIVOT monthly_sales
+    ON (jan, feb, mar) AS q1, (apr, may, jun) AS q2
+    INTO
+        NAME quarter
+        VALUE month_1_sales, month_2_sales, month_3_sales;
+
+    
+
+-- 采购节资率 ------------------------------
+
+set temp_directory = 'C:\Users\zhangch2\Downloads\data\'
+
+create or replace temp table z0 as
+    from dw_prod.DIM_PR_CONFIG cross join (
+        select zbbm, -- 招标编码
+            any_value(htbm) as htbm, -- 合同编码
+            min(check_price) as check_price, -- 控制价
+            min(budget_price) as budget_price,  -- 预算价
+            sum(con_price) as con_price,    -- 合同价（多合同汇总）
+            count(con_price) as contracts,  -- 合同数
+            list(offer_price order by offer_price) as price_list -- 报价列表（从低到高排列）
+        from dw_prod.DWS_PR_PROCUREMENT_ASSET_TEMP3
+        where zbbm like '__2024%'
+        group by zbbm
+        having min(con_price) > 0 and min(offer_price) > 0);  -- 合同价、报价都大于0        
+    
+        
+with recursive z1 as (
+    select 'Z1（控制价）' as price_type, zbbm, htbm,
+        check_price as reference_price, con_price, reference_price/con_price - 1 as j,
+        json_object('控制价节资率区间', json_array(check_low, check_high)) as detail
+    from z0
+    where check_price > 0 and j between check_low and check_high), 
+z2 as (
+    select 'Z2（预算价）' as price_type, zbbm, htbm, 
+        budget_price as reference_price, con_price, reference_price/con_price - 1 as j,
+        json_object('预算价节资率区间', json_array(budget_low, budget_high)) as detail
+    from z0
+    where zbbm not in (select zbbm from z1) 
+        and budget_price > 0 and j between budget_low and budget_high),        
+avgs as (   -- 递归计算平均价格
+    select *,
+        list_avg(price_list)/con_price - 1 as j,    -- 节资率
+        j between avg_low and avg_high as valid_j,   -- 节资率是否可用
+    from z0
+    where zbbm not in (select zbbm from (from z1 union all from z2))  
+        and contracts > 1)     -- 只处理单一合同的招标项目
+from avgs
+where valid_j and zbbm like 'ZB%'
+order by list_stddev_samp(price_list)/list_avg(price_list) desc
+        
+        
+
+select *
+from dw_prod.DWS_PR_PROCUREMENT_ASSET_TEMP3
+where zbbm = ''
 
 
 
-
-
-
---------------------------------
+        
+avgs as (   -- 递归计算平均价格
+    select zbbm, htbm, con_price, avg_low, avg_high,
+        price_list, 
+        1 - con_price/list_avg(price_list) as j,    -- 节资率
+        j between avg_low and avg_high as valid_j,   -- 节资率是否可用
+        1 as iter
+    from z0
+    where zbbm not in (select zbbm from (from z1 union all from z2))  
+        and contracts = 1     -- 只处理单一合同的招标项目
+    union all
+    select zbbm, htbm, con_price, avg_low, avg_high,
+        -- 如果节资率偏大，则去掉一个最高价，否则去掉一个最低价
+        if(j > avg_high, array_pop_back(price_list), array_pop_front(price_list)) as new_list,
+        1 - con_price/list_avg(new_list) as new_j, -- 重新计算节资率 
+        new_j between avg_low and avg_high,
+        iter + 1,
+    from avgs
+    where not valid_j and len(price_list) > 0 and iter = (select max(iter) from avgs)),
+z3 as (
+    select 'Z3（平均价）' as price_type, zbbm, htbm,
+        list_avg(price_list) as reference_price, con_price, j,
+        json_object(
+            '平均价节资率区间', json_array(avg_low, avg_high),
+            '出价列表', price_list) as detail
+    from avgs
+    where valid_j),
+z as (
+    select *, reference_price - con_price as savings
+    from (
+        from z1
+        union all
+        from z2
+        union all
+        from z3))
+from z
+where price_type like 'Z3%'
+        
+    
+    
+    

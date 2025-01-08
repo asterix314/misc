@@ -43,6 +43,11 @@
                 "description": "集团公司总部、{直管单位}"
             },
             {
+                "column_name": "department",
+                "column_cn": "部门名称",
+                "data_type": "ARRAY<VARCHAR(255)>"
+            },
+            {
                 "column_name": "position",
                 "column_cn": "职位",
                 "data_type": "VARCHAR(6000)"

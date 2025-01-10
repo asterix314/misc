@@ -381,7 +381,8 @@
             {
                 "column_name": "year",
                 "column_cn": "年度",
-                "data_type": "INT"
+                "data_type": "INT",
+                "key": true
             },
             {
                 "column_name": "result",

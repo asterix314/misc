@@ -204,23 +204,28 @@
                 "data_type": "VARCHAR(255)"
             },
             {
-                "column_name": "brt_a",
+                "column_name": "brt",
+                "column_cn": "不认同",
                 "data_type": "DOUBLE"
             },
             {
-                "column_name": "blj_u",
+                "column_name": "blj",
+                "column_cn": "不了解",
                 "data_type": "DOUBLE"
             },
             {
-                "column_name": "rt_w",
+                "column_name": "rt",
+                "column_cn": "认同",
                 "data_type": "DOUBLE"
             },
             {
-                "column_name": "jbrt_u",
+                "column_name": "jbrt",
+                "column_cn": "基本认同",
                 "data_type": "DOUBLE"
             },
             {
-                "column_name": "qq_i",
+                "column_name": "qq",
+                "column_cn": "弃权",
                 "data_type": "DOUBLE"
             },
             {
@@ -240,7 +245,6 @@
             }
         ]
     },
-    ,
     {
         "page": "干部管理",
         "table_name": "DWS_HR_CADRE_TEAM",

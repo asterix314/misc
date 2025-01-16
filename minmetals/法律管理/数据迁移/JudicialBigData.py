@@ -1,4 +1,6 @@
-# coding: utf-8
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+# pylint: disable=print-statement
 
 """司法大数据接口类，从法研院接口获取案件数据。可按需使用全量或新增案件接口，若获取失败则自动按页重试。
 
@@ -52,6 +54,7 @@
 
 
 
+from __future__ import print_function
 from collections import deque, namedtuple, defaultdict
 import json
 import base64
@@ -59,6 +62,11 @@ import requests
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 import pymysql
+import logging
+import time
+import logging
+from time import sleep
+from functools import wraps
 
 
 class AESB64:
@@ -146,13 +154,13 @@ class JudicialBigData:
         all_cases = defaultdict(list)
         while tasks:
             t = tasks.popleft()
-            print "[{}]：{} 第 {}{} 页 {}".format(
+            print("[{}]：{} 第 {}{} 页 {}".format(
                 t.api_type,
                 t.company,
                 t.pageNum,
                 "/{}".format(t.pages) if t.pages >= 0 else '',
                 "（重试 {}）".format(t.retry) if t.retry > 0 else ''
-            )
+            ))
 
             try:
                 cases, pages = self.request_page(
@@ -162,7 +170,7 @@ class JudicialBigData:
                     pageSize=pageSize
                 )
             except ValueError as e: # retries
-                print e
+                print(e)
                 if t.retry < self.conn['retries']:
                     tasks.append(t._replace(retry=1+t.retry))
                 continue
@@ -204,7 +212,7 @@ class JudicialBigData:
                     try:
                         cursor.executemany(sql, data)
                     except Exception as e:
-                        print "数据库插入表{}错误：{}".format(table, e)
+                        print("数据库插入表{}错误：{}".format(table, e))
 
             dbconn.commit()
         finally:

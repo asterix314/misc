@@ -1,5 +1,4 @@
--- 在 duckdb 执行
-
+-- duckdb
 load mysql;
 create secret 数字底座 (
     type mysql,
@@ -15,9 +14,26 @@ create secret 干部人事 (
     user 'databaseuser',
     password 'hZH2AeEXijZDm1lc@'
 );
+create secret 党建人力 (
+    type mysql,
+    host '10.82.0.170',
+    port 3306,
+    user 'root',
+    password 'root@2o22'
+);
+create or replace secret 经商办企业 (
+    type mysql,
+    host '10.2.133.170',
+    port 13306,
+    user 'root',
+    password 'eap@cisdi2022$'
+);
+
 attach 'database=ods_prod' as ods_prod (type mysql, secret 数字底座);
 attach 'database=dw_prod' as dw_prod (type mysql, secret 数字底座);
 attach 'database=information_schema' as infscm (type mysql, secret 数字底座);
+
+attach 'database=minmetals_monitor' as mysqlscanner (type mysql, secret 党建人力);
 attach 'database=gbrs_minmetals' as gbrs (type mysql, secret 干部人事);
 load spatial;
 
@@ -35,7 +51,6 @@ from tables
 where table_catalog = 'HR_CADRE'
 order by 1
 
-
 -- 2. doris 中新建表信息导入 duckdb 
 insert into tables by name
 from infscm.tables as i
@@ -52,8 +67,11 @@ where table_schema in ('ods_prod', 'dw_prod', 'ads_prod') and not exists (
     
 -- 3. schema annotation
 -- 3.1 table_catalog, table_type, 
--- update tables set table_catalog = 'HR_CADRE'
-where table_schema = 'ods_prod' and table_name like 'ODS_DAB01_%'
+-- update tables set table_catalog = 'HR_CADRE', table_type = '事实表'
+from tables
+where table_schema = 'ods_prod' and table_name like 'ODS_DAB01%'
+    and create_time between '2025-01-13' and '2025-01-14'
+
 -- update tables
 -- set table_type = '维度表'
 where regexp_extract(table_name, 'ODS_DAB01_([A-Z]+)', 1) in ('HR', 'GB', 'GBT', 'ZB', 'TJ')
@@ -125,12 +143,14 @@ where TABLE_SCHEMA = 'ods_prod' and table_name like 'ODS_DAB01%' and length(extr
 -- 4. 生成 doris alter table/column comment 语句 并在 doris 中执行
 select format('alter table {} modify comment "{}";', table_name, table_comment)
 from tables
-where table_catalog = 'HR_CADRE' and trim(table_comment) != ''
+where table_catalog = 'HR_CADSUP' and trim(table_comment) != ''
 
 select format('alter table {} modify column {} comment "{}";', table_name, column_name, column_comment)
 from columns
-where table_schema = 'ods_prod' and table_name like 'ODS\_DAB01\_%' escape '\' and trim(column_comment) != ''
+where table_schema = 'ods_prod' and table_name like 'ODS\_DAD01\_%' escape '\' and trim(column_comment) != ''
 
+select distinct table_catalog
+from tables 
 
 -- 5. 逆向建模 ODS
 
@@ -162,7 +182,7 @@ with base as (
         columns as c
         inner join tables as t using (table_schema, table_name)
     where
-        t.table_schema = 'ods_prod' and t.table_catalog = 'HR_CADRE'),
+        t.table_schema = 'ods_prod' and t.table_catalog = 'HR_COSTEF'),
 fixture as (
     select   -- 对事实表增加贯标列
         table_catalog,
@@ -174,9 +194,9 @@ fixture as (
         false as original,
         '' as extra,
         unnest([
-            {'column_name': 'org_cd', 'column_cn': '组织机构代码', 'ods_dtype': 'varchar(255)', 'dw_dtype': 'VARCHAR(255)', 'r': 501},
-            {'column_name': 'org_cn_abbr', 'column_cn': '组织机构简称', 'ods_dtype': 'varchar(255)', 'dw_dtype': 'VARCHAR(255)','r': 502},
-            {'column_name': 'biz_date', 'column_cn': '业务日期', 'ods_dtype': 'varchar(8)', 'dw_dtype': 'VARCHAR(8)', 'r': 503}], recursive:=true)
+            {'column_name': 'org_cd', 'column_cn': '组织机构代码', 'dw_dtype': 'VARCHAR(8)', 'r': 501},
+            {'column_name': 'org_cn_abbr', 'column_cn': '组织机构简称', 'dw_dtype': 'VARCHAR(200)','r': 502},
+            {'column_name': 'biz_date', 'column_cn': '业务日期', 'dw_dtype': 'VARCHAR(8)', 'r': 503}], recursive:=true)
     from (
         select distinct table_catalog, table_type, ods_name, dw_name, table_cn
         from base 
@@ -230,7 +250,7 @@ dw_ddl as (
         dw_name as 表英文名称,
         table_cn as 表中文名称,
         format('drop table if exists `{0}`;
-create table if not exists dw${{env}}.`{0}` ({1}) 
+create table if not exists `{0}` ({1}) 
 engine=olap
 unique key({2})
 comment "{3}"
@@ -238,19 +258,46 @@ distributed by hash({2}) buckets 1;',
             dw_name, cdef_list, key_list, table_cn) as ddl
     from tlist
     order by dw_name),
+dw_ddl_dm as (
+    select 
+        dw_name as 表英文名称,
+        table_cn as 表中文名称,
+        format('drop table if exists `{0}`;
+create table if not exists `{0}` ({1});
+comment on table `{0}` is ''{2}'';',
+            dw_name, cdef_list, table_cn) as ddl
+    from tlist),
 dw_dml as (
     select
         dw_name as 表英文名称,
         table_cn as 表中文名称,
-        format('insert into dw${{env}}.`{0}`({1})
+        format('-- {3}
+truncate table dw${{env}}.`{0}`;
+insert into dw${{env}}.`{0}`({1})
 select {1}
 from ods${{env}}.`{2}`;',
             dw_name,
             original_list,
-            ods_name) as dml
+            ods_name, 
+            table_cn) as dml
     from tlist
     order by dw_name)
-from dw_dml
+from dw_ddl
+
+
+where 表英文名称 in (
+    'DWD_HR_CADRE_ZZJGB',
+    'DWD_HR_CADRE_QYLDGBRYQK',
+    'DWD_HR_CADRE_LDBZPZQKYJ',
+    'DWD_HR_CADRE_EJDWDZZJSQKYJ',
+    'DWD_HR_CADRE_ZGDWFSJSZQK',
+    'DWD_HR_CADRE_WBDSZTYJQYGZDN',
+    'DWD_HR_CADRE_EJZZYSLDGBJWNWCJSJTXQK',
+    'DWD_HR_CADRE_EBBZJ3NPXSCBMSSLXSQK')
+
+
+order by 表英文名称
+    
     
     
 
@@ -259,7 +306,7 @@ with base as (
     -- 源：JSON 配置文件
         select page, table_name, table_cn, unnest(columns, recursive:=true),
             generate_subscripts(columns, 1) as r
-        from "D:\misc\minmetals\人力资源\数据建模\干部管理DWS.json"),
+        from "D:\misc\minmetals\人力资源\数据建模\干部监督DWS.json"),
 fixture as (
     select   -- 对事实表增加贯标列
         *,
@@ -280,7 +327,7 @@ clist as (
 model as (
     select
         '每天' as 更新频率,
-        'DWS' as 模式名,
+        left(table_name, 3) as 模式名,
         table_name as 表英文名称,
         table_cn as 表中文名称,
         lower(column_name) as 字段英文名称,
@@ -314,8 +361,19 @@ comment ''{3}''
 distributed by hash({2}) buckets 1;',
             table_name, cdef_list, key_list, table_cn) as ddl
     from tlist
+    order by table_name),
+ddl_dm as (
+    select 
+        table_name as 表英文名称,
+        table_cn as 表中文名称,
+        format('drop table if exists `{0}`;
+create table if not exists `{0}` ({1});
+comment on table `{0}` is ''{2}'';',
+            table_name, cdef_list, table_cn) as ddl
+    from tlist
     order by table_name)
 from ddl
+
 
 
 

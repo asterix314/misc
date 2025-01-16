@@ -16,6 +16,11 @@
                 "data_type": "VARCHAR(255)"
             },
             {
+                "column_name": "b00_list",
+                "column_cn": "部门编码列表",
+                "data_type": "ARRAY<VARCHAR(255)>"
+            },
+            {
                 "column_name": "identi_no",
                 "column_cn": "身份证号",
                 "data_type": "VARCHAR(255)"
@@ -41,6 +46,11 @@
                 "column_cn": "组织机构简称",
                 "data_type": "VARCHAR(255)",
                 "description": "集团公司总部、{直管单位}"
+            },
+            {
+                "column_name": "department",
+                "column_cn": "部门名称",
+                "data_type": "ARRAY<VARCHAR(255)>"
             },
             {
                 "column_name": "position",

@@ -252,5 +252,143 @@
                 "data_type": "VARCHAR(255)"
             }
         ]
+    },
+    {
+        "page": "干部管理",
+        "table_name": "ADS_HR_CADRE_ALERT_EXPIRY",
+        "table_cn": "党组管理干部到任到期预警",
+        "columns": [
+            {
+                "column_name": "alert_cat",
+                "column_cn": "预警类型",
+                "data_type": "VARCHAR(255)",
+                "description": "近两年即将退休的干部、近1年即将任职期满应交流的干部、试用期内的干部",
+                "key": true
+            },
+            {
+                "column_name": "name",
+                "column_cn": "姓名",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "birth_dt",
+                "column_cn": "出生日期",
+                "data_type": "DATE",
+                "key": true
+            },
+            {
+                "column_name": "sex",
+                "column_cn": "性别",
+                "data_type": "VARCHAR(255)",
+                "description": "男性、女性"
+            },
+            {
+                "column_name": "age",
+                "column_cn": "年龄",
+                "data_type": "INT"
+            },
+            {
+                "column_name": "edu",
+                "column_cn": "学历",
+                "data_type": "VARCHAR(255)",
+                "description": "博士研究生、硕士研究生、大学本科、大专及以下。"
+            },
+            {
+                "column_name": "position",
+                "column_cn": "职位",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "ideo_pol",
+                "column_cn": "政治面貌",
+                "data_type": "VARCHAR(255)"
+            },
+            {
+                "column_name": "probation_dt",
+                "column_cn": "试用期满日期",
+                "data_type": "DATE"
+            }
+        ]
+    },
+    {
+        "page": "干部管理",
+        "table_name": "ADS_HR_CADRE_TEAM",
+        "table_cn": "干部班子配置情况",
+        "columns": [
+            {
+                "column_name": "team",
+                "column_cn": "班子名称",
+                "data_type": "VARCHAR(255)",
+                "key": true,
+                "description": "党政班子、党委班子、董事会、经理层"
+            },
+            {
+                "column_name": "org_cat",
+                "column_cn": "组织机构类型",
+                "data_type": "VARCHAR(255)",
+                "key": true,
+                "description": "总部部门、直管企业"
+            },
+            {
+                "column_name": "org_cn_abbr",
+                "column_cn": "组织机构简称",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "positions",
+                "column_cn": "总职位数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "allocated",
+                "column_cn": "实际配置人数",
+                "data_type": "INT",
+                "unit": "人"
+            },
+            {
+                "column_name": "members",
+                "column_cn": "人员配置",
+                "data_type": "VARCHAR(6000)"
+            },
+            {
+                "column_name": "vacancy",
+                "column_cn": "空编数",
+                "data_type": "INT",
+                "unit": "人"
+            }
+        ]
+    },
+    {
+        "page": "干部管理",
+        "table_name": "ADS_HR_CADRE_PERF",
+        "table_cn": "干部绩效情况",
+        "columns": [
+            {
+                "column_name": "org_cn_nm",
+                "column_cn": "组织机构全称",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "name",
+                "column_cn": "姓名",
+                "data_type": "VARCHAR(255)",
+                "key": true
+            },
+            {
+                "column_name": "year",
+                "column_cn": "年度",
+                "data_type": "INT",
+                "key": true
+            },
+            {
+                "column_name": "result",
+                "column_cn": "考核结果",
+                "data_type": "VARCHAR(6000)"
+            }
+        ]
     }
 ]

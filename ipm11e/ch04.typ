@@ -1,3 +1,4 @@
+
 #set text(
 //  font: "New Computer Modern",
   size: 12pt
@@ -6,13 +7,13 @@
 #show heading.where(
   level: 3
 ): it => text(
-  [Exercise ] + it.body + [.],
+  [Exercise ] + it.body,
 )
 
 #show heading.where(
   level: 4
 ): it => text(
-  [Solution] + [.],
+  [Solution] + [:],
 )
 
 #set enum(numbering: "(a)")
@@ -46,15 +47,19 @@ Let 1 stand for a white ball and 0 for a black one. The probabilities (transitio
   [*111 - 000*],     [0],           [0],           [1],           [0]
 )
 
-
 === 4.2
 Each individual in a population independently has a random number of off-spring that is Poisson distributed with mean $lambda$. Those initially present constitute the zeroth generation. Offspring of zeroth generation people constitute the first generation; their offspring constitute the second generation, and so on. If $X_n$ denotes the size of generation $n$, is ${X_n, n gt.eq 0}$ a Markov chain? If it is, give its transition probabilities $P_(i,j)$; if it is not, explain why it is not.
 
 ====
+${X_n, n gt.eq 0}$ is a Markov chain with
+$
+  P_(i,j) = e^(-i lambda) (i lambda)^j \/ j!.
+$
+(The sum of $n$ iid $"Poisson"(lambda)$ random variables is $"Poisson"(n lambda)$).
 
 
 === 4.3
-There are $k$ players, with player $i$ having value $v_i > 0$, $i = 1,...,k$. In every period, two of the players play a game, while the other $k − 2$ wait in an ordered line. The loser of a game joins the end of the line, and the winner then plays a new game against the player who is first in line. Whenever $i$ and $j$ play, $i$ wins with probability $v_i/(v_i + v_j)$ .
+There are $k$ players, with player $i$ having value $v_i > 0$, $i = 1,...,k$. In every period, two of the players play a game, while the other $k - 2$ wait in an ordered line. The loser of a game joins the end of the line, and the winner then plays a new game against the player who is first in line. Whenever $i$ and $j$ play, $i$ wins with probability $v_i/(v_i + v_j)$ .
 
 + Define a Markov chain that is useful in analyzing this model.
 + How many states does the Markov chain have?

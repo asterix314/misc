@@ -23,8 +23,6 @@
 
 == Markov Chains
 
-#lorem(20)
-
 === 4.1
 Three white and three black balls are distributed in two urns in such a way that each contains three balls. We say that the system is in state $i$, $i = 0,1,2,3$, if the first urn contains $i$ white balls. At each step, we draw one ball from each urn and place the ball drawn from the first urn into the second, and conversely with the ball from the second urn. Let $X_n$ denote the state of the system after the $n$th step. Explain why ${X_n, n = 0,1,2,...}$ is a Markov chain and calculate its transition probability matrix.
 
@@ -65,6 +63,26 @@ There are $k$ players, with player $i$ having value $v_i > 0$, $i = 1,...,k$. In
 + How many states does the Markov chain have?
 + Give the transition probabilities of the chain.
 
+====
++ To fully capture the gaming scene, the state should include:
+  - the pair of players currently having a game, and
+  - the ordered queue of players waiting.
+  Or in notation:
+  $
+    (x_1, x_2), x_3, ... x_k,
+  $
+  where $(x_1, x_2)$ is orderless.
+
++ There are 
+  $
+    binom(k, 2)(k-2)! = k!/2
+  $
+  such states.
+
++ There are only 2 possibilities going from state $[(x_1, x_2), x_3, ... x_k]$:
+  - $x_1$ wins, the chain goes to state $[(x_1, x_3), x_4, ... x_k, x_2]$ with probability $v_1\/(v_1 + v_2)$.
+  - $x_1$ loses, the chain goes to state $[(x_2, x_3), x_4, ... x_k, x_1]$ with probability $v_2\/(v_1 + v_2)$.
+  All other transition probabilities are 0.
 
 === 4.4
 Let $bold(P)$ and $bold(Q)$ be transition probability matrices on states $1,...,m$, with respective transition probabilities $P_(i,j)$ and $Q_(i,j)$. Consider processes ${X_n,n gt.eq 0}$ and ${Y_n,n gt.eq 0}$ defined as follows:

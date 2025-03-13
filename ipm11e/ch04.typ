@@ -110,6 +110,24 @@ $
 
 If $Pr{X_0 = 0} = Pr{X_0 = 1} = 1/4$, find $"E"[X_3]$.
 
+====
+The probability distribution of $X_0$ is $bold(x)_0 = mat(1\/4, 1\/4, 1\/2)$. Therefore the distribution of $X_3$ is
+$
+  bold(x)_3 
+    &= bold(x)_0 bold(P)^3 \
+    &= mat(1/4, 1/4, 1/2) 
+      mat(
+        1/2, 1/3, 1/6;
+        0,   1/3, 2/3;
+        1/2, 0,   1/2)^3 \
+    &= mat(59/144, 43/216, 169/432),
+$
+and
+$
+  "E"[X_3]  
+  &= mat(0,1,2) dot mat(59/144, 43/216, 169/432) \
+  &= 53/54.
+$
 
 === 4.6
 Let the transition probability matrix of a two-state Markov chain be given, as in Example 4.2, by
@@ -121,7 +139,6 @@ $
 $
 
 Show by mathematical induction that
-
 $
   bold(P)^n = mat(
     1/2 + 1/2(2p-1)^n, 1/2 - 1/2(2p-1)^n;
@@ -129,6 +146,23 @@ $
   ).
 $
 
+====
+For $n=1$, the result is immediate. Assume the result holds for $n=k$. Then
+$
+  bold(P)^(k+1) 
+  &= bold(P)^k dot bold(P) \
+  &= mat(
+    1/2 + 1/2(2p-1)^k, 1/2 - 1/2(2p-1)^k;
+    1/2 - 1/2(2p-1)^k, 1/2 + 1/2(2p-1)^k)
+    mat(
+    p, 1-p;
+    1-p, p) \
+  &= mat(
+    1/2 + 1/2(2p-1)^(k+1), 1/2 - 1/2(2p-1)^(k+1);
+    1/2 - 1/2(2p-1)^(k+1), 1/2 + 1/2(2p-1)^(k+1)).
+$
+
+Therefore the result holds for arbitrary $n$.
 
 === 4.7
 In Example 4.4, suppose that it has rained neither yesterday nor the day before yesterday. What is the probability that it will rain tomorrow?

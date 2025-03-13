@@ -36,14 +36,14 @@ It is a Markov chain because $X_(n+1)$ depends only on $X_n$. To see this, note 
 
 Let 1 stand for a white ball and 0 for a black one. The probabilities (transition matrix) are: 
 
-#table(
+#figure(table(
   columns: 5,
   [before \\ after], [*000 - 111*], [*001 - 011*], [*011 - 001*], [*111 - 000*],
   [*000 - 111*],     [0],           [1],           [0],           [0],
   [*001 - 011*],     [1/9],         [4/9],         [4/9],         [0],
   [*011 - 001*],     [0],           [4/9],         [4/9],         [1/9],
   [*111 - 000*],     [0],           [0],           [1],           [0]
-)
+))
 
 === 4.2
 Each individual in a population independently has a random number of off-spring that is Poisson distributed with mean $lambda$. Those initially present constitute the zeroth generation. Offspring of zeroth generation people constitute the first generation; their offspring constitute the second generation, and so on. If $X_n$ denotes the size of generation $n$, is ${X_n, n >= 0}$ a Markov chain? If it is, give its transition probabilities $P_(i,j)$; if it is not, explain why it is not.
@@ -167,6 +167,23 @@ Therefore the result holds for arbitrary $n$.
 === 4.7
 In Example 4.4, suppose that it has rained neither yesterday nor the day before yesterday. What is the probability that it will rain tomorrow?
 
+====
+We need to look at the $P^2_(i,j)$ probabilities:
+
+#import emoji:umbrella, sun
+
+#figure(table(
+  columns: 5,
+  align: center,
+  [*T-2, T-1 \\ T, T+1*], [#umbrella #umbrella], [#sun #umbrella], [#umbrella #sun], [#sun #sun],
+  [#umbrella #umbrella], [0.49], [0.12], [0.21], [0.18],
+  [#sun #umbrella], [0.35], [0.2], [0.15], [0.3],
+  [#umbrella #sun], [0.2], [0.12], [0.2], [0.48],
+  [#sun #sun], [0.1], [0.16], [0.1], [0.64]
+))
+
+Reading off the last line, the probability that it will rain tomorrow is $0.1 + 0.16 = 0.26$.
+
 === 4.8
 An urn initially contains 2 balls, one of which is red and the other blue. At each stage a ball is randomly selected. If the selected ball is red, then it is replaced with a red ball with probability 0.7 or with a blue ball with probability 0.3; if
 the selected ball is blue, then it is equally likely to be replaced by either a red or blue ball.
@@ -180,3 +197,27 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
 +  Find the probability that the fourth ball selected is red.
 
 ====
+
+
+=== 4.9
+In a sequence of independent flips of a coin that comes up heads with probability 0.6, what is the probability that there is a run of three consecutive heads within the first 10 flips?
+
+=== 4.10
+In Example 4.3, Gary is currently in a cheerful mood. What is the probability that he is not in a glum mood on any of the following three days?
+
+=== 4.11
+In Example 4.13, give the transition probabilities of the $Y_n$ Markov chain in terms of the transition probabilities $P_(i,j)$ of the $X_n$ chain.
+
+=== 4.12
+Consider a Markov chain with transition probabilities $q_(i,j), i,j >= 0$. Let $N_(0,k), k != 0$ be the number of transitions, starting in state $0$, until this Markov chain enters state $k$. Consider another Markov chain with transition probabilities $P_(i,j),i,j >= 0$, where
+$
+  P_(i,j) &= q_(i,j), i != k \
+  P_(k,j) &= 0, j != k \
+  P_(k,k) &= 1.
+$
+
+Give explanations as to whether the following identities are true or false.
+
++ $Pr{N_(0,k) <= m} = P^m_(0,k)$
+
++ $Pr{N_(0,k) = m} = sum_(i!=k) P^(m-1)_(0,i) P_(i,k)$

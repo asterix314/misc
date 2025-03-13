@@ -1,6 +1,8 @@
 #set page(
   "a4",
-  margin: (bottom: 4em),
+  margin: (
+    top: 5em,
+    bottom: 2em, left: 4em, right: 4em,),
   flipped: true,
   columns: 2
 )
@@ -10,7 +12,7 @@
 #let i = 1
 // 创建表格
 #table(
-  columns: (1em, 10em, 1fr),
+  columns: (1em, 11em, 1fr),
   stroke: (x: none, y: 0.5pt),
   align: (
     right + horizon, 
@@ -21,16 +23,16 @@
       [#i.],
       text(
         font: "SimHei",
-        size: 10pt,
+        size: 11pt,
         标题) + h(1em) +
       text(
         font: "FangSong",
-        size: 8pt,
+        size: 10pt,
         box([[#朝代] #作者])
       ),
       text(
         font: "FangSong",
-        size: 8pt,
+        size: 11pt,
         内容
       )
     )

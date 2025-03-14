@@ -35,16 +35,19 @@ It is a Markov chain because $X_(n+1)$ depends only on $X_n$. To see this, note 
 + the probabilities of the new state after the balls are switched.
 ]
 
-Let 1 stand for a white ball and 0 for a black one. The probabilities (transition matrix) are: 
+The probabilities (transition matrix) are: 
 
-#figure(table(
-  columns: 5,
-  [before \\ after], [*000 - 111*], [*001 - 011*], [*011 - 001*], [*111 - 000*],
-  [*000 - 111*],     [0],           [1],           [0],           [0],
-  [*001 - 011*],     [1/9],         [4/9],         [4/9],         [0],
-  [*011 - 001*],     [0],           [4/9],         [4/9],         [1/9],
-  [*111 - 000*],     [0],           [0],           [1],           [0]
-))
+#figure(
+  table(
+    columns: 5,
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    [before \\ after], [*000 - 111*], [*001 - 011*], [*011 - 001*], [*111 - 000*],
+    [*000 - 111*],     [0],           [1],           [0],           [0],
+    [*001 - 011*],     [1/9],         [4/9],         [4/9],         [0],
+    [*011 - 001*],     [0],           [4/9],         [4/9],         [1/9],
+    [*111 - 000*],     [0],           [0],           [1],           [0]),
+  caption: [1=white, 0=black]  
+)
 
 === 4.2
 Each individual in a population independently has a random number of off-spring that is Poisson distributed with mean $lambda$. Those initially present constitute the zeroth generation. Offspring of zeroth generation people constitute the first generation; their offspring constitute the second generation, and so on. If $X_n$ denotes the size of generation $n$, is ${X_n, n >= 0}$ a Markov chain? If it is, give its transition probabilities $P_(i,j)$; if it is not, explain why it is not.
@@ -173,15 +176,17 @@ We need to look at the $P^2_(i,j)$ probabilities:
 
 #import emoji:umbrella, sun
 
-#figure(table(
-  columns: 5,
-  align: center,
-  [*T-2, T-1 \\ T, T+1*], $umbrella umbrella$, $sun umbrella$, $umbrella sun$, $sun sun$,
-  $umbrella umbrella$, [0.49], [0.12], [0.21], [0.18],
-  $sun umbrella$, [0.35], [0.2], [0.15], [0.3],
-  $umbrella sun$, [0.2], [0.12], [0.2], [0.48],
-  $sun sun$, [0.1], [0.16], [0.1], [0.64]
-))
+#figure(
+  table(
+    columns: 5,
+    align: center,
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    [], $umbrella umbrella$, $sun umbrella$, $umbrella sun$, $sun sun$,
+    $umbrella umbrella$, [0.49], [0.12], [0.21], [0.18],
+    $sun umbrella$, [0.35], [0.2], [0.15], [0.3],
+    $umbrella sun$, [0.2], [0.12], [0.2], [0.48],
+    $sun sun$, [0.1], [0.16], [0.1], [0.64])
+)
 
 Reading off the last line, the probability that it will rain tomorrow is $0.1 + 0.16 = 0.26$.
 
@@ -204,10 +209,11 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
   #figure(
     table(
       columns: 4,
-      [], $circle circle$,  $circle circle.filled$,  $circle.filled  circle.filled$,
-      $circle circle$,  $.5$, $.5$, $0$,
-      $circle circle.filled$,  $.5 times .3 = .15$, $.6$, $.5 times .5 = .25$,
-      $circle.filled circle.filled$, $0$, $.3$, $.7$,
+      stroke: (x, y) => if x>0 and y>0 {0.5pt},
+      [], $circle | circle$,  $circle | circle.filled$,  $circle.filled | circle.filled$,
+      $circle | circle$,  $.5$, $.5$, $0$,
+      $circle | circle.filled$,  $.5 times .3 = .15$, $.6$, $.5 times .5 = .25$,
+      $circle.filled | circle.filled$, $0$, $.3$, $.7$,
     ),
     caption: [$circle$ = blue, $circle.filled$ = red]
   )
@@ -225,28 +231,22 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
 In a sequence of independent flips of a coin that comes up heads with probability 0.6, what is the probability that there is a run of three consecutive heads within the first 10 flips?
 
 ====
-Let the state represent a sequence of 3 consecutive results. We also make the state of 3 heads aborbing, marking the run has occurred. The transition matrix $bold(P)$ is therefore:
+Let the state represent the current numer of consecutive heads. We make the state of 3 consecutive heads aborbing, marking the run has occurred. The transition matrix $bold(P)$ is therefore:
 
 #figure(
   table(
-    columns: 9,
-    [],     [000], [001], [010], [011], [100], [101], [110], [111],
-    [000],  [.4],  [.6],  [],    [],    [],    [],    [],    [],
-    [001],  [],    [],    [.4],  [.6],  [],    [],    [],    [],
-    [010],  [],    [],    [],    [],    [.4],  [.6],  [],    [],
-    [011],  [],    [],    [],    [],    [],    [],    [.4],  [.6],
-    [100],  [.4],  [.6],  [],    [],    [],    [],    [],    [],
-    [101],  [],    [],    [.4],  [.6],  [],    [],    [],    [],
-    [110],  [],    [],    [],    [],    [.4],  [.6],  [],    [],
-    [111],  [],    [],    [],    [],    [],    [],    [],    [1],
+    columns: 5,
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    [],     [*0*],   [*1*],   [*2*],  [*3*],
+    [*0*],  [0.4],   [0.6],   [0],    [0],
+    [*1*],  [0.4],   [0],     [0.6],  [0],
+    [*2*],  [0.4],   [0],     [0],    [0.6],
+    [*3*],  [0],     [0],     [0],    [1]
   ),
-  caption: [0=tails, 1=heads]
+  caption: [state = current number of consecutive heads]
 )
 
-Now make $X_0 = 000$ (3 tails) and let the chain proceed 10 steps. The probability that there is a run of three consecutive heads within the first 10 flips is
-$
-  P^10_(000,111) = 0.701361.
-$
+Now start from $X_0 = 0$ and let the chain proceed 10 steps. The probability that there is a run of three consecutive heads within the first 10 flips is $ P^10_(0,3) = 0.701361. $
 
 === 4.10
 In Example 4.3, Gary is currently in a cheerful mood. What is the probability that he is not in a glum mood on any of the following three days?
@@ -265,6 +265,19 @@ Then the answer is: $1 - P^3_(1,3) = 0.585.$
 
 === 4.11
 In Example 4.13, give the transition probabilities of the $Y_n$ Markov chain in terms of the transition probabilities $P_(i,j)$ of the $X_n$ chain.
+
+====
+The probabilities of the $Y_n$ chain is
+$
+  mat(
+    P_11, P_12, 0, 0, 0, P_10;
+    0, 0, P_21, 0, P_22, P_20;
+
+  )
+$
+
+For example,
+
 
 === 4.12
 Consider a Markov chain with transition probabilities $q_(i,j), i,j >= 0$. Let $N_(0,k), k != 0$ be the number of transitions, starting in state $0$, until this Markov chain enters state $k$. Consider another Markov chain with transition probabilities $P_(i,j),i,j >= 0$, where

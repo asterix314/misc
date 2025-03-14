@@ -17,6 +17,7 @@
 )
 
 #set enum(numbering: "(a)")
+#set figure(numbering: none)
 #set math.mat(gap: 1em)
 #set math.mat(delim: "[")
 
@@ -175,11 +176,11 @@ We need to look at the $P^2_(i,j)$ probabilities:
 #figure(table(
   columns: 5,
   align: center,
-  [*T-2, T-1 \\ T, T+1*], [#umbrella #umbrella], [#sun #umbrella], [#umbrella #sun], [#sun #sun],
-  [#umbrella #umbrella], [0.49], [0.12], [0.21], [0.18],
-  [#sun #umbrella], [0.35], [0.2], [0.15], [0.3],
-  [#umbrella #sun], [0.2], [0.12], [0.2], [0.48],
-  [#sun #sun], [0.1], [0.16], [0.1], [0.64]
+  [*T-2, T-1 \\ T, T+1*], $umbrella umbrella$, $sun umbrella$, $umbrella sun$, $sun sun$,
+  $umbrella umbrella$, [0.49], [0.12], [0.21], [0.18],
+  $sun umbrella$, [0.35], [0.2], [0.15], [0.3],
+  $umbrella sun$, [0.2], [0.12], [0.2], [0.48],
+  $sun sun$, [0.1], [0.16], [0.1], [0.64]
 ))
 
 Reading off the last line, the probability that it will rain tomorrow is $0.1 + 0.16 = 0.26$.
@@ -197,13 +198,70 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
 +  Find the probability that the fourth ball selected is red.
 
 ====
++ ${X_n}$ is not a Markov chain. Because the color of the $n$th ball selected does not determine the probability of color of the $(n+1)$th.
 
++ ${Y_n}$ is a Markov chain with transition probabilities $bold(P)$:
+  #figure(
+    table(
+      columns: 4,
+      [], $circle circle$,  $circle circle.filled$,  $circle.filled  circle.filled$,
+      $circle circle$,  $.5$, $.5$, $0$,
+      $circle circle.filled$,  $.5 times .3 = .15$, $.6$, $.5 times .5 = .25$,
+      $circle.filled circle.filled$, $0$, $.3$, $.7$,
+    ),
+    caption: [$circle$ = blue, $circle.filled$ = red]
+  )
+
++ Looking at the 2nd row of $bold(P)$, the probability that the second ball selected is red is 
+  $ .6 times .5 + .25 = .55. $
+
++ The state probabilities after the 3rd replacement is
+  $ mat(0, 1, 0) dot bold(P)^3 = mat(0.159, 0.486, 0.355). $
+
+  So the 4th ball selected is red with probability 
+  $ .486 times .5 + .355 = .598. $
 
 === 4.9
 In a sequence of independent flips of a coin that comes up heads with probability 0.6, what is the probability that there is a run of three consecutive heads within the first 10 flips?
 
+====
+Let the state represent a sequence of 3 consecutive results. We also make the state of 3 heads aborbing, marking the run has occurred. The transition matrix $bold(P)$ is therefore:
+
+#figure(
+  table(
+    columns: 9,
+    [],     [000], [001], [010], [011], [100], [101], [110], [111],
+    [000],  [.4],  [.6],  [],    [],    [],    [],    [],    [],
+    [001],  [],    [],    [.4],  [.6],  [],    [],    [],    [],
+    [010],  [],    [],    [],    [],    [.4],  [.6],  [],    [],
+    [011],  [],    [],    [],    [],    [],    [],    [.4],  [.6],
+    [100],  [.4],  [.6],  [],    [],    [],    [],    [],    [],
+    [101],  [],    [],    [.4],  [.6],  [],    [],    [],    [],
+    [110],  [],    [],    [],    [],    [.4],  [.6],  [],    [],
+    [111],  [],    [],    [],    [],    [],    [],    [],    [1],
+  ),
+  caption: [0=tails, 1=heads]
+)
+
+Now make $X_0 = 000$ (3 tails) and let the chain proceed 10 steps. The probability that there is a run of three consecutive heads within the first 10 flips is
+$
+  P^10_(000,111) = 0.701361.
+$
+
 === 4.10
 In Example 4.3, Gary is currently in a cheerful mood. What is the probability that he is not in a glum mood on any of the following three days?
+
+====
+Make the glum state (3) absorbing:
+$
+  bold(P) = mat(
+    .5, .4, .1;
+    .3, .4, .3;
+    0,  0,  1
+  )
+$
+
+Then the answer is: $1 - P^3_(1,3) = 0.585.$
 
 === 4.11
 In Example 4.13, give the transition probabilities of the $Y_n$ Markov chain in terms of the transition probabilities $P_(i,j)$ of the $X_n$ chain.

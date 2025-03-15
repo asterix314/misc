@@ -41,7 +41,7 @@ The probabilities (transition matrix) are:
   table(
     columns: 5,
     stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    [before \\ after], [*000 - 111*], [*001 - 011*], [*011 - 001*], [*111 - 000*],
+    [before $without$ after], [*000 - 111*], [*001 - 011*], [*011 - 001*], [*111 - 000*],
     [*000 - 111*],     [0],           [1],           [0],           [0],
     [*001 - 011*],     [1/9],         [4/9],         [4/9],         [0],
     [*011 - 001*],     [0],           [4/9],         [4/9],         [1/9],
@@ -181,11 +181,12 @@ We need to look at the $P^2_(i,j)$ probabilities:
     columns: 5,
     align: center,
     stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    [], $umbrella umbrella$, $sun umbrella$, $umbrella sun$, $sun sun$,
-    $umbrella umbrella$, [0.49], [0.12], [0.21], [0.18],
-    $sun umbrella$, [0.35], [0.2], [0.15], [0.3],
-    $umbrella sun$, [0.2], [0.12], [0.2], [0.48],
-    $sun sun$, [0.1], [0.16], [0.1], [0.64])
+    [T-2 | T-1 $without$ T | T+1], $umbrella|umbrella$, $sun|umbrella$, $umbrella|sun$, $sun|sun$,
+    $umbrella|umbrella$, [0.49], [0.12], [0.21], [0.18],
+    $sun|umbrella$, [0.35], [0.2], [0.15], [0.3],
+    $umbrella|sun$, [0.2], [0.12], [0.2], [0.48],
+    $sun|sun$, [0.1], [0.16], [0.1], [0.64]),
+    caption: [T = today]
 )
 
 Reading off the last line, the probability that it will rain tomorrow is $0.1 + 0.16 = 0.26$.
@@ -210,12 +211,12 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
     table(
       columns: 4,
       stroke: (x, y) => if x>0 and y>0 {0.5pt},
-      [], $circle | circle$,  $circle | circle.filled$,  $circle.filled | circle.filled$,
-      $circle | circle$,  $.5$, $.5$, $0$,
-      $circle | circle.filled$,  $.5 times .3 = .15$, $.6$, $.5 times .5 = .25$,
-      $circle.filled | circle.filled$, $0$, $.3$, $.7$,
+      [current $without$ next], [*0*],  [*1*],  [*2*],
+      [*0*],  $.5$, $.5$, $0$,
+      [*1*],  $.5 times .3 = .15$, $.6$, $.5 times .5 = .25$,
+      [*2*], $0$, $.3$, $.7$,
     ),
-    caption: [$circle$ = blue, $circle.filled$ = red]
+    caption: [state = number of red balls]
   )
 
 + Looking at the 2nd row of $bold(P)$, the probability that the second ball selected is red is 
@@ -231,17 +232,17 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
 In a sequence of independent flips of a coin that comes up heads with probability 0.6, what is the probability that there is a run of three consecutive heads within the first 10 flips?
 
 ====
-Let the state represent the current numer of consecutive heads. We make the state of 3 consecutive heads aborbing, marking the run has occurred. The transition matrix $bold(P)$ is therefore:
+Let the state represent the current numer of consecutive heads. We also make the state of 3 consecutive heads aborbing to mark that the run has occurred. The transition matrix $bold(P)$ is therefore:
 
 #figure(
   table(
     columns: 5,
     stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    [],     [*0*],   [*1*],   [*2*],  [*3*],
-    [*0*],  [0.4],   [0.6],   [0],    [0],
-    [*1*],  [0.4],   [0],     [0.6],  [0],
-    [*2*],  [0.4],   [0],     [0],    [0.6],
-    [*3*],  [0],     [0],     [0],    [1]
+    [current $without$ next],     [*0*],   [*1*],   [*2*],  [*3*],
+    [*0*],                        [0.4],   [0.6],   [0],    [0],
+    [*1*],                        [0.4],   [0],     [0.6],  [0],
+    [*2*],                        [0.4],   [0],     [0],    [0.6],
+    [*3*],                        [0],     [0],     [0],    [1]
   ),
   caption: [state = current number of consecutive heads]
 )
@@ -268,16 +269,23 @@ In Example 4.13, give the transition probabilities of the $Y_n$ Markov chain in 
 
 ====
 The probabilities of the $Y_n$ chain is
-$
-  mat(
-    P_11, P_12, 0, 0, 0, P_10;
-    0, 0, P_21, 0, P_22, P_20;
 
-  )
-$
-
-For example,
-
+#figure(
+  table(
+    columns: 8,
+    align: (x, y) => if x==0 {left} else {auto},
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    $Y_n without Y_(n+1)$, [➀], [➁], [➂], [➃], [➄], [➅], [➆],     
+    [➀: 1 step in pattern], $P_11$, $P_12$, $0$, $0$, $0$, $P_10$, $P_13$,
+    [➁: 2 steps in pattern] , $0$, $0$, $P_21$, $0$, $P_22$, $P_20$, $P_23$,
+    [➂: 3 steps in pattern], $P_11$, $0$, $0$, $P_12$, $0$, $P_10$, $P_13$,
+    [➃: pattern seen], $0$, $0$, $0$, $1$, $0$, $0$, $0$,
+    [➄: \_\_2, no progress], $P_21$, $0$, $0$, $0$, $P_22$, $P_20$, $P_23$,
+    [➅: \_\_0, no progress], $P_01$, $0$, $0$, $0$, $P_02$, $P_00$, $P_03$,
+    [➆: \_\_3, no progress], $P_31$, $0$, $0$, $0$, $P_32$, $P_30$, $P_33$
+  ),
+  caption: [tracking progress in pattern *1212*]
+)
 
 === 4.12
 Consider a Markov chain with transition probabilities $q_(i,j), i,j >= 0$. Let $N_(0,k), k != 0$ be the number of transitions, starting in state $0$, until this Markov chain enters state $k$. Consider another Markov chain with transition probabilities $P_(i,j),i,j >= 0$, where

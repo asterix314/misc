@@ -41,7 +41,7 @@ The probabilities (transition matrix) are:
   table(
     columns: 5,
     stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    [before $without$ after], [*000 - 111*], [*001 - 011*], [*011 - 001*], [*111 - 000*],
+    $X_n without X_(n+1)$, [*000 - 111*], [*001 - 011*], [*011 - 001*], [*111 - 000*],
     [*000 - 111*],     [0],           [1],           [0],           [0],
     [*001 - 011*],     [1/9],         [4/9],         [4/9],         [0],
     [*011 - 001*],     [0],           [4/9],         [4/9],         [1/9],
@@ -211,7 +211,7 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
     table(
       columns: 4,
       stroke: (x, y) => if x>0 and y>0 {0.5pt},
-      [current $without$ next], [*0*],  [*1*],  [*2*],
+      $Y_n without Y_(n+1)$, [*0*],  [*1*],  [*2*],
       [*0*],  $.5$, $.5$, $0$,
       [*1*],  $.5 times .3 = .15$, $.6$, $.5 times .5 = .25$,
       [*2*], $0$, $.3$, $.7$,
@@ -238,7 +238,7 @@ Let the state represent the current numer of consecutive heads. We also make the
   table(
     columns: 5,
     stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    [current $without$ next],     [*0*],   [*1*],   [*2*],  [*3*],
+    $X_n without X_(n+1)$,     [*0*],   [*1*],   [*2*],  [*3*],
     [*0*],                        [0.4],   [0.6],   [0],    [0],
     [*1*],                        [0.4],   [0],     [0.6],  [0],
     [*2*],                        [0.4],   [0],     [0],    [0.6],
@@ -300,3 +300,71 @@ Give explanations as to whether the following identities are true or false.
 + $Pr{N_(0,k) <= m} = P^m_(0,k)$
 
 + $Pr{N_(0,k) = m} = sum_(i!=k) P^(m-1)_(0,i) P_(i,k)$
+
+====
+Because of the way it's set up, the $bold(P)$ chain is just the original chain but with node $k$ made absorbing.
+
++ The LHS is the probability that the original chain reaches state $k$ in $m$ steps or less. The RHS is the probability that the modified chain ($k$ made absorbing) is in state $k$ after $m$ steps. They are the same.
+
++ It is also true. The LHS is the probability that the original chain reaches state $k$ in exactly $m$ steps. To do this, the chain must first go from $0$ to $i, i != k$ in $m-1$ steps, then continue from $i$ to $k$ in a single step. The RHS is the sum of these probabilities over all $i != k$.
+
+=== 4.13 
+Let $bold(P)$ be the transition probability matrix of a Markov chain. Argue that if for some positive integer $r$, $bold(P)^r$ has all positive entries, then so does $bold(P)^n$, for all
+integers $n >= r$.
+
+====
+
+
+=== 4.14
+Specify the classes of the following Markov chains, and determine whether they are transient or recurrent:
+
+$
+  bold(P_1) = mat(
+    0, 1/2, 1/2;
+    1/2, 0, 1/2;
+    1/2, 1/2, 0
+  ),
+  wide
+  bold(P_2) = mat(
+    0, 0, 0, 1;
+    0, 0, 0, 1;
+    1/2, 1/2, 0, 0;
+    0, 0, 1, 0
+  ), 
+$
+
+$
+  bold(P_3) = mat(
+    1/2, 0, 1/2, 0, 0;
+    1/4, 1/2, 1/4, 0, 0;
+    1/2, 0, 1/2, 0, 0;
+    0, 0, 0, 1/2, 1/2;
+    0, 0, 0, 1/2, 1/2;  
+  ),
+  wide
+  bold(P_4) = mat(
+    1/4, 3/4, 0, 0, 0;
+    1/2, 1/2, 0, 0, 0;
+    0, 0, 1, 0, 0;
+    0, 0, 1/3, 2/3, 0;
+    1, 0, 0, 0, 0;
+  ).
+$
+
+
+=== 4.15
+Consider the random walk of Example 4.19. Suppose that $p > 1\/2$, and let $m_i$ denote the mean number of transitions until the random walk, starting in state $0$, has value $i, i > 0$. Argue that
+
++ $m_1 = 1 + (1-p)2m_1$
+
++ Find $m_i, i > 0$.
+
+=== 4.16
+Show that if state $i$ is recurrent and state $i$ does not communicate with state $j$, then $P_(i,j) = 0$. This implies that once a process enters a recurrent class of states it can never leave that class. For this reason, a recurrent class is often referred to as a _closed_ class.
+
+=== 4.17
+For the random walk of Example 4.19 use the strong law of large numbers to give another proof that the Markov chain is transient when $p != 1/2$.
+
+*Hint*: Note that the state at time $n$ can be written as $sum_(i=1)^n Y_i$ where the $Y_i$s are independent and $Pr{Y_i = 1} = p = 1 - Pr{Y_i = -1}$. Argue that if $p > 1/2$, then, by the strong law of large numbers, $sum_(i=1)^n Y_i -> infinity$ as $n -> infinity$ and hence the initial state $0$ can be visited only finitely often, and hence must be transient. A similar argument holds when $p < 1/2$.
+
+

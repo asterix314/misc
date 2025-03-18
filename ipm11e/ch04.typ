@@ -1,3 +1,4 @@
+#import "@preview/fletcher:0.5.6" as fletcher: diagram, node, edge
 
 #set text(
 //  font: "New Computer Modern",
@@ -20,6 +21,8 @@
 #set figure(numbering: none)
 #set math.mat(gap: 1em)
 #set math.mat(delim: "[")
+
+
 
 
 == Markov Chains
@@ -313,7 +316,13 @@ Let $bold(P)$ be the transition probability matrix of a Markov chain. Argue that
 integers $n >= r$.
 
 ====
+We only need to argue for the case $n=r+1$, and the rest follows by induction.
 
+Because $bold(P)^r$ has all positive entries, all states are accessible from all states, and no state is isolated. That means the columns of $bold(P)$ cannot be all zeros, i.e. for all $i$, $P_(i,k)>0$ for some $k$. Therefore,
+
+$
+  P^(r+1)_(i,j) = sum_(k>=0) P^r_(i,k) P_(k,j) > 0.
+$
 
 === 4.14
 Specify the classes of the following Markov chains, and determine whether they are transient or recurrent:
@@ -351,6 +360,104 @@ $
   ).
 $
 
+====
+It's easier to see given the graph representation of the chains.
+
+#grid(
+//  columns: (auto, auto, 1fr),
+  columns: 3,
+  align: (horizon, center, horizon),
+  gutter: 2em,
+
+  $bold(P_1):$,
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    $
+      1 
+      edge("rr", ->, 1/2, label-side: #center) 
+      edge("rr", <-, 1/2, bend: #60deg, label-side: #center)
+      && 2 
+      edge("dl", ->, 1/2, label-side: #center)
+      edge("dl", <-, 1/2, bend: #60deg, label-side: #center)
+      \ & 3
+      edge("ul", ->, 1/2, label-side: #center) 
+      edge("ul", <-, 1/2, bend: #60deg, label-side: #center)
+    $
+  ),
+  [All states communicate, so all states belong to the same class which is recurrent.],
+
+  $bold(P_2):$,
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    $
+      3 
+      edge(->, 1/2, label-side: #center) 
+      edge("dr", ->, 1/2, label-side: #center)
+      edge("rr", <-, 1, bend: #60deg, label-side: #center)
+      &2 
+      edge(->, 1, label-side: #center) &4 
+      edge("dl", <-, 1, label-side: #center)
+      \ &1 
+    $
+  ),
+  [All states communicate, so all states belong to the same class which is recurrent.],
+
+  $bold(P_3):$,
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    node((0,0), $1$, name: <1>),
+    edge(<3>, "->", $1/2$, label-side: center),
+    edge(<1>, "->", $1/2$, bend: 320deg, loop-angle: 0deg, label-side: center),
+    node((1,0), $2$, name: <2>),
+    edge(<1>, "->", $1/4$, label-side: center),
+    edge(<3>, "->", $1/4$, label-side: left),
+    edge(<2>, "->", $1/2$, bend: 320deg, loop-angle: -90deg, label-side: center),
+    node((1,1), $3$, name: <3>),
+    edge(<1>, "->", $1/2$, label-side: center, bend: 50deg),
+    edge(<3>, "<-", $1/2$, bend: 320deg, loop-angle: 90deg, label-side: center),
+    node((2,0), $4$, name: <4>),
+    edge(<5>, "->", $1/2$, label-side: center, bend: 50deg),
+    edge(<4>, "->", $1/2$, bend: 320deg, loop-angle: -90deg, label-side: center),
+    node((2,1), $5$, name: <5>),
+    edge(<4>, "->", $1/2$, label-side: center, bend: 50deg),
+    edge(<5>, "->", $1/2$, bend: 320deg, loop-angle: 90deg, label-side: center),
+  ),
+  [
+    The chain can be partitioned into 3 classes: 
+    - ${2}$ is transient.
+    - ${1,3}$ is recurrent.
+    - ${4,5}$ is recurrent.
+  ],
+
+  $bold(P_4):$,
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    node((0,0), $1$, name: <1>),
+    edge(<2>, "->", $3/4$, bend: -50deg, label-side: center),
+    edge(<1>, "->", $1/4$, bend: 320deg, loop-angle: 0deg, label-side: center),
+    node((1,0), $2$, name: <2>),
+    edge(<1>, "->", $1/2$, bend: -50deg, label-side: center),
+    edge(<2>, "->", $1/2$, bend: 320deg, loop-angle: 180deg, label-side: center),
+    node((2,0), $3$, name: <3>),
+    edge(<3>, "<-", $1$, bend: 320deg, loop-angle: -90deg, label-side: center),
+    node((2,1), $4$, name: <4>),
+    edge(<3>, "->", $1/3$),
+    edge(<4>, "->", $2/3$, bend: 320deg, loop-angle: 90deg, label-side: center),
+    node((0,1), $5$, name: <5>),
+    edge(<1>, "->", $1$, label-side: left),
+  ),
+  [
+    The chain can be partitioned into 4 classes: 
+    - ${1,2}$ is recurrent.
+    - ${5}$ is transient.
+    - ${3}$ is recurrent.
+    - ${4}$ is transient.
+  ]
+)
 
 === 4.15
 Consider the random walk of Example 4.19. Suppose that $p > 1\/2$, and let $m_i$ denote the mean number of transitions until the random walk, starting in state $0$, has value $i, i > 0$. Argue that

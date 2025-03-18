@@ -466,6 +466,22 @@ Consider the random walk of Example 4.19. Suppose that $p > 1\/2$, and let $m_i$
 
 + Find $m_i, i > 0$.
 
+====
++ Starting from $0$, if the chain takes one step right, it has arrived at $1$ already; if it takes one step left to $-1$, then it has to move first to $0$ in $m_1$ steps, on average, then to $2$, in another $m_1$ steps. That is,
+  $ 
+    m_1 &= 1 + p dot 0 + (1-p) dot 2m_1 \
+    &= 1 + (1-p)2m_1 \
+    &= 1/(2p-1).
+  $
+
++ By the same token, one can write
+  $
+    m_i &= 1 + p dot (i-1) m_1 + (1-p) dot (i+1)m_1 \
+    &= 1 + (i + 1 - 2p)m_1 \
+    &= 1 + (i + 1 - 2p)/(2p-1) \
+    &= i/(2p-1).
+  $
+
 === 4.16
 Show that if state $i$ is recurrent and state $i$ does not communicate with state $j$, then $P_(i,j) = 0$. This implies that once a process enters a recurrent class of states it can never leave that class. For this reason, a recurrent class is often referred to as a _closed_ class.
 
@@ -477,4 +493,19 @@ For the random walk of Example 4.19 use the strong law of large numbers to give 
 
 *Hint*: Note that the state at time $n$ can be written as $sum_(i=1)^n Y_i$ where the $Y_i$s are independent and $Pr{Y_i = 1} = p = 1 - Pr{Y_i = -1}$. Argue that if $p > 1/2$, then, by the strong law of large numbers, $sum_(i=1)^n Y_i -> infinity$ as $n -> infinity$ and hence the initial state $0$ can be visited only finitely often, and hence must be transient. A similar argument holds when $p < 1/2$.
 
+====
+Let's take the hint and define $Y_i$ as 
+$
+  Y_i = cases(
+    1 quad &"if" X_i "takes a right step",
+    -1 quad &"otherwise"
+  )
+$
+so that $X_n = sum_(i<=n) Y_i$. Then, by the strong law of large numbers,
+$
+  X_n &-> n dot "E"[Y] \
+  &= n(2p-1) "as" n->infinity.
+$
+
+If $p!=1/2$, this means that $X_n -> plus.minus infinity$, so any state can be visited only finitely often, and hence the Markov chain is transient.
 

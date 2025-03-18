@@ -361,7 +361,7 @@ $
 $
 
 ====
-It's easier to see given the graph representation of the chains.
+It's easier to see by the graph representation.
 
 #grid(
 //  columns: (auto, auto, 1fr),
@@ -468,6 +468,9 @@ Consider the random walk of Example 4.19. Suppose that $p > 1\/2$, and let $m_i$
 
 === 4.16
 Show that if state $i$ is recurrent and state $i$ does not communicate with state $j$, then $P_(i,j) = 0$. This implies that once a process enters a recurrent class of states it can never leave that class. For this reason, a recurrent class is often referred to as a _closed_ class.
+
+====
+Suppose $P_(i,j) > 0$, i.e., the chain can go from $i$ to $j$. But it can never come back to $i$, for $i$ does not communicate with $j$. This contradicts the fact that $i$ is recurrent. Hence $P_(i,j) = 0$. 
 
 === 4.17
 For the random walk of Example 4.19 use the strong law of large numbers to give another proof that the Markov chain is transient when $p != 1/2$.

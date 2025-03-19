@@ -364,11 +364,9 @@ $
 It's easier to see by the graph representation.
 
 #grid(
-//  columns: (auto, auto, 1fr),
   columns: 3,
-  align: (horizon, center, horizon),
-  gutter: 2em,
-
+  align: (horizon, left, horizon),
+  gutter: 1em,
   $bold(P_1):$,
   diagram(
     node-stroke: 1.5pt,
@@ -410,20 +408,20 @@ It's easier to see by the graph representation.
     edge-stroke: .7pt,
     node((0,0), $1$, name: <1>),
     edge(<3>, "->", $1/2$, label-side: center),
-    edge(<1>, "->", $1/2$, bend: 320deg, loop-angle: 0deg, label-side: center),
+    edge(<1>, "->", $1/2$, bend: 310deg, loop-angle: 0deg, label-side: center),
     node((1,0), $2$, name: <2>),
     edge(<1>, "->", $1/4$, label-side: center),
     edge(<3>, "->", $1/4$, label-side: left),
-    edge(<2>, "->", $1/2$, bend: 320deg, loop-angle: -90deg, label-side: center),
+    edge(<2>, "->", $1/2$, bend: 310deg, loop-angle: -90deg, label-side: center),
     node((1,1), $3$, name: <3>),
     edge(<1>, "->", $1/2$, label-side: center, bend: 50deg),
-    edge(<3>, "<-", $1/2$, bend: 320deg, loop-angle: 90deg, label-side: center),
+    edge(<3>, "<-", $1/2$, bend: 310deg, loop-angle: 90deg, label-side: center),
     node((2,0), $4$, name: <4>),
     edge(<5>, "->", $1/2$, label-side: center, bend: 50deg),
-    edge(<4>, "->", $1/2$, bend: 320deg, loop-angle: -90deg, label-side: center),
+    edge(<4>, "->", $1/2$, bend: 310deg, loop-angle: -90deg, label-side: center),
     node((2,1), $5$, name: <5>),
     edge(<4>, "->", $1/2$, label-side: center, bend: 50deg),
-    edge(<5>, "->", $1/2$, bend: 320deg, loop-angle: 90deg, label-side: center),
+    edge(<5>, "->", $1/2$, bend: 310deg, loop-angle: 90deg, label-side: center),
   ),
   [
     The chain can be partitioned into 3 classes: 
@@ -438,15 +436,15 @@ It's easier to see by the graph representation.
     edge-stroke: .7pt,
     node((0,0), $1$, name: <1>),
     edge(<2>, "->", $3/4$, bend: -50deg, label-side: center),
-    edge(<1>, "->", $1/4$, bend: 320deg, loop-angle: 0deg, label-side: center),
+    edge(<1>, "->", $1/4$, bend: 310deg, loop-angle: 0deg, label-side: center),
     node((1,0), $2$, name: <2>),
     edge(<1>, "->", $1/2$, bend: -50deg, label-side: center),
-    edge(<2>, "->", $1/2$, bend: 320deg, loop-angle: 180deg, label-side: center),
+    edge(<2>, "->", $1/2$, bend: 310deg, loop-angle: 180deg, label-side: center),
     node((2,0), $3$, name: <3>),
-    edge(<3>, "<-", $1$, bend: 320deg, loop-angle: -90deg, label-side: center),
+    edge(<3>, "<-", $1$, bend: 310deg, loop-angle: -90deg, label-side: center),
     node((2,1), $4$, name: <4>),
     edge(<3>, "->", $1/3$),
-    edge(<4>, "->", $2/3$, bend: 320deg, loop-angle: 90deg, label-side: center),
+    edge(<4>, "->", $2/3$, bend: 310deg, loop-angle: 90deg, label-side: center),
     node((0,1), $5$, name: <5>),
     edge(<1>, "->", $1$, label-side: left),
   ),
@@ -508,4 +506,92 @@ $
 $
 
 If $p!=1/2$, this means that $X_n -> plus.minus infinity$, so any state can be visited only finitely often, and hence the Markov chain is transient.
+
+=== 4.18
+Coin 1 comes up heads with probability 0.6 and coin 2 with probability 0.5. A coin is continually flipped until it comes up tails, at which time that coin is put aside and we start flipping the other one.
+
++ What proportion of flips use coin 1?
+
++ If we start the process with coin 1 what is the probability that coin 2 is used on the fifth flip?
+
++ What proportion of flips land heads?
+
+====
+Let ${X_n}$ represent each of the 4 outcomes (coin 1/2 heads/tails), and the transitions matrix $bold(P)$ is:
+
+#grid(
+  columns:  (1fr, 1fr),
+  align: center + bottom,
+  gutter: 1em,
+  table(
+    columns: 5,
+    align: (x, y) => if x==0 {left} else {auto},
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    $X_n without X_(n+1)$, [H1], [T1], [H2], [T2],
+    [H1], [.6],[.4],[0],[0],
+    [T1], [0],[0],[.5],[.5],
+    [H2], [0],[0],[.5],[.5],
+    [T2], [.6],[.4],[0],[0]
+  ),
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    node-shape: circle,
+    node((0,0), [H1], name: <h1>),
+    edge(<t1>, "->", [0.4], label-side: center),
+    edge(<h1>, "->", [0.6], bend: 310deg, loop-angle: 0deg,label-side: center),
+    node((1,0), [T1], name: <t1>),
+    edge(<h2>, "->", [0.5], bend: 50deg, label-side: center),
+    edge(<t2>, "->", [0.5], bend: 50deg, label-side: center),
+    node((1,1), [T2], name: <t2>),
+    edge(<h1>, "->", [0.6], bend: 50deg, label-side: center),
+    edge(<t1>, "->", [0.4], bend: 50deg, label-side: center),
+    node((2,1), [H2], name: <h2>),
+    edge(<t2>, "->", [0.5], label-side: center),
+    edge(<h2>, "->", [0.5], bend: 310deg, loop-angle: 180deg, label-side: center)
+    ),
+    [transition matrix],
+    [transition graph]
+)
+
++ The long-run proportions are calculated from $bold(P)$ to be: $pi_"H1" = 1\/3$, $pi_"T1" = pi_"H2" = pi_"T2" = 2\/9$. So the proportion of coin 1 is $pi_"H1" + pi_"T1" = 5\/9$.
+
++ It's the same as starting with the inital state H1 and after 4 flips we land with H2 or T2. The probability of that is
+  $ P^4_"H1,H2" + P^4_"H1,T2" = 222/500. $ 
+
++ $pi_"H1" + pi_"H2" = 5\/9$.
+
+=== 4.19
+For Example 4.4, calculate the proportion of days that it rains.
+
+====
+Recall in that example, $bold(P)$ was
+#figure(
+  table(
+    columns: 5,
+    align: center,
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    [T-1 | T $without$ T | T+1], $umbrella|umbrella$, $sun|umbrella$, $umbrella|sun$, $sun|sun$,
+    $umbrella|umbrella$, [.7], [0], [0.3], [0],
+    $sun|umbrella$, [.5], [0], [.5], [0],
+    $umbrella|sun$, [0], [.4], [0], [.6],
+    $sun|sun$, [0], [.2], [0], [0.8]),
+    caption: [T = today]
+)
+and the long-run proportions are:
+$ pi_(umbrella|umbrella) = .25, quad pi_(sun|umbrella) = .15, quad pi_(umbrella|sun) = .15, quad pi_(sun|sun) = .45 $
+
+The proportion of rainy days is therefore
+$  pi_(umbrella|umbrella) + pi_(sun|umbrella) = .4 $
+
+=== 4.20
+A transition probability matrix $bold(P)$ is said to be doubly stochastic if the sum over each column equals one; that is,
+
+$ sum_i P_(i,j), quad "for all" j $
+
+If such a chain is irreducible and consists of $M + 1$ states $0,1,...,M$, show that the long-run proportions are given by
+
+$ pi_j = 1/(M + 1), quad j = 0,1,...,M. $
+
+
 

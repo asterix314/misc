@@ -1,5 +1,9 @@
 #import "@preview/fletcher:0.5.6" as fletcher: diagram, node, edge
 
+#set page(
+  numbering: "- 1 -"
+)
+
 #set text(
 //  font: "New Computer Modern",
   size: 12pt
@@ -660,5 +664,48 @@ $ sum_j P_(i,j) = 1 "for all" i quad "and" quad sum_i P_(i,j) = 1 "for all" j. $
 So Exercise 20 applies and $pi_0 = 1\/13$.
 
 === 4.23
+In a good weather year, the number of storms is Poisson distributed with mean 1; in a bad year it is Poisson distributed with mean 3. Suppose that any year's weather condition depends on past years only through the previous year's condition. Suppose that a good year is equally likely to be followed by either a good or a bad year, and that a bad year is twice as likely to be followed by a bad year as by a good year. Suppose that last year — call it year 0 — was a good year.
 
++ Find the expected total number of storms in the next two years (that is, in years 1 and 2).
 
++ Find the probability there are no storms in year 3.
+
++ Find the long-run average number of storms per year.
+
++ Find the proportion of years that have no storms.
+
+====
+There are 2 states, "good" and "bad", and the transition matrix is
+
+#figure(
+  table(
+    columns: 3,
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    $X_n without X_(n+1)$, [*good*], [*bad*],
+    [*good*],              $1\/2$,    $1\/2$,
+    [*bad*],               $1\/3$,    $2\/3$
+  ),
+  caption: [transition matrix $bold(P)$]
+)
+
++ The state probabilities for year 1 is $mat(1\/2, 1\/2)$, so expect $ 1/2 dot 1 + 1/2 dot 3 = 2 $ storms in year 1. Similarly, the state probabilities for year 2 is $mat(1\/2, 1\/2) dot bold(P) = mat(5\/12, 7\/12)$, so expect $ 5/12 dot 1 + 7/12 dot 3 = 13/6 $ storms in year 2. The expected total number of storms is therefore $2 + 13\/6 = 25\/6$.
+
++ The state probabilities for year 3 is 
+  $ mat(1,0) dot bold(P)^3 = mat(5/12, 7/12) = mat(29/72, 43/72). $
+  The probability of no storms is
+  $ 
+    & 29/72 dot e^(-1) 1^0/0! + 43/72 dot e^(-3) 3^0/0! \ 
+    =& 29/72 e^(-1) + 43/72 e^(-3) \
+    approx& 0.1779
+  $
+
++ The long-run proportions can be calculated from $bold(P)$:
+  $ pi_"good" = 2/5, quad pi_"bad" = 3/5. $
+  So the long-run average storms per year is 
+  $ 2/5 dot 1 + 3/5 dot 3 = 11/5. $
+
++ $ 
+    & 2/5 dot e^(-1) 1^0/0!  + 3/5 dot e^(-3) 3^0/0! \
+   =& 2/5 e^(-1) + 3/5 e^(-3) \
+   approx& 0.1770
+  $

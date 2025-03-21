@@ -22,8 +22,10 @@
 #set math.mat(gap: 1em)
 #set math.mat(delim: "[")
 
-
-
+#let hint(content) = {
+  set text(style: "italic")
+  [Hint: ] + content
+}
 
 == Markov Chains
 
@@ -489,7 +491,9 @@ Suppose $P_(i,j) > 0$, i.e., the chain can go from $i$ to $j$. But it can never 
 === 4.17
 For the random walk of Example 4.19 use the strong law of large numbers to give another proof that the Markov chain is transient when $p != 1/2$.
 
-*Hint*: Note that the state at time $n$ can be written as $sum_(i=1)^n Y_i$ where the $Y_i$s are independent and $Pr{Y_i = 1} = p = 1 - Pr{Y_i = -1}$. Argue that if $p > 1/2$, then, by the strong law of large numbers, $sum_(i=1)^n Y_i -> infinity$ as $n -> infinity$ and hence the initial state $0$ can be visited only finitely often, and hence must be transient. A similar argument holds when $p < 1/2$.
+ #hint[
+  Note that the state at time $n$ can be written as $sum_(i=1)^n Y_i$ where the $Y_i$s are independent and $Pr{Y_i = 1} = p = 1 - Pr{Y_i = -1}$. Argue that if $p > 1/2$, then, by the strong law of large numbers, $sum_(i=1)^n Y_i -> infinity$ as $n -> infinity$ and hence the initial state $0$ can be visited only finitely often, and hence must be transient. A similar argument holds when $p < 1/2$.
+]
 
 ====
 Let's take the hint and define $Y_i$ as 
@@ -617,7 +621,7 @@ A DNA nucleotide has any of four values. A standard model for a mutational chang
       alpha\, & "if" i != j.
     )
   $
-  For $n=1$, the result is apparent. Now assume that the result holds for $n$. Then by symmetry,
+  For $n=1$, the result is apparent. Now assume that the result holds for $n$, then by symmetry,
   $
     P^n_(1,j) = 1/3 (1 - P^n_(1,1)) = 1/4 - 1/4 (1 - 4 alpha)^n, quad j = 2, 3, 4.
   $
@@ -628,9 +632,33 @@ A DNA nucleotide has any of four values. A standard model for a mutational chang
     &= (1 - 3 alpha) dot [1/4 + 3/4 (1 - 4 alpha)^n]  + 3 alpha dot [1/4 - 1/4 (1 - 4 alpha)^n] \
     &= 1/4 + 3/4 (1 - 4 alpha)^(n+1).
   $
-  By induction $P^n_(1,1) = 1/4 + 3/4 (1 - 4 alpha)^n$ holds for all $n >= 1$.
+  By induction, $P^n_(1,1) = 1/4 + 3/4 (1 - 4 alpha)^n$ holds for all $n >= 1$.
 
 + By symmetry the 4 states must take equal parts in the long-run proportion of time, so $pi_i = 1\/4, i = 1,2,3.4$.
 
 === 4.22
- 
+Let $Y_n$ be the sum of $n$ independent rolls of a fair die. Find
+$ lim_(n -> infinity) Pr{Y_n "is a multiple of 13"} $
+
+#hint[
+  Define an appropriate Markov chain and apply the results of Exercise 20.
+]
+
+====
+Let $X_n$ be $Y_n$ modulo $13$. Then $X_n$ is a Markov chain with long-run proportions $pi_i, i = 0,1,2,...,12$ and transition probabilities
+$
+  P_(i,j) = cases(
+    1/6\, quad & i + k equiv j mod 13\, k = 1\, 2\, ... 6,
+    0\, quad & "otherwise"
+    )
+$
+and
+$ lim_(n -> infinity) Pr{Y_n "is a multiple of 13"} = pi_0. $
+
+It's easy to verify 
+$ sum_j P_(i,j) = 1 "for all" i quad "and" quad sum_i P_(i,j) = 1 "for all" j. $
+So Exercise 20 applies and $pi_0 = 1\/13$.
+
+=== 4.23
+
+

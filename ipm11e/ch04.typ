@@ -587,11 +587,50 @@ $  pi_(umbrella|umbrella) + pi_(sun|umbrella) = .4 $
 === 4.20
 A transition probability matrix $bold(P)$ is said to be doubly stochastic if the sum over each column equals one; that is,
 
-$ sum_i P_(i,j), quad "for all" j $
+$ sum_i P_(i,j) = 1, quad "for all" j $
 
 If such a chain is irreducible and consists of $M + 1$ states $0,1,...,M$, show that the long-run proportions are given by
 
 $ pi_j = 1/(M + 1), quad j = 0,1,...,M. $
 
+====
+$pi_j = 1\/(M + 1), quad j = 0,1,...,M$ satisfies the long-run equations:
+$ 
+  sum_i P_(i,j) pi_i &= 1/(M+1) sum_i P_(i,j) \
+  &= 1/(M+1) \
+  &= pi_j.
+$
+By uniqueness they are the long-run proportions.
 
+=== 4.21
+A DNA nucleotide has any of four values. A standard model for a mutational change of the nucleotide at a specific location is a Markov chain model that supposes that in going from period to period the nucleotide does not change with probability $1 - 3 alpha$, and if it does change then it is equally likely to change to any of the other three values, for some $0 < alpha < 1$
 
++ Show that $P^n_(1,1) = 1/4 + 3/4 (1 - 4 alpha)^n$.
+
++ What is the long-run proportion of time the chain is in each state?
+
+====
++ The transition probabilities are
+  $
+    P_(i,j) = cases(
+      1 - 3 alpha\, & "if" i = j, \
+      alpha\, & "if" i != j.
+    )
+  $
+  For $n=1$, the result is apparent. Now assume that the result holds for $n$. Then by symmetry,
+  $
+    P^n_(1,j) = 1/3 (1 - P^n_(1,1)) = 1/4 - 1/4 (1 - 4 alpha)^n, quad j = 2, 3, 4.
+  $
+  And so
+  $
+    P^(n+1)_(1,1) &= mat(P^n_(1,1), P^n_(1,2), P^n_(1,3), P^n_(1,4))
+      dot mat(1 - 3 alpha; alpha; alpha; alpha) \
+    &= (1 - 3 alpha) dot [1/4 + 3/4 (1 - 4 alpha)^n]  + 3 alpha dot [1/4 - 1/4 (1 - 4 alpha)^n] \
+    &= 1/4 + 3/4 (1 - 4 alpha)^(n+1).
+  $
+  By induction $P^n_(1,1) = 1/4 + 3/4 (1 - 4 alpha)^n$ holds for all $n >= 1$.
+
++ By symmetry the 4 states must take equal parts in the long-run proportion of time, so $pi_i = 1\/4, i = 1,2,3.4$.
+
+=== 4.22
+ 

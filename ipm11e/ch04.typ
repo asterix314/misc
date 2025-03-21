@@ -652,7 +652,7 @@ $ lim_(n -> infinity) Pr{Y_n "is a multiple of 13"} $
 Let $X_n$ be $Y_n$ modulo $13$. Then $X_n$ is a Markov chain with long-run proportions $pi_i, i = 0,1,2,...,12$ and transition probabilities
 $
   P_(i,j) = cases(
-    1/6\, quad & i + k equiv j mod 13\, k = 1\, 2\, ... 6,
+    1\/6\, quad & i + k equiv j mod 13\, thick k = 1\, 2\, ... 6,
     0\, quad & "otherwise"
     )
 $
@@ -709,3 +709,33 @@ There are 2 states, "good" and "bad", and the transition matrix is
    =& 2/5 e^(-1) + 3/5 e^(-3) \
    approx& 0.1770
   $
+
+=== 4.24
+Consider three urns, one colored red, one white, and one blue. The red urn contains 1 red and 4 blue balls; the white urn contains 3 white balls, 2 red balls, and 2 blue balls; the blue urn contains 4 white balls, 3 red balls, and 2 blue balls. At the initial stage, a ball is randomly selected from the red urn and then returned to that urn. At every subsequent stage, a ball is randomly selected from the urn whose color is the same as that of the ball previously selected and is then returned to that urn. In the long run, what proportion of the selected balls are red? What proportion are white? What proportion are blue?
+
+====
+Let $X_n$ represent the color of the $n$th ball selected. The state transition probabilities are:
+
+#figure(
+  table(
+    columns: 4,
+    stroke: (x, y) => if x>0 and y>0 {0.5pt},
+    $X_n without X_(n+1)$, [*R*],  [*B*],  [*W*], 
+    [*R*],                 $1\/5$, $4\/5$, $0$,
+    [*B*],                 $3\/9$, $2\/9$, $4\/9$,
+    [*W*],                 $2\/7$, $2\/7$, $3\/7$,           
+  ),
+  caption: [R = red, B = blue, W = white]  
+)
+
+The long-run proportions $pi_i$ satisfy
+$
+  pi_"R" &= 1/5 pi_"R" + & 3/9 pi_"B" + 2/7 pi_"W" \
+  pi_"B" &= 4/5 pi_"R" + & 2/9 pi_"B" + 2/7 pi_"W" \
+  pi_"W" &=              & 4/9 pi_"B" + 3/7 pi_"W"
+$
+giving
+$ pi_"R" = 25/89, quad pi_"B" = 36/89, quad pi_"W" = 28/89. $
+
+=== 4.25
+Each morning an individual leaves his house and goes for a run. He is equally likely to leave either from his front or back door. Upon leaving the house, he chooses a pair of running shoes (or goes running barefoot if there are no shoes at the door from which he departed). On his return he is equally likely to enter, and leave his running shoes, either by the front or back door. If he owns a total of k pairs of running shoes, what proportion of the time does he run barefooted?

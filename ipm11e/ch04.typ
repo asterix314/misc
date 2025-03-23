@@ -24,7 +24,7 @@
 #set enum(numbering: "(a)")
 #set figure(numbering: none)
 #set math.mat(gap: 1em)
-#set math.mat(delim: "[")
+//#set math.mat(delim: "[")
 
 #let hint(content) = {
   set text(style: "italic")
@@ -116,30 +116,30 @@ Let $bold(P)$ and $bold(Q)$ be transition probability matrices on states $1,...,
 A Markov chain ${X_n,n >= 0}$ with states $0,1,2$ has the transition probability matrix
 $
   mat(
-    1/2, 1/3, 1/6;
-    0,   1/3, 2/3;
-    1/2, 0,   1/2).
+    1\/2, 1\/3, 1\/6;
+    0,   1\/3, 2\/3;
+    1\/2, 0,   1\/2).
 $
 
-If $Pr{X_0 = 0} = Pr{X_0 = 1} = 1/4$, find $"E"[X_3]$.
+If $Pr{X_0 = 0} = Pr{X_0 = 1} = 1/4$, find $EE[X_3]$.
 
 ====
 The probability distribution of $X_0$ is $bold(x)_0 = mat(1\/4, 1\/4, 1\/2)$. Therefore the distribution of $X_3$ is
 $
   bold(x)_3 
     &= bold(x)_0 bold(P)^3 \
-    &= mat(1/4, 1/4, 1/2) 
+    &= mat(1\/4, 1\/4, 1\/2) 
       mat(
-        1/2, 1/3, 1/6;
-        0,   1/3, 2/3;
-        1/2, 0,   1/2)^3 \
-    &= mat(59/144, 43/216, 169/432),
+        1\/2, 1\/3, 1\/6;
+        0,   1\/3, 2\/3;
+        1\/2, 0,   1\/2)^3 \
+    &= mat(59\/144, 43\/216, 169\/432),
 $
 and
 $
-  "E"[X_3]  
-  &= mat(0,1,2) dot mat(59/144, 43/216, 169/432) \
-  &= 53/54.
+  EE[X_3]  
+  &= mat(0,1,2) dot mat(59\/144, 43\/216, 169\/432) \
+  &= 53\/54.
 $
 
 === 4.6
@@ -496,24 +496,24 @@ Suppose $P_(i,j) > 0$, i.e., the chain can go from $i$ to $j$. But it can never 
 For the random walk of Example 4.19 use the strong law of large numbers to give another proof that the Markov chain is transient when $p != 1/2$.
 
  #hint[
-  Note that the state at time $n$ can be written as $sum_(i=1)^n Y_i$ where the $Y_i$s are independent and $Pr{Y_i = 1} = p = 1 - Pr{Y_i = -1}$. Argue that if $p > 1/2$, then, by the strong law of large numbers, $sum_(i=1)^n Y_i -> infinity$ as $n -> infinity$ and hence the initial state $0$ can be visited only finitely often, and hence must be transient. A similar argument holds when $p < 1/2$.
+  Note that the state at time $n$ can be written as $sum_(i=1)^n Y_i$ where the $Y_i$s are independent and $Pr{Y_i = 1} = p = 1 - Pr{Y_i = -1}$. Argue that if $p > 1/2$, then, by the strong law of large numbers, $sum_(i=1)^n Y_i -> oo$ as $n -> oo$ and hence the initial state $0$ can be visited only finitely often, and hence must be transient. A similar argument holds when $p < 1/2$.
 ]
 
 ====
 Let's take the hint and define $Y_i$ as 
 $
   Y_i = cases(
-    1 quad &"if" X_i "takes a right step",
-    -1 quad &"otherwise"
+    1\, quad &"if" X_i "takes a right step",
+    -1\, quad &"otherwise"
   )
 $
 so that $X_n = sum_(i<=n) Y_i$. Then, by the strong law of large numbers,
 $
-  X_n &-> n dot "E"[Y] \
-  &= n(2p-1) "as" n->infinity.
+  X_n &-> n dot EE[Y] \
+  &= n(2p-1) "as" n->oo.
 $
 
-If $p!=1/2$, this means that $X_n -> plus.minus infinity$, so any state can be visited only finitely often, and hence the Markov chain is transient.
+If $p!=1/2$, this means that $X_n -> plus.minus oo$, so any state can be visited only finitely often, and hence the Markov chain is transient.
 
 === 4.18
 Coin 1 comes up heads with probability 0.6 and coin 2 with probability 0.5. A coin is continually flipped until it comes up tails, at which time that coin is put aside and we start flipping the other one.
@@ -632,8 +632,8 @@ A DNA nucleotide has any of four values. A standard model for a mutational chang
   And so
   $
     P^(n+1)_(1,1) &= mat(P^n_(1,1), P^n_(1,2), P^n_(1,3), P^n_(1,4))
-      dot mat(1 - 3 alpha; alpha; alpha; alpha) \
-    &= (1 - 3 alpha) dot [1/4 + 3/4 (1 - 4 alpha)^n]  + 3 alpha dot [1/4 - 1/4 (1 - 4 alpha)^n] \
+      dot vec(1 - 3 alpha, alpha, alpha, alpha) \
+    &= (1 - 3 alpha) dot (1/4 + 3/4 (1 - 4 alpha)^n)  + 3 alpha dot (1/4 - 1/4 (1 - 4 alpha)^n) \
     &= 1/4 + 3/4 (1 - 4 alpha)^(n+1).
   $
   By induction, $P^n_(1,1) = 1/4 + 3/4 (1 - 4 alpha)^n$ holds for all $n >= 1$.
@@ -642,7 +642,7 @@ A DNA nucleotide has any of four values. A standard model for a mutational chang
 
 === 4.22
 Let $Y_n$ be the sum of $n$ independent rolls of a fair die. Find
-$ lim_(n -> infinity) Pr{Y_n "is a multiple of 13"} $
+$ lim_(n -> oo) Pr{Y_n "is a multiple of 13"} $
 
 #hint[
   Define an appropriate Markov chain and apply the results of Exercise 20.
@@ -657,7 +657,7 @@ $
     )
 $
 and
-$ lim_(n -> infinity) Pr{Y_n "is a multiple of 13"} = pi_0. $
+$ lim_(n -> oo) Pr{Y_n "is a multiple of 13"} = pi_0. $
 
 It's easy to verify 
 $ sum_j P_(i,j) = 1 "for all" i quad "and" quad sum_i P_(i,j) = 1 "for all" j. $
@@ -738,4 +738,54 @@ giving
 $ pi_"R" = 25/89, quad pi_"B" = 36/89, quad pi_"W" = 28/89. $
 
 === 4.25
-Each morning an individual leaves his house and goes for a run. He is equally likely to leave either from his front or back door. Upon leaving the house, he chooses a pair of running shoes (or goes running barefoot if there are no shoes at the door from which he departed). On his return he is equally likely to enter, and leave his running shoes, either by the front or back door. If he owns a total of k pairs of running shoes, what proportion of the time does he run barefooted?
+Each morning an individual leaves his house and goes for a run. He is equally likely to leave either from his front or back door. Upon leaving the house, he chooses a pair of running shoes (or goes running barefoot if there are no shoes at the door from which he departed). On his return he is equally likely to enter, and leave his running shoes, either by the front or back door. If he owns a total of $k$ pairs of running shoes, what proportion of the time does he run barefooted?
+
+====
+Let $X_n$ denote, at the start of day $n$, the number of pairs of shoes at door 1 (front or back) from which the individual leaves the house. Then ${X_n}$ is a Markov chain with transition probabilities arising from 4 scenarios:
+
+#figure(table(
+  columns: 3,
+  align: center + horizon,
+  stroke: 0.5pt,
+  [*today returns \ to door*], [*tomorrow leaves \ from door*], [*probability*],
+  [1],  [1],  $P_(i,i) &= 1\/4$,
+  [1],  [2],  $P_(i, k-i) = 1\/4$,
+  [2],  [1],  $P_(i,max(i-1,0)) = 1\/4$,
+  [2],  [2],  $P_(i,min(k-i+1,k)) = 1\/4$
+  ),
+  caption: [door 2 = the other door.]
+)
+
+Because every sceanrio contributes to each column of the transition matrix exactly once (when different scenarios refer to the same transition, the probabilities should be added for that transition), this Markov chain is doubly stochastic (Exercise 4.20). Therefore the long-run proportion of state $0$ (runner runs barefooted) is $1\/(k+1)$.
+
+=== 4.26
+Consider the following approach to shuffling a deck of $n$ cards. Starting with any initial ordering of the cards, one of the numbers $1,2,...,n$ is randomly chosen in such a manner that each one is equally likely to be selected. If number $i$ is chosen, then we take the card that is in position $i$ and put it on top of the deck — that is, we put that card in position $1$. We then repeatedly perform the same operation. Show that, in the limit, the deck is perfectly shuffled in the sense that the resultant ordering is equally likely to be any of the $n!$ possible orderings.
+
+=== 4.27
+Each individual in a population of size $N$ is, in each period, either active or inactive. If an individual is active in a period then, independent of all else, that individual will be active in the next period with probability $alpha$. Similarly, if an individual is inactive in a period then, independent of all else, that individual will be inactive in the next period with probability $beta$. Let $X_n$ denote the number
+of individuals that are active in period $n$.
+
++ Argue that ${X_n,n >= 0}$ is a Markov chain.
+
++ Find $EE[X_n | X_0 = i]$.
+
++ Derive an expression for its transition probabilities.
+
++ Find the long-run proportion of time that exactly $j$ people are active. #hint[Consider first the case where $N = 1$.]
+
+=== 4.28
+Every time that the team wins a game, it wins its next game with probability 0.8; every time it loses a game, it wins its next game with probability 0.3. If the team wins a game, then it has dinner together with probability 0.7, whereas if the team loses then it has dinner together with probability 0.2. What proportion of games result in a team dinner?
+
+=== 4.29
+Whether or not it rains follows a 2 state Markov chain. If it rains one day, then it will rain the next with probability $1\/2$ or will be dry with probability $1\/2$. Overall, 40 percent of days are rainy. If it is raining on Monday, find the probability that it will rain on Thursday.
+
+=== 4.30
+J plays a new game every day. If J wins a game, then she wins the next one with probability 0.6; if she has lost the last game but won the one preceding it, then she wins the next with probability 0.7; if she has lost the last 2 games, then she wins the next with probability 0.2.
+
++ What proportion of games does J win?
+
++ Suppose J has been playing a long time. If J loses her game on Monday, what is the probability she will win on Tuesday?
+
+
+=== 4.31
+A certain town never has two sunny days in a row. Each day is classified as being either sunny, cloudy (but dry), or rainy. If it is sunny one day, then it is equally likely to be either cloudy or rainy the next day. If it is rainy or cloudy one day, then there is one chance in two that it will be the same the next day, and if it changes then it is equally likely to be either of the other two possibilities. In the long run, what proportion of days are sunny? What proportion are cloudy?

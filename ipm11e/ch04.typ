@@ -9,6 +9,8 @@
   size: 12pt
 )
 
+#set par(justify: true)
+
 #show heading.where(
   level: 3
 ): it => text(
@@ -760,6 +762,15 @@ Because every sceanrio contributes to each column of the transition matrix exact
 
 === 4.26
 Consider the following approach to shuffling a deck of $n$ cards. Starting with any initial ordering of the cards, one of the numbers $1,2,...,n$ is randomly chosen in such a manner that each one is equally likely to be selected. If number $i$ is chosen, then we take the card that is in position $i$ and put it on top of the deck — that is, we put that card in position $1$. We then repeatedly perform the same operation. Show that, in the limit, the deck is perfectly shuffled in the sense that the resultant ordering is equally likely to be any of the $n!$ possible orderings.
+
+====
+Let $X_n$ denote the ordering of the deck after $n$ operations. Then ${X_n}$ is a Markov chain with state space equal to the set of all $n!$ possible orderings of the deck. 
+
+To show that the chain is irreducible, note that any ordering $S_i$ can be transformed into any other ordering $S_j = j_1, j_2, ... j_n$ by choosing, in turn, the numbers $j_n, j_(n-1) ... j_1$ from $S_i$.
+
+To show that the chain is doubly stochastic, note that $S_j$ can be directly reached, with probability $1\/n$, from each of exactly $n$ states, namely those obtained by moving $j_1$ to the $k$th ($k=1,2,...n$) position within $S_j$. E.g., with $k=3$, the ordering $j_2,j_3,j_1, j_4, j_5 ... j_n$ goes to $S_j$ with probability $1\/n$.
+
+Because the chain is both irreducible and doubly stochastic, the stationary distribution is uniform. That is, in the limit, the resultant ordering is equally likely to be any of the $n!$ possible orderings.
 
 === 4.27
 Each individual in a population of size $N$ is, in each period, either active or inactive. If an individual is active in a period then, independent of all else, that individual will be active in the next period with probability $alpha$. Similarly, if an individual is inactive in a period then, independent of all else, that individual will be inactive in the next period with probability $beta$. Let $X_n$ denote the number

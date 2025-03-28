@@ -1,11 +1,10 @@
-#import "@preview/fletcher:0.5.6" as fletcher: diagram, node, edge
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
 #set page(
   numbering: "- 1 -"
 )
 
 #set text(
-//  font: "New Computer Modern",
   size: 12pt
 )
 
@@ -26,7 +25,6 @@
 #set enum(numbering: "(a)")
 #set figure(numbering: none)
 #set math.mat(gap: 1em)
-//#set math.mat(delim: "[")
 
 #let hint(content) = {
   set text(style: "italic")
@@ -787,8 +785,39 @@ of individuals that are active in period $n$.
 === 4.28
 Every time that the team wins a game, it wins its next game with probability 0.8; every time it loses a game, it wins its next game with probability 0.3. If the team wins a game, then it has dinner together with probability 0.7, whereas if the team loses then it has dinner together with probability 0.2. What proportion of games result in a team dinner?
 
+====
+The transition matrix is
+$
+  bold(P) = mat(.8, .2; .3, .7),
+$
+with long-run proportions
+$
+  pi_"win" = .6, quad pi_"lose" = .4 
+$
+
+The proportion of games resuling in a team dinner is therefore
+$
+  .6 times .7 + .4 times .2 = .5
+$
+
 === 4.29
 Whether or not it rains follows a 2 state Markov chain. If it rains one day, then it will rain the next with probability $1\/2$ or will be dry with probability $1\/2$. Overall, 40 percent of days are rainy. If it is raining on Monday, find the probability that it will rain on Thursday.
+
+====
+We need to know the probability of rain next day if today is a dry day. Let's call it $q$. Then the transition matrix is
+$
+  bold(P) = mat(1\/2, 1\/2; q, 1-q).
+$
+Given long-run proportions $mat(2\/5, 3\/5)$, it must be that
+$
+  mat(2\/5, 3\/5) dot mat(1\/2, 1\/2; q, 1-q) = mat(2\/5, 3\/5),
+$
+yeilding $q = 1\/3$, and
+$
+  bold(P)^3 = mat(29\/72, 43\/72; 43\/108, 65\/108).
+$
+Therefore it will rain with probability $29\/72$ on Thursday.
+
 
 === 4.30
 J plays a new game every day. If J wins a game, then she wins the next one with probability 0.6; if she has lost the last game but won the one preceding it, then she wins the next with probability 0.7; if she has lost the last 2 games, then she wins the next with probability 0.2.
@@ -796,6 +825,34 @@ J plays a new game every day. If J wins a game, then she wins the next one with 
 + What proportion of games does J win?
 
 + Suppose J has been playing a long time. If J loses her game on Monday, what is the probability she will win on Tuesday?
+
+====
+The transition probabilities are
+
+#figure(table(
+  columns: 5,
+  stroke: (x, y) => if x>0 and y>0 {0.5pt},
+  $X_n without X_(n+1)$, [*WW*], [*LW*], [*WL*], [*LL*],
+  [*WW*],                [.6],   [0],    [.4],   [0],
+  [*LW*],                [.6],   [0],    [.4],   [0],
+  [*WL*],                [0],    [.7],   [0],    [.3],
+  [*LL*],                [0],    [.2],   [0],    [.8]
+  ),
+  caption: [W=win, L=lose]  
+)
+with stationary distribution
+$
+  pi_"WW" = .3, quad pi_"LW" = .2, quad pi_"WL" = .2, quad pi_"LL" = .3
+$
+
++ $
+  pi_"WW" dot 1 + (pi_"LW" + pi_"WL") dot 1/2  = .5
+  $
+
++ $ 
+  (pi_"WL" dot P_("WL","LW") + pi_"LL" dot P_("LL", "LW"))/(pi_"WL" + pi_"LL")  = .4
+  $
+
 
 
 === 4.31

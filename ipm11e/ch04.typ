@@ -8,6 +8,9 @@
   size: 12pt
 )
 
+#set table.hline(stroke: .7pt)
+#set table.vline(stroke: .7pt)
+
 #set par(justify: true)
 
 #show heading.where(
@@ -189,8 +192,9 @@ We need to look at the $P^2_(i,j)$ probabilities:
   table(
     columns: 5,
     align: center,
-    stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    [T-2 | T-1 $without$ T | T+1], $umbrella|umbrella$, $sun|umbrella$, $umbrella|sun$, $sun|sun$,
+    stroke: none,
+    [T-2 | T-1 $without$ T | T+1], table.vline(), table.hline(),
+    $umbrella|umbrella$, $sun|umbrella$, $umbrella|sun$, $sun|sun$,
     $umbrella|umbrella$, [0.49], [0.12], [0.21], [0.18],
     $sun|umbrella$, [0.35], [0.2], [0.15], [0.3],
     $umbrella|sun$, [0.2], [0.12], [0.2], [0.48],
@@ -220,10 +224,11 @@ the selected ball is blue, then it is equally likely to be replaced by either a 
     table(
       columns: 4,
       stroke: (x, y) => if x>0 and y>0 {0.5pt},
-      $Y_n without Y_(n+1)$, [*0*],  [*1*],  [*2*],
+      $Y_n without Y_(n+1)$, 
+              [*0*],  [*1*],  [*2*],
       [*0*],  $.5$, $.5$, $0$,
       [*1*],  $.5 times .3 = .15$, $.6$, $.5 times .5 = .25$,
-      [*2*], $0$, $.3$, $.7$,
+      [*2*],  $0$, $.3$, $.7$,
     ),
     caption: [state = number of red balls]
   )
@@ -246,12 +251,13 @@ Let the state represent the current numer of consecutive heads. We also make the
 #figure(
   table(
     columns: 5,
-    stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    $X_n without X_(n+1)$,     [*0*],   [*1*],   [*2*],  [*3*],
-    [*0*],                        [0.4],   [0.6],   [0],    [0],
-    [*1*],                        [0.4],   [0],     [0.6],  [0],
-    [*2*],                        [0.4],   [0],     [0],    [0.6],
-    [*3*],                        [0],     [0],     [0],    [1]
+    stroke: none,
+    $X_n without X_(n+1)$, table.vline(), table.hline(),     
+            [*0*],   [*1*],   [*2*],  [*3*],
+    [*0*],  [0.4],   [0.6],   [0],    [0],
+    [*1*],  [0.4],   [0],     [0.6],  [0],
+    [*2*],  [0.4],   [0],     [0],    [0.6],
+    [*3*],  [0],     [0],     [0],    [1]
   ),
   caption: [state = current number of consecutive heads]
 )
@@ -283,8 +289,9 @@ The probabilities of the $Y_n$ chain is
   table(
     columns: 8,
     align: (x, y) => if x==0 {left} else {auto},
-    stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    $Y_n without Y_(n+1)$, [➀], [➁], [➂], [➃], [➄], [➅], [➆],     
+    stroke: none,
+    $Y_n without Y_(n+1)$, table.hline(), table.vline(),
+    [➀], [➁], [➂], [➃], [➄], [➅], [➆],     
     [➀: 1 step in pattern], $P_11$, $P_12$, $0$, $0$, $0$, $P_10$, $P_13$,
     [➁: 2 steps in pattern] , $0$, $0$, $P_21$, $0$, $P_22$, $P_20$, $P_23$,
     [➂: 3 steps in pattern], $P_11$, $0$, $0$, $P_12$, $0$, $P_10$, $P_13$,
@@ -534,12 +541,13 @@ Let ${X_n}$ represent each of the 4 outcomes (coin 1/2 heads/tails), and the tra
   table(
     columns: 5,
     align: (x, y) => if x==0 {left} else {auto},
-    stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    $X_n without X_(n+1)$, [H1], [T1], [H2], [T2],
-    [H1], [.6],[.4],[0],[0],
-    [T1], [0],[0],[.5],[.5],
-    [H2], [0],[0],[.5],[.5],
-    [T2], [.6],[.4],[0],[0]
+    stroke: none,
+    $X_n without X_(n+1)$, table.vline(), table.hline(),
+            [*H1*], [*T1*], [*H2*], [*T2*],
+    [*H1*], [.6],   [.4],   [0],    [0],
+    [*T1*], [0],    [0],    [.5],   [.5],
+    [*H2*], [0],    [0],    [.5],   [.5],
+    [*T2*], [.6],   [.4],   [0],    [0]
   ),
   diagram(
     node-stroke: 1.5pt,
@@ -578,8 +586,9 @@ Recall in that example, $bold(P)$ was
   table(
     columns: 5,
     align: center,
-    stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    [T-1 | T $without$ T | T+1], $umbrella|umbrella$, $sun|umbrella$, $umbrella|sun$, $sun|sun$,
+    stroke: none,
+    [T-1 | T $without$ T | T+1], table.vline(), table.hline(),
+    $umbrella|umbrella$, $sun|umbrella$, $umbrella|sun$, $sun|sun$,
     $umbrella|umbrella$, [.7], [0], [0.3], [0],
     $sun|umbrella$, [.5], [0], [.5], [0],
     $umbrella|sun$, [0], [.4], [0], [.6],
@@ -680,10 +689,11 @@ There are 2 states, "good" and "bad", and the transition matrix is
 #figure(
   table(
     columns: 3,
-    stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    $X_n without X_(n+1)$, [*good*], [*bad*],
-    [*good*],              $1\/2$,    $1\/2$,
-    [*bad*],               $1\/3$,    $2\/3$
+    stroke: none,
+    $X_n without X_(n+1)$, table.vline(), table.hline(),
+                [*good*], [*bad*],
+    [*good*],   $1\/2$,    $1\/2$,
+    [*bad*],    $1\/3$,    $2\/3$
   ),
   caption: [transition matrix $bold(P)$]
 )
@@ -719,11 +729,12 @@ Let $X_n$ represent the color of the $n$th ball selected. The state transition p
 #figure(
   table(
     columns: 4,
-    stroke: (x, y) => if x>0 and y>0 {0.5pt},
-    $X_n without X_(n+1)$, [*R*],  [*B*],  [*W*], 
-    [*R*],                 $1\/5$, $4\/5$, $0$,
-    [*B*],                 $3\/9$, $2\/9$, $4\/9$,
-    [*W*],                 $2\/7$, $2\/7$, $3\/7$,           
+    stroke: none,
+    $X_n without X_(n+1)$, table.vline(), table.hline(), 
+            [*R*],  [*B*],  [*W*], 
+    [*R*],  $1\/5$, $4\/5$, $0$,
+    [*B*],  $3\/9$, $2\/9$, $4\/9$,
+    [*W*],  $2\/7$, $2\/7$, $3\/7$,           
   ),
   caption: [R = red, B = blue, W = white]  
 )
@@ -782,6 +793,12 @@ of individuals that are active in period $n$.
 
 + Find the long-run proportion of time that exactly $j$ people are active. #hint[Consider first the case where $N = 1$.]
 
+====
++ ${X_n}$ is a Markov chain because the state at time $n$ (number of active individuals) depends only on the previous state and not any states prior to that.
+
++ 
+
+
 === 4.28
 Every time that the team wins a game, it wins its next game with probability 0.8; every time it loses a game, it wins its next game with probability 0.3. If the team wins a game, then it has dinner together with probability 0.7, whereas if the team loses then it has dinner together with probability 0.2. What proportion of games result in a team dinner?
 
@@ -831,12 +848,13 @@ The transition probabilities are
 
 #figure(table(
   columns: 5,
-  stroke: (x, y) => if x>0 and y>0 {0.5pt},
-  $X_n without X_(n+1)$, [*WW*], [*LW*], [*WL*], [*LL*],
-  [*WW*],                [.6],   [0],    [.4],   [0],
-  [*LW*],                [.6],   [0],    [.4],   [0],
-  [*WL*],                [0],    [.7],   [0],    [.3],
-  [*LL*],                [0],    [.2],   [0],    [.8]
+  stroke: none,
+  $X_n without X_(n+1)$, table.hline(), table.vline(),
+          [*WW*], [*LW*], [*WL*], [*LL*],
+  [*WW*], [.6],   [0],    [.4],   [0],
+  [*LW*], [.6],   [0],    [.4],   [0],
+  [*WL*], [0],    [.7],   [0],    [.3],
+  [*LL*], [0],    [.2],   [0],    [.8]
   ),
   caption: [W=win, L=lose]  
 )
@@ -854,6 +872,60 @@ $
   $
 
 
-
 === 4.31
 A certain town never has two sunny days in a row. Each day is classified as being either sunny, cloudy (but dry), or rainy. If it is sunny one day, then it is equally likely to be either cloudy or rainy the next day. If it is rainy or cloudy one day, then there is one chance in two that it will be the same the next day, and if it changes then it is equally likely to be either of the other two possibilities. In the long run, what proportion of days are sunny? What proportion are cloudy?
+
+====
+The transition matrix is
+
+#figure(table(
+  columns: 4,
+  stroke: none,
+  $X_n without X_(n+1)$, table.vline(), table.hline(),
+          [*S*], [*C*], [*R*],
+  [*S*],  [0],   [.5],  [.5],
+  [*C*],  [.25], [.5],  [.25],
+  [*R*],  [.25], [.25], [.5]
+  ),
+  caption: [S=sunny, C=cloudy, R=rainy]  
+)
+with stationary distribution
+$ pi_"S" = .2, quad pi_"C" = .4, quad pi_"R" = .4 $
+
+
+=== 4.32
+Each of two switches is either on or off during a day. On day $n$, each switch will independently be on with probability
+
+$ [1 + "number of on switches during day" n − 1]\/4 $
+
+For instance, if both switches are on during day $n − 1$, then each will independently be on during day $n$ with probability $3\/4$. What fraction of days are both switches on? What fraction are both off?
+
+====
+Let $X_n$ be the number of on switches during day $n$. The transition matrix is therefore
+
+#figure(table(
+  columns: 4,
+  stroke: none,
+  $X_n without X_(n+1)$, table.vline(), table.hline(), 
+          [*0*],    [*1*],     [*2*],
+  [*0*],  $9\/16$,  $6\/16$,   $1\/16$,
+  [*1*],  $1\/4$,  $1\/2$,   $1\/4$,
+  [*2*],  $1\/16$,  $6\/16$,   $9\/16$)
+)
+with stationary distribution
+$ pi_0 = 2/7, quad pi_1 = 3/7, quad pi_2 = 2/7. $
+
+So both switches are on $2\/7$ of the days, and both switches are off another $2\/7$ of the days.
+
+
+=== 4.33
+Two players are playing a sequence of points, which begin when one of the players serves. Suppose that player 1 wins each point she serves with probability $p$, and wins each point her opponent serves with probability $q$. Suppose the winner of a point becomes the server of the next point.
+
++ Find the proportion of points that are won by player 1.
+
++ Find the proportion of time that player 1 is the server.
+
+====
+Let $X_n in {1,2}$ be the server in game $n$. The transition matrix is then $ mat(p, 1-p; q, 1-q) $ with stationary distribution $ pi_1 = q/(1+q-p), quad pi_2 = (1-p)/(1+q-p). $
+
+Because a player becomes the server when she wins a point, the proportion of points she won is the same as the proportion of time served. For player 1 this proportion is $pi_1 = q/(1+q-p)$.

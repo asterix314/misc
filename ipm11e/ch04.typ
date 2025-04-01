@@ -34,6 +34,7 @@
   [Hint: ] + content
 }
 
+
 == Markov Chains
 
 === 4.1
@@ -701,7 +702,7 @@ There are 2 states, "good" and "bad", and the transition matrix is
 + The state probabilities for year 1 is $mat(1\/2, 1\/2)$, so expect $ 1/2 dot 1 + 1/2 dot 3 = 2 $ storms in year 1. Similarly, the state probabilities for year 2 is $mat(1\/2, 1\/2) dot bold(P) = mat(5\/12, 7\/12)$, so expect $ 5/12 dot 1 + 7/12 dot 3 = 13/6 $ storms in year 2. The expected total number of storms is therefore $2 + 13\/6 = 25\/6$.
 
 + The state probabilities for year 3 is 
-  $ mat(1,0) dot bold(P)^3 = mat(5/12, 7/12) = mat(29/72, 43/72). $
+  $ mat(1,0) dot bold(P)^3 = mat(5\/12, 7\/12) = mat(29\/72, 43\/72). $
   The probability of no storms is
   $ 
     & 29/72 dot e^(-1) 1^0/0! + 43/72 dot e^(-3) 3^0/0! \ 
@@ -796,7 +797,26 @@ of individuals that are active in period $n$.
 ====
 + ${X_n}$ is a Markov chain because the state at time $n$ (number of active individuals) depends only on the previous state and not any states prior to that.
 
-+ 
++ The transition matrix $bold(Q)$ of an individual is
+  #figure(table(
+    columns: 3,
+    stroke: none,
+    $Y_n without Y_(n+1)$, table.vline(), table.hline(),
+                    [*active*], [*inactive*],
+    [*active*],     $alpha$,    $1 - alpha$,
+    [*inactive*],   $1 - beta$, $beta$,
+    ),
+  )
+
+  Initially there are $i$ active and $N-i$ inactive individuals.
+
+  $
+    mat(i, N-i) dot mat(alpha, 1-alpha; 1-beta, beta)^n
+  $
+
++  
+
++
 
 
 === 4.28
@@ -926,6 +946,62 @@ Two players are playing a sequence of points, which begin when one of the player
 + Find the proportion of time that player 1 is the server.
 
 ====
-Let $X_n in {1,2}$ be the server in game $n$. The transition matrix is then $ mat(p, 1-p; q, 1-q) $ with stationary distribution $ pi_1 = q/(1+q-p), quad pi_2 = (1-p)/(1+q-p). $
+Let $X_n in {1,2}$ be the server in game $n$. The transition matrix is then $ bold(P) = mat(p, 1-p; q, 1-q) $ and the stationary distribution $ pi(bold(P)) = mat(q/(1+q-p), (1-p)/(1+q-p)). $
 
 Because a player becomes the server when she wins a point, the proportion of points she won is the same as the proportion of time served. For player 1 this proportion is $pi_1 = q/(1+q-p)$.
+
+
+=== 4.34
+A flea moves around the vertices of a triangle in the following manner: Whenever it is at vertex $i$ it moves to its clockwise neighbor vertex with probability $p_i$ and to the counterclockwise neighbor with probability $q_i = 1 - p_i, i = 1,2,3$.
+
++ Find the proportion of time that the flea is at each of the vertices.
+
++ How often does the flea make a counterclockwise move that is then followed by five consecutive clockwise moves?
+
+
+=== 4.35
+Consider a Markov chain with states $0, 1, 2, 3, 4$. Suppose $P_(0,4) = 1$; and suppose that when the chain is in state $i,i > 0$, the next state is equally likely to be any of the states $0,1,...,i-1$. Find the limiting probabilities of this Markov chain.
+
+====
+$
+  bold(P) = mat(
+    0,    0,    0,    0,    1;
+    1,    0,    0,    0,    0;
+    1\/2, 1\/2, 0,    0,    0;
+    1\/3, 1\/3, 1\/3, 0,    0;
+    1\/4, 1\/4, 1\/4, 1\/4, 0).
+$
+
+It's easy to check that the chain is both irreducible and aperiodic, so the limiting probabilities follow the stationary distribution
+$ P^oo_(i,dot) = pi(bold(P)) = mat(12, 6, 4, 3, 12) \/ 37. $
+
+
+=== 4.36
+The state of a process changes daily according to a two-state Markov chain. If the process is in state $i$ during one day, then it is in state $j$ the following day with probability $P_(i,j)$, where
+$ P_(0,0) = 0.4, quad P_(0,1) = 0.6, quad P_(1,0) = 0.2, quad P_(1,1) = 0.8 $
+
+Every day a message is sent. If the state of the Markov chain that day is $i$ then the message sent is "good" with probability $p_i$ and is "bad" with probability $q_i = 1 - p_i, i = 0,1$.
+
++ If the process is in state $0$ on Monday, what is the probability that a good message is sent on Tuesday?
+
++ If the process is in state $0$ on Monday, what is the probability that a good message is sent on Friday?
+
++ In the long run, what proportion of messages are good?
+
++ Let $Y_n$ equal $1$ if a good message is sent on day $n$ and let it equal $2$ otherwise. Is ${Y_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix. If not, briefly explain why not.
+
+
+====
++ $
+    mat(1,0) dot bold(P) dot vec(p_0, p_1) = 0.4 thin p_0 + 0.6 thin p_1
+  $
+
++ $
+    mat(1,0) dot bold(P)^4 dot vec(p_0, p_1) = 0.2512 thin p_0 + 0.7488 thin p_1
+  $
+
++ $
+    pi(bold(P)) dot vec(p_0, p_1) = 0.25 thin p_0 + 0.75 thin p_1
+  $
+
++ No, because knowing $Y_n$ cannot determine the probability of $Y_(n+1)$, since the underlying process could be in either the $0$ or $1$ state.

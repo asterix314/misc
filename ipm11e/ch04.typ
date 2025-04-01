@@ -958,11 +958,68 @@ A flea moves around the vertices of a triangle in the following manner: Whenever
 
 + How often does the flea make a counterclockwise move that is then followed by five consecutive clockwise moves?
 
+====
+Let $X_n$ denote the vertex the flea has arrived after $n$ moves. 
+
+#grid(
+  columns:  (1fr, 1fr),
+  align: center + horizon,
+  gutter: 1em,
+  $
+    bold(P) = mat(
+      0,    q_1,  p_1;
+      p_2,  0,    q_2;
+      q_3,  p_3,  0
+    )
+  $,
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    $
+      &1 
+      edge("dl",->, q_1, label-side: #center) 
+      edge("dr",->, p_1, bend: #50deg, label-side: #center) \
+      2 
+      edge("rr", ->, q_2, label-side: #center) 
+      edge("ur", ->, p_2, bend: #50deg, label-side: #center) 
+      &&3
+      edge("ul", ->, q_3, label-side: #center)
+      edge("ll", ->, p_3, bend: #40deg, label-side: #center) 
+    $
+    )
+)
+
++ The proportions of time are the stationary probabilities
+  $
+    pi(bold(P)) = vec(
+      1 - q_2 p_3,
+      1 - p_1 q_3, 
+      1 - q_1 p_2
+    )^"T" \/ (3 - p_2 q_3 - p_3 + p_1 (p_2 + p_3 - 1))
+  $
+
++ Depending on the starting state, the probabilities are:
+  #figure(table(
+    columns: 2,
+    stroke: none,
+    $i$, table.vline(), table.hline(),
+          $Pr{arrow.ccw #box($arrow.cw$)^5 | "starts from" i}$,
+    $1$,  $pi_1 q_1 p_2^2 p_1^2 p_3$,
+    $2$,  $pi_2 q_2 p_3^2 p_2^2 p_1$,
+    $3$,  $pi_3 q_3 p_1^2 p_3^2 p_2$
+  ))
+
+  Therefore on average, the flea makes a counterclockwise move followed by five consecutive clockwise moves once every
+  $
+    1\/(pi_1 q_1 p_2^2 p_1^2 p_3 + pi_2 q_2 p_3^2 p_2^2 p_1 + pi_3 q_3 p_1^2 p_3^2 p_2)
+  $
+  moves.
 
 === 4.35
 Consider a Markov chain with states $0, 1, 2, 3, 4$. Suppose $P_(0,4) = 1$; and suppose that when the chain is in state $i,i > 0$, the next state is equally likely to be any of the states $0,1,...,i-1$. Find the limiting probabilities of this Markov chain.
 
 ====
+The transition matrix
 $
   bold(P) = mat(
     0,    0,    0,    0,    1;
@@ -973,7 +1030,9 @@ $
 $
 
 It's easy to check that the chain is both irreducible and aperiodic, so the limiting probabilities follow the stationary distribution
-$ P^oo_(i,dot) = pi(bold(P)) = mat(12, 6, 4, 3, 12) \/ 37. $
+$ 
+  P^oo_(i,dot) = pi(bold(P)) = mat(12, 6, 4, 3, 12) \/ 37. 
+$
 
 
 === 4.36

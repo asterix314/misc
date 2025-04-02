@@ -13,11 +13,11 @@
 
 #set par(justify: true)
 
-#show heading.where(
-  level: 3
-): it => text(
-  [Exercise ] + it.body,
-)
+// #show heading.where(
+//   level: 3
+// ): it => text(
+//   [Exercise ] + it.body,
+// )
 
 #show heading.where(
   level: 4
@@ -34,15 +34,25 @@
   [Hint: ] + content
 }
 
+#show heading.where(level: 3): it => {
+  grid(
+    columns: 2,
+    gutter: 1em,
+    align: horizon,
+    [],[],
+    [Exercise #it.body], line(length: 100%, stroke: .7pt)
+  )
+}
+
 
 == Markov Chains
 
 === 4.1
 Three white and three black balls are distributed in two urns in such a way that each contains three balls. We say that the system is in state $i$, $i = 0,1,2,3$, if the first urn contains $i$ white balls. At each step, we draw one ball from each urn and place the ball drawn from the first urn into the second, and conversely with the ball from the second urn. Let $X_n$ denote the state of the system after the $n$th step. Explain why ${X_n, n = 0,1,2,...}$ is a Markov chain and calculate its transition probability matrix.
 
-==== 
-It is a Markov chain because $X_(n+1)$ depends only on $X_n$. To see this, note that $X_n$ determines, in turn:
-#[#set enum(numbering: "1.")
+====
+It is a Markov chain because $X_(n+1)$ depends only on $X_n$. To see this, note that $X_n$ determines, in turn: #[
+#set enum(numbering: "1.")
 + the number of white and black balls in both urns, and so
 + the probabilities of the color of the balls drawn, and so
 + the probabilities of the new state after the balls are switched.
@@ -1064,3 +1074,47 @@ Every day a message is sent. If the state of the Markov chain that day is $i$ th
   $
 
 + No, because knowing $Y_n$ cannot determine the probability of $Y_(n+1)$, since the underlying process could be in either the $0$ or $1$ state.
+
+=== 4.37
+Show that the stationary probabilities for the Markov chain having transition probabilities $P_(i,j)$ are also the stationary probabilities for the Markov chain whose transition probabilities $Q_(i,j)$ are given by $ Q_(i,j) = P^k_(i,j) $ for any specified positive integer $k$.
+
+====
+$
+   pi(bold(P)) dot bold(Q) = pi(bold(P)) dot bold(P)^k = pi(bold(P)) dot bold(P)^(k-1) = ... = pi(bold(P)).
+$
+
+=== 4.38
+Capa plays either one or two chess games every day, with the number of games that she plays on successive days being a Markov chain with transition probabilities
+$
+  P_(1,1) = 0.2, quad  P_(1,2) = 0.8, quad P_(2,1) = 0.4, quad P_(2,2) = 0.6
+$
+
+Capa wins each game with probability $p$. Suppose she plays two games on Monday.
+
++ What is the probability that she wins all the games she plays on Tuesday?
+
++ What is the expected number of games that she plays on Wednesday?
+
++ In the long run, on what proportion of days does Capa win all her games.
+
+=== 4.39
+Consider the one-dimensional symmetric random walk of Example 4.19, which was shown in that example to be recurrent. Let $pi_i$ denote the long-run proportion of time that the chain is in state $i$.
+
++ Argue that $pi_i = pi_0$ for all $i$.
+
++ Show that $sum_i pi_i !=1$.
+
++ Conclude that this Markov chain is null recurrent, and thus all $pi_i = 0$.
+
+=== 4.40
+A particle moves on 12 points situated on a circle. At each step it is equally likely to move one step in the clockwise or in the counterclockwise direction. Find the mean number of steps for the particle to return to its starting position.
+
+
+=== 4.41
+Consider a Markov chain with states equal to the nonnegative integers, and suppose its transition probabilities satisfy $P_(i,j) = 0$ if $j <= i$. Assume $X_0 = 0$, and let $e_j$ be the probability that the Markov chain is ever in state $j$. (Note that
+$e_0 = 1$ because $X_0 = 0$.) Argue that for $j > 0$
+$
+  e_j = sum^(j-1)_(i=0) e_i P_(i,j)
+$
+
+If $P_(i,i+k) = 1\/3, thick k = 1,2,3$, find $e_i$ for $i = 1, ..., 10$.

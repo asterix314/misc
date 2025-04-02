@@ -812,21 +812,37 @@ of individuals that are active in period $n$.
     columns: 3,
     stroke: none,
     $Y_n without Y_(n+1)$, table.vline(), table.hline(),
-                    [*active*], [*inactive*],
-    [*active*],     $alpha$,    $1 - alpha$,
-    [*inactive*],   $1 - beta$, $beta$,
+                    [*1*], [*2*],
+    [*1*],     $alpha$,    $1 - alpha$,
+    [*2*],   $1 - beta$, $beta$,
     ),
+    caption: [1=active, 2=inactive]
   )
 
-  Initially there are $i$ active and $N-i$ inactive individuals.
-
+  So $Q^n_(1,1)$ is the probability of being active after $n$ periods, given that the individual was initially active; and $Q^n_(2,1)$ is the probability of being active, given that she was initially inactive. It follows that 
   $
-    mat(i, N-i) dot mat(alpha, 1-alpha; 1-beta, beta)^n
+    EE[X_n | X_0 = i] &= i Q^n_(1,1) + (N-i) Q^n_(2,1) \
+    &= i (alpha + beta -1)^n + (N(1-beta)(1-(alpha + beta - 1)^n))/(2 - alpha - beta)
+    
   $
 
-+  
++ For the number of active individuals to change from $i$ to $j$ in one step, it must be the case that
+  - $k$ of the $i$ active individuals remain active, for some $k tilde "Bin"(i, alpha)$; and
+  - $j-k$ of the $N-i$ inactive individuals become active, for some $(j-k) tilde.op "Bin"(N-i, 1-beta)$.
 
-+
+  And so the total probability is to sum up all the $k$:
+  $
+    P_(i,j) = sum^j_(k=0) 
+    binom(i, k) alpha^k (1-alpha)^(i-k)
+    binom(N-i, j-k) beta^(N-i-j+k) (1-beta)^(j-k)
+  $
+
++ It is infeasable to directly solve for $pi(bold(P))$ based on $bold(P)$. But in the long run, each individual is an iid Bernoulli with $mat(p, 1-p) = pi(bold(Q))$ yielding
+  $ p = (1-beta)/(2 - alpha - beta) $
+  And therefore $pi(bold(P))$ must be $"Bin"(N, p)$. That is,
+  $
+    Pr{X_oo = j} = binom(N, j) p^j (1-p)^(N-j)
+  $
 
 
 === 4.28
@@ -1096,6 +1112,18 @@ Capa wins each game with probability $p$. Suppose she plays two games on Monday.
 + What is the expected number of games that she plays on Wednesday?
 
 + In the long run, on what proportion of days does Capa win all her games.
+
+====
+$
+  bold(P) = mat(.2, .8; .4, .6).
+$
+
++ $ mat(0, 1) dot bold(P) dot vec(p, p^2) = 0.4 thin p + 0.6 thin p^2 $
+
++ $ mat(0, 1) dot bold(P)^2 dot vec(1, 2) = 1.68 $
+
++ $ pi(bold(P)) dot vec(p, p^2) = p/3 + (2 p^2)/3 $
+
 
 === 4.39
 Consider the one-dimensional symmetric random walk of Example 4.19, which was shown in that example to be recurrent. Let $pi_i$ denote the long-run proportion of time that the chain is in state $i$.

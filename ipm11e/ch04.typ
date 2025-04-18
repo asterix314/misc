@@ -725,11 +725,10 @@ There are 2 states, "good" and "bad", and the transition matrix is
   So the long-run average storms per year is 
   $ 2/5 dot 1 + 3/5 dot 3 = 11/5. $
 
-+ $ 
++ $display(
     & 2/5 dot e^(-1) 1^0/0!  + 3/5 dot e^(-3) 3^0/0! \
    =& 2/5 e^(-1) + 3/5 e^(-3) \
-   approx& 0.1770
-  $
+   approx& 0.1770)$
 
 === 4.24
 Consider three urns, one colored red, one white, and one blue. The red urn contains 1 red and 4 blue balls; the white urn contains 3 white balls, 2 red balls, and 2 blue balls; the blue urn contains 4 white balls, 3 red balls, and 2 blue balls. At the initial stage, a ball is randomly selected from the red urn and then returned to that urn. At every subsequent stage, a ball is randomly selected from the urn whose color is the same as that of the ball previously selected and is then returned to that urn. In the long run, what proportion of the selected balls are red? What proportion are white? What proportion are blue?
@@ -909,13 +908,11 @@ $
   pi_"WW" = .3, quad pi_"LW" = .2, quad pi_"WL" = .2, quad pi_"LL" = .3
 $
 
-+ $
-  pi_"WW" dot 1 + (pi_"LW" + pi_"WL") dot 1/2  = .5
-  $
++ $display(
+  pi_"WW" dot 1 + (pi_"LW" + pi_"WL") dot 1/2  = .5)$
 
-+ $ 
-  (pi_"WL" dot P_("WL","LW") + pi_"LL" dot P_("LL", "LW"))/(pi_"WL" + pi_"LL")  = .4
-  $
++ $display(
+  (pi_"WL" dot P_("WL","LW") + pi_"LL" dot P_("LL", "LW"))/(pi_"WL" + pi_"LL")  = .4)$
 
 
 === 4.31
@@ -1077,17 +1074,14 @@ Every day a message is sent. If the state of the Markov chain that day is $i$ th
 
 
 ====
-+ $
-    mat(1,0) dot bold(P) dot vec(p_0, p_1) = 0.4 thin p_0 + 0.6 thin p_1
-  $
++ $display(
+    mat(1,0) dot bold(P) dot vec(p_0, p_1) = 0.4 thin p_0 + 0.6 thin p_1)$
 
-+ $
-    mat(1,0) dot bold(P)^4 dot vec(p_0, p_1) = 0.2512 thin p_0 + 0.7488 thin p_1
-  $
++ $display(
+    mat(1,0) dot bold(P)^4 dot vec(p_0, p_1) = 0.2512 thin p_0 + 0.7488 thin p_1)$
 
-+ $
-    pi(bold(P)) dot vec(p_0, p_1) = 0.25 thin p_0 + 0.75 thin p_1
-  $
++ $display(
+    pi(bold(P)) dot vec(p_0, p_1) = 0.25 thin p_0 + 0.75 thin p_1)$
 
 + No, because knowing $Y_n$ cannot determine the probability of $Y_(n+1)$, since the underlying process could be in either the $0$ or $1$ state.
 
@@ -1118,11 +1112,11 @@ $
   bold(P) = mat(.2, .8; .4, .6).
 $
 
-+ $ mat(0, 1) dot bold(P) dot vec(p, p^2) = 0.4 thin p + 0.6 thin p^2 $
++ $display(mat(0, 1) dot bold(P) dot vec(p, p^2) = 0.4 thin p + 0.6 thin p^2)$
 
-+ $ mat(0, 1) dot bold(P)^2 dot vec(1, 2) = 1.68 $
++ $display(mat(0, 1) dot bold(P)^2 dot vec(1, 2) = 1.68)$
 
-+ $ pi(bold(P)) dot vec(p, p^2) = p/3 + (2 p^2)/3 $
++ $display(pi(bold(P)) dot vec(p, p^2) = p/3 + (2 p^2)/3)$
 
 
 === 4.39
@@ -1134,15 +1128,82 @@ Consider the one-dimensional symmetric random walk of Example 4.19, which was sh
 
 + Conclude that this Markov chain is null recurrent, and thus all $pi_i = 0$.
 
+====
++ $pi_i = pi_0$ follows from the standpoint of symmetry.
+
++ $display(sum_i pi_i = sum_i pi_0 = cases(
+    0\, quad &"if" pi_0 = 0,
+    oo\, quad &"if" pi_0 > 0
+  ))$
+
++ Because there is no solution to $sum_i pi_i =1$ and the Markov chain is clearly recurrent, by Theorem 4.1 we conclude that it is null recurrent and all $pi_i = 0$. 
+
 === 4.40
 A particle moves on 12 points situated on a circle. At each step it is equally likely to move one step in the clockwise or in the counterclockwise direction. Find the mean number of steps for the particle to return to its starting position.
 
+====
+By symmetry, $pi_i = 1\/12$. Therefore the mean number of steps for the particle to return to its starting position $m_i = 1\/pi_i = 12$.
+
 
 === 4.41
-Consider a Markov chain with states equal to the nonnegative integers, and suppose its transition probabilities satisfy $P_(i,j) = 0$ if $j <= i$. Assume $X_0 = 0$, and let $e_j$ be the probability that the Markov chain is ever in state $j$. (Note that
-$e_0 = 1$ because $X_0 = 0$.) Argue that for $j > 0$
+Consider a Markov chain with states equal to the nonnegative integers, and suppose its transition probabilities satisfy $P_(i,j) = 0$ if $j <= i$. Assume $X_0 = 0$, and let $e_j$ be the probability that the Markov chain is ever in state $j$. (Note that $e_0 = 1$ because $X_0 = 0$.) Argue that for $j > 0$
 $
   e_j = sum^(j-1)_(i=0) e_i P_(i,j)
 $
 
 If $P_(i,i+k) = 1\/3, thick k = 1,2,3$, find $e_i$ for $i = 1, ..., 10$.
+
+====
+It is obvious that $ e_j = sum^(j-1)_(i=0) e_i P_(i,j)$. And from $e_0 = 1$, we have 
+$
+e_1 &= 1\/3 \
+e_2 &= 1/3 (1+1/3) = 4/9 \
+e_3 &= 1/3 (1 + 1/3 + 4/9) = 16/27 \
+&...
+$
+and so on. ($e_i$ is $1\/3$ of the sum of its 3 predecessors)
+
+
+
+=== 4.42
+Let $A$ be a set of states, and let $A^c$ be the remaining states.
+
++ What is the interpretation of $sum_(i in A) sum_(j in A^c) pi_i P_(i,j)$?
+
++ What is the interpretation of $sum_(i in A^c) sum_(j in A) pi_i P_(i,j)$ ?
+
++ Explain the identity
+  $ sum_(i in A) sum_(j in A^c) pi_i P_(i,j) = sum_(i in A^c) sum_(j in A) pi_i P_(i,j) $
+
+
+=== 4.43
+Each day, one of $n$ possible elements is requested, the $i$th one with probability $P_i,i >= 1, sum^n_1 P_i = 1$. These elements are at all times arranged in an ordered list that is revised as follows: The element selected is moved to the front of the list with the relative positions of all the other elements remaining unchanged. Define the state at any time to be the list ordering at that time and note that there are $n!$ possible states.
+
++ Argue that the preceding is a Markov chain.
+
++ For any state $i_1,...,i_n$ (which is a permutation of $1,2,...,n$), let $pi(i_1,...,i_n)$ denote the limiting probability. In order for the state to be $i_1,...,i_n$, it is necessary for the last request to be for $i_1$, the last non-$i_1$ request for $i_2$, the last non-$i_1$ or $i_2$ request for $i_3$, and so on. Hence, it appears intuitive that
+  $
+  pi(i_1,...,i_n) = P_(i_1) P_(i_2)/(1 - P_(i_1)) P_(i_3)/(1 - P_(i_1) - P_(i_2)) ... P_(i_(n-1))/(1 - P_(i_1) - ... - P_(i_(n-2)))
+  $
+  Verify when $n = 3$ that the preceding are indeed the limiting probabilities.
+
+
+
+#pagebreak()
+
+= scratch
+
+#figure(diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    node-shape: circle,
+    node((2,0), [甲丙 \ 丁戊], name: <甲>),
+    edge("->", $1\/4$, label-side: center, bend: 50deg),
+    edge(<甲>, "->", $3\/4$, label-side: center, bend: -310deg, loop-angle: 0deg),
+    node((0, 0), [乙], name: <乙>),
+    edge(<甲>, "->", $1$, label-side: center, bend: 50deg)
+  ),
+  caption: $a_0 = 0, a_1 = 1/4, \
+  a_n = 3/4 a_(n-1) + 1/4 (1 + a_(n-2))$
+)
+

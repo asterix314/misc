@@ -1146,14 +1146,46 @@ By symmetry, $pi_i = 1\/12$. Therefore the mean number of steps for the particle
 
 
 === 4.41
-Consider a Markov chain with states equal to the nonnegative integers, and suppose its transition probabilities satisfy $P_(i,j) = 0$ if $j <= i$. Assume $X_0 = 0$, and let $e_j$ be the probability that the Markov chain is ever in state $j$. (Note that
-$e_0 = 1$ because $X_0 = 0$.) Argue that for $j > 0$
+Consider a Markov chain with states equal to the nonnegative integers, and suppose its transition probabilities satisfy $P_(i,j) = 0$ if $j <= i$. Assume $X_0 = 0$, and let $e_j$ be the probability that the Markov chain is ever in state $j$. (Note that $e_0 = 1$ because $X_0 = 0$.) Argue that for $j > 0$
 $
   e_j = sum^(j-1)_(i=0) e_i P_(i,j)
 $
 
 If $P_(i,i+k) = 1\/3, thick k = 1,2,3$, find $e_i$ for $i = 1, ..., 10$.
 
+====
+It is obvious that $ e_j = sum^(j-1)_(i=0) e_i P_(i,j)$. And from $e_0 = 1$, we have 
+$
+e_1 &= 1\/3 \
+e_2 &= 1/3 (1+1/3) = 4/9 \
+e_3 &= 1/3 (1 + 1/3 + 4/9) = 16/27 \
+&...
+$
+and so on. ($e_i$ is $1\/3$ of the sum of its 3 predecessors)
+
+
+
+=== 4.42
+Let $A$ be a set of states, and let $A^c$ be the remaining states.
+
++ What is the interpretation of $sum_(i in A) sum_(j in A^c) pi_i P_(i,j)$?
+
++ What is the interpretation of $sum_(i in A^c) sum_(j in A) pi_i P_(i,j)$ ?
+
++ Explain the identity
+  $ sum_(i in A) sum_(j in A^c) pi_i P_(i,j) = sum_(i in A^c) sum_(j in A) pi_i P_(i,j) $
+
+
+=== 4.43
+Each day, one of $n$ possible elements is requested, the $i$th one with probability $P_i,i >= 1, sum^n_1 P_i = 1$. These elements are at all times arranged in an ordered list that is revised as follows: The element selected is moved to the front of the list with the relative positions of all the other elements remaining unchanged. Define the state at any time to be the list ordering at that time and note that there are $n!$ possible states.
+
++ Argue that the preceding is a Markov chain.
+
++ For any state $i_1,...,i_n$ (which is a permutation of $1,2,...,n$), let $pi(i_1,...,i_n)$ denote the limiting probability. In order for the state to be $i_1,...,i_n$, it is necessary for the last request to be for $i_1$, the last non-$i_1$ request for $i_2$, the last non-$i_1$ or $i_2$ request for $i_3$, and so on. Hence, it appears intuitive that
+  $
+  pi(i_1,...,i_n) = P_(i_1) P_(i_2)/(1 - P_(i_1)) P_(i_3)/(1 - P_(i_1) - P_(i_2)) ... P_(i_(n-1))/(1 - P_(i_1) - ... - P_(i_(n-2)))
+  $
+  Verify when $n = 3$ that the preceding are indeed the limiting probabilities.
 
 
 

@@ -1008,8 +1008,7 @@ Let $X_n$ denote the vertex the flea has arrived after $n$ moves.
       &&3
       edge("ul", ->, q_3, label-side: #center)
       edge("ll", ->, p_3, bend: #40deg, label-side: #center) 
-    $
-    )
+    $)
 )
 
 + The proportions of time are the stationary probabilities
@@ -1154,26 +1153,57 @@ $
 If $P_(i,i+k) = 1\/3, thick k = 1,2,3$, find $e_i$ for $i = 1, ..., 10$.
 
 ====
-It is obvious that $ e_j = sum^(j-1)_(i=0) e_i P_(i,j)$. And from $e_0 = 1$, we have 
+It is obvious that $ e_j = sum^(j-1)_(i=0) e_i P_(i,j)$. And from $e_0 = 1$, we have the recurrence
 $
 e_1 &= 1\/3 \
 e_2 &= 1/3 (1+1/3) = 4/9 \
-e_3 &= 1/3 (1 + 1/3 + 4/9) = 16/27 \
-&...
+e_i &= 1/3(e_(i-1) + e_(i-2) + e_(i-3))
 $
-and so on. ($e_i$ is $1\/3$ of the sum of its 3 predecessors)
-
+which has the solution
+$
+  e_n = 1/4 ((-1/3 - (i sqrt(2))/3)^n + (-1/3 + (i sqrt(2))/3)^n + 2)
+$
+And
+$
+  {e_n} = {1, 1/3, 4/9, 16/27, 37/81, 121/243, 376/729, 1072/2187, 3289/6561, 9889/19683, 29404/59049, ...}
+$
 
 
 === 4.42
 Let $A$ be a set of states, and let $A^c$ be the remaining states.
 
-+ What is the interpretation of $sum_(i in A) sum_(j in A^c) pi_i P_(i,j)$?
++ What is the interpretation of $sum_(i in A) sum_(j in A^c) pi_i P_(i,j)$ ?
 
 + What is the interpretation of $sum_(i in A^c) sum_(j in A) pi_i P_(i,j)$ ?
 
 + Explain the identity
   $ sum_(i in A) sum_(j in A^c) pi_i P_(i,j) = sum_(i in A^c) sum_(j in A) pi_i P_(i,j) $
+
+====
+If we the states in $A$ are collapsed into a single state and the rest into another state $A^c$, the Markov chain simplifies to:
+
+#figure(
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    node-shape: circle,
+    node((1,0), $A^c$, name: <Ac>),
+    edge("->", label-side: center, bend: 40deg),
+    edge(<Ac>, "->", label-side: center, bend: -320deg, loop-angle: 0deg),
+    node((0, 0), $A$, name: <A>),
+    edge(<Ac>, "->", label-side: center, bend: 40deg),
+    edge(<A>, "->", label-side: center, bend: 320deg, loop-angle: 0deg)
+  ),
+  caption: [collapsed Markov chain]
+)
+
+It is then easy to see that
+
++ $sum_(i in A) sum_(j in A^c) pi_i P_(i,j) = pi_A P_(A, A^c)$ is the long-run rate of transitions from $A$ to $A^c$.
+
++ $sum_(i in A^c) sum_(j in A) pi_i P_(i,j) = pi_(A^c) P_(A^c,A)$ is the long-run rate of transitions from $A^c$ to $A$.
+
++ The above 2 rates must be equal for the static proportions $pi_A$ and $pi_(A^c)$ to remain constant --- whatever goes out must be replenished fully by what comes in.
 
 
 === 4.43
@@ -1187,7 +1217,50 @@ Each day, one of $n$ possible elements is requested, the $i$th one with probabil
   $
   Verify when $n = 3$ that the preceding are indeed the limiting probabilities.
 
+=== 4.44
+Suppose that a population consists of a fixed number, say, $m$, of genes in any generation. Each gene is one of two possible genetic types. If exactly $i$ (of the
+$m$) genes of any generation are of type 1, then the next generation will have $j$ type 1 (and $m-j$ type 2) genes with probability
+$
+  binom(m,j) (i/m)^j ((m-i)/m)^(m-j), quad j=0,1, ... m
+$
 
+Let $X_n$ denote the number of type 1 genes in the $n$th generation, and assume that $X_0 = i$.
+
++ Find $EE[X_n]$.
+
++ What is the probability that eventually all the genes will be type 1?
+
+=== 4.45
+Consider an irreducible finite Markov chain with states $0,1,...,N$.
+
++ Starting in state $i$, what is the probability the process will ever visit state $j$? Explain!
+
++ Let $x_i = Pr{"visit state" N "before state" 0 | "start in" i}$. Compute a set of linear equations that the $x_i$ satisfy, $i = 0,1,...,N$.
+
++ If $sum_j j thin P_(i j)$ for $i = 1,...,N - 1$, show that $x_i = i\/N$ is a solution to the equations in part (b).
+
+=== 4.46
+An individual possesses $r$ umbrellas that he employs in going from his home to office, and vice versa. If he is at home (the office) at the beginning (end) of a day and it is raining, then he will take an umbrella with him to the office
+(home), provided there is one to be taken. If it is not raining, then he never takes an umbrella. Assume that, independent of the past, it rains at the beginning (end) of a day with probability $p$.
+
++ Define a Markov chain with $r + 1$ states, which will help us to determine the proportion of time that our man gets wet. (_Note_: He gets wet if it is raining, and all umbrellas are at his other location.)
+
++ Show that the limiting probabilities are given by
+  $
+    pi_i = cases(
+      q/(r+q)\, quad "if" i = 0,
+      1/(r+q)\, quad "if" i = 1\,2\,...\,r
+    )
+  $
+  where $q = 1-p$.
+
++ What fraction of time does our man get wet?
+
++ When $r = 3$, what value of $p$ maximizes the fraction of time he gets wet?
+
+=== 4.47
+Let ${X_n,n >= 0}$ denote an ergodic Markov chain with limiting probabilities $pi_i$. Define the process ${Y_n,n >= 1}$ by $Y_n = (X_(n−1),X_n)$. That is, $Y_n$ keeps track of
+the last two states of the original chain. Is ${Y_n,n >= 1}$ a Markov chain? If so, determine its transition probabilities and find $ lim_(n -> oo) Pr{Y_n = (i,j)} $
 
 #pagebreak()
 

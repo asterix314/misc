@@ -1217,9 +1217,55 @@ Each day, one of $n$ possible elements is requested, the $i$th one with probabil
   $
   Verify when $n = 3$ that the preceding are indeed the limiting probabilities.
 
+====
++ It is a Markov chain because the next state (list) depends only on the current state (and the element chosen) and not any previous states.
+
++ For $n=3$, the transition matrix $bold(P)$ is
+
+  #figure(
+  table(
+    columns: 7,
+    stroke: none,
+    $X_n without X_(n+1)$, table.hline(), table.vline(),
+              [*123*], [*132*], [*213*], [*231*], [*312*], [*321*],
+    [*123*],  $P_1$,   $0$,     $P_2$,   $0$,     $P_3$,   $0$,
+    [*132*],  $0$,     $P_1$,   $P_2$,   $0$,     $P_3$,   $0$,
+    [*213*],  $P_1$,   $0$,     $P_2$,   $0$,     $0$,     $P_3$,
+    [*231*],  $P_1$,   $0$,     $0$,     $P_2$,   $0$,     $P_3$,
+    [*312*],  $0$,     $P_1$,   $0$,     $P_2$,   $P_3$,   $0$,
+    [*321*],  $0$,     $P_1$,   $0$,     $P_2$,   $0$,     $P_3$)  
+  )
+
+  On the other hand $pi(i_1,i_2,i_3) = (P_(i_1) P_(i_2))\/(1 - P_(i_1))$. Therefore
+  $
+    bold(pi) dot bold(P) &= mat(
+      (P_1 P_2)/(1 - P_1), 
+      (P_1 P_3)/(1 - P_1),
+      (P_2 P_1)/(1 - P_2),
+      (P_2 P_3)/(1 - P_2),
+      (P_3 P_1)/(1 - P_3),
+      (P_3 P_2)/(1 - P_3)) dot mat(
+        P_1, 0,   P_2,  0,  P_3, 0;
+        0,   P_1, P_2,  0,  P_3, 0;
+        P_1, 0,   P_2,  0,  0,   P_3;
+        P_1, 0,   0,    P_2,0,   P_3;
+        0,   P_1, 0,    P_2,P_3, 0;
+        0,   P_1, 0,    P_2,0,   P_3) \
+    &= mat(
+      (P_1 P_2)/(1 - P_1), 
+      (P_1 P_3)/(1 - P_1),
+      (P_2 P_1)/(1 - P_2),
+      (P_2 P_3)/(1 - P_2),
+      (P_3 P_1)/(1 - P_3),
+      (P_3 P_2)/(1 - P_3)) \
+    &= bold(pi)
+  $
+
+  So $bold(pi)$ is indeed the limiting probabilities.
+
+
 === 4.44
-Suppose that a population consists of a fixed number, say, $m$, of genes in any generation. Each gene is one of two possible genetic types. If exactly $i$ (of the
-$m$) genes of any generation are of type 1, then the next generation will have $j$ type 1 (and $m-j$ type 2) genes with probability
+Suppose that a population consists of a fixed number, say, $m$, of genes in any generation. Each gene is one of two possible genetic types. If exactly $i$ (of the $m$) genes of any generation are of type 1, then the next generation will have $j$ type 1 (and $m-j$ type 2) genes with probability
 $
   binom(m,j) (i/m)^j ((m-i)/m)^(m-j), quad j=0,1, ... m
 $
@@ -1240,8 +1286,7 @@ Consider an irreducible finite Markov chain with states $0,1,...,N$.
 + If $sum_j j thin P_(i j)$ for $i = 1,...,N - 1$, show that $x_i = i\/N$ is a solution to the equations in part (b).
 
 === 4.46
-An individual possesses $r$ umbrellas that he employs in going from his home to office, and vice versa. If he is at home (the office) at the beginning (end) of a day and it is raining, then he will take an umbrella with him to the office
-(home), provided there is one to be taken. If it is not raining, then he never takes an umbrella. Assume that, independent of the past, it rains at the beginning (end) of a day with probability $p$.
+An individual possesses $r$ umbrellas that he employs in going from his home to office, and vice versa. If he is at home (the office) at the beginning (end) of a day and it is raining, then he will take an umbrella with him to the office (home), provided there is one to be taken. If it is not raining, then he never takes an umbrella. Assume that, independent of the past, it rains at the beginning (end) of a day with probability $p$.
 
 + Define a Markov chain with $r + 1$ states, which will help us to determine the proportion of time that our man gets wet. (_Note_: He gets wet if it is raining, and all umbrellas are at his other location.)
 
@@ -1259,8 +1304,58 @@ An individual possesses $r$ umbrellas that he employs in going from his home to 
 + When $r = 3$, what value of $p$ maximizes the fraction of time he gets wet?
 
 === 4.47
-Let ${X_n,n >= 0}$ denote an ergodic Markov chain with limiting probabilities $pi_i$. Define the process ${Y_n,n >= 1}$ by $Y_n = (X_(n−1),X_n)$. That is, $Y_n$ keeps track of
-the last two states of the original chain. Is ${Y_n,n >= 1}$ a Markov chain? If so, determine its transition probabilities and find $ lim_(n -> oo) Pr{Y_n = (i,j)} $
+Let ${X_n,n >= 0}$ denote an ergodic Markov chain with limiting probabilities $pi_i$. Define the process ${Y_n,n >= 1}$ by $Y_n = (X_(n−1),X_n)$. That is, $Y_n$ keeps track of the last two states of the original chain. Is ${Y_n,n >= 1}$ a Markov chain? If so, determine its transition probabilities and find $ lim_(n -> oo) Pr{Y_n = (i,j)} $
+
+
+=== 4.48
+Consider a Markov chain in steady state. Say that a $k$ length run of zeroes ends at time $m$ if
+$
+  X_(m-k-1) != 0, quad X_(m-k) = X_(m-k+1) = ... = X_(m−1) = 0, quad X_m != 0
+$
+Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
+
+
+=== 4.49
+Consider a Markov chain with states $1,2,3$ having transition probability matrix
+$
+  mat(
+    0.5, 0.3,0.2;
+    0, 0.4, 0.6;
+    0.8, 0, 0.2)
+$
+
+1. If the chain is currently in state $1$, find the probability that after two transitions it will be in state $2$.
+
+2. Suppose you receive a reward $r(i) = i^2$ whenever the Markov chain is in state $i, i = 1,2,3$. Find your long run average reward per unit time.
+
+Let $N_i$ denote the number of transitions, starting in state $i$, until the Markov chain enters state $3$.
+
+3. Find $EE[N_1]$.
+
++ Find $Pr(N_1 <= 4)$.
+
++ Find $Pr(N_1 = 4)$.
+
+=== 4.50
+A Markov chain with states $1,...,6$ has transition probability matrix
+$ 
+  mat(
+    0.2, 0.4, 0, 0.3, 0, 0.1;
+    0.1, 0.3, 0, 0.4, 0, 0.2;
+    0, 0, 0.3, 0.7, 0, 0;
+    0, 0, 0.6, 0.4, 0, 0;
+    0, 0, 0, 0, 0.5, 0.5;
+    0, 0, 0, 0, 0.2,0.8)
+$
+
++ Give the classes and tell which are recurrent and which are transient.
+
++ Find $lim_(n->oo) P^n_(1,2)$.
+
++ Find $lim_(n->oo) P^n_(5,6)$.
+
++ Find $lim_(n->oo) P^n_(1,3)$.
+
 
 #pagebreak()
 

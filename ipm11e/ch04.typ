@@ -827,7 +827,7 @@ of individuals that are active in period $n$.
 
 + For the number of active individuals to change from $i$ to $j$ in one step, it must be the case that
   - $k$ of the $i$ active individuals remain active, for some $k tilde "Bin"(i, alpha)$; and
-  - $j-k$ of the $N-i$ inactive individuals become active, for some $(j-k) tilde.op "Bin"(N-i, 1-beta)$.
+  - $j-k$ of the $N-i$ inactive individuals become active, for some $(j-k) tilde "Bin"(N-i, 1-beta)$.
 
   And so the total probability is to sum up all the $k$:
   $
@@ -1276,6 +1276,23 @@ Let $X_n$ denote the number of type 1 genes in the $n$th generation, and assume 
 
 + What is the probability that eventually all the genes will be type 1?
 
+====
++ Given $X_n = k$, $X_(n+1) tilde "Bin"(m, k\/m)$,
+  $
+    EE[X_n | X_(n-1) = i] = m dot i/m = i = X_(n-1)
+  $
+  Therefore
+  $
+    EE[X_n] = EE[X_(n-1)] = ... = EE[X_0] = i
+  $
+
++ Eventually all the gnenes will be either type 1 or type 2, for these are the absorbing states. Ans so starting from state $i$,
+  $
+    EE[X_oo] &= Pr{"eventually all type 1"} dot m + Pr{"eventually all type 2"} dot 0 \
+    &= m Pr{"eventually all type 1"}
+  $
+  On the other hand $EE[X_oo] = i$, so $Pr{"eventually all type 1"} = i\/m$.
+
 === 4.45
 Consider an irreducible finite Markov chain with states $0,1,...,N$.
 
@@ -1283,7 +1300,24 @@ Consider an irreducible finite Markov chain with states $0,1,...,N$.
 
 + Let $x_i = Pr{"visit state" N "before state" 0 | "start in" i}$. Compute a set of linear equations that the $x_i$ satisfy, $i = 0,1,...,N$.
 
-+ If $sum_j j thin P_(i j)$ for $i = 1,...,N - 1$, show that $x_i = i\/N$ is a solution to the equations in part (b).
++ If $sum_j j thin P_(i j) = i$ for $i = 1,...,N - 1$, show that $x_i = i\/N$ is a solution to the equations in part (b).
+
+====
++ An irreducible, finite Markov chain is recurrent, and any two states communicate. So the probability of $j$ reachable from $i$ is $1$.
+
++ Immediately, $x_0 = 0$ and $x_N = 1$. For the rest, condition on $x_i$'s forward neighbors.
+  $
+    x_i = sum^N_(j=1) P_(i,j) x_j, thick i = 1, 2, ..., N-1
+  $
+
++ Substituting $x_j = j\/N$:
+  $
+    sum^N_(j=1) P_(i,j) x_j &= sum^N_(j=1) P_(i,j) j/N \
+    &=1/N sum^N_(j=0) j thin P_(i,j) \
+    &= i/N \
+    &= x_i quad "for" i=1,2,..., N-1
+  $
+  But $i\/N$ also satisfies $x_0 = 0$ and $x_N = 1$, so $x_i = i\/N$ is a solution to the equations in part (b).
 
 === 4.46
 An individual possesses $r$ umbrellas that he employs in going from his home to office, and vice versa. If he is at home (the office) at the beginning (end) of a day and it is raining, then he will take an umbrella with him to the office (home), provided there is one to be taken. If it is not raining, then he never takes an umbrella. Assume that, independent of the past, it rains at the beginning (end) of a day with probability $p$.

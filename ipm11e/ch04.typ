@@ -1337,14 +1337,60 @@ An individual possesses $r$ umbrellas that he employs in going from his home to 
 
 + When $r = 3$, what value of $p$ maximizes the fraction of time he gets wet?
 
+====
++ Define a Markov chain with states ${i, i = 0, 1, ..., r}$ as the number of umbrellas at the individual's disposal at either location (home or office). The transition matrix is (zeros not shown)
+  #grid(
+    columns: 2,
+    align: center + horizon,
+    table(
+      columns: 7,
+      stroke: none,
+      $X_n without X_(n+1)$, table.hline(), table.vline(),
+            $0$, $1$, $2$, $dots.c$, $r-1$, $r$,
+      $0$,  $$,  $$,  $$,  $dots.c$, $$,    $1$,
+      $1$,  $$,  $$,  $$,  $dots.c$, $q$,   $p$,
+      $2$,  $$,  $$,  $$,  $dots.c$, $p$,   $$,
+      $dots.v$,  $dots.v$, $dots.v$, $dots.v$, $dots.down$, $dots.v$, $dots.v$,
+      $r-1$,$$,  $q$, $p$, $dots.c$, $$,    $$,
+      $r$,  $q$, $p$, $$,  $dots.c$, $$,    $$),
+      $ quad "or" quad
+      P_(i,j) = cases(
+        1\, quad (i,j) = (0,r),
+        q\, quad i + j = r,
+        p\, quad i + j = r+1,
+        0\, quad "otherwise"
+      ) $
+  )
+
++ It is easy to check that $bold(pi) dot bold(P) = bold(pi)$.
+
++ $display(p thin pi_0 = (p thin q)/(r+q))$.
+
++ $display(op("argmax", limits: #true)_p (p(1-p))/(3+1-p)) = 4 - 2 sqrt(3) approx 0.5359, thick "maximum" = 7 - 4 sqrt(3) approx 0.0718$.
+
 === 4.47
-Let ${X_n,n >= 0}$ denote an ergodic Markov chain with limiting probabilities $pi_i$. Define the process ${Y_n,n >= 1}$ by $Y_n = (X_(n−1),X_n)$. That is, $Y_n$ keeps track of the last two states of the original chain. Is ${Y_n,n >= 1}$ a Markov chain? If so, determine its transition probabilities and find $ lim_(n -> oo) Pr{Y_n = (i,j)} $
+Let ${X_n,n >= 0}$ denote an ergodic Markov chain with limiting probabilities $pi_i$. Define the process ${Y_n,n >= 1}$ by $Y_n = (X_(n-1),X_n)$. That is, $Y_n$ keeps track of the last two states of the original chain. Is ${Y_n,n >= 1}$ a Markov chain? If so, determine its transition probabilities and find $ lim_(n -> oo) Pr{Y_n = (i,j)} $
+
+====
+${Y_n,n >= 1}$ is a Markov chain because $Y_(n+1)$ depends only on $Y_n$ through the transition probabilities
+$
+  P_(i j, k l) = cases(
+    P_(j l) quad &j=k,
+    0 quad &"otherwise"
+  ) 
+$
+where $P_(j l)$ are the transition probabilities of ${X_n}$.
+
+The $lim_(n -> oo) Pr{Y_n = (i,j)}$ are the long-run proportions of ${Y_n}$, or simply $pi_(i j)$. They can be derived by noting that the sequence $(i, j)$ is accomplished whenever the ${X_n}$ chain arrives at $i$ (with probability $pi_i$) and then goes to $j$ (with conditional probability $P_(i j)$). So
+$
+  pi_(i j) = pi_i P_(i j)
+$
 
 
 === 4.48
 Consider a Markov chain in steady state. Say that a $k$ length run of zeroes ends at time $m$ if
 $
-  X_(m-k-1) != 0, quad X_(m-k) = X_(m-k+1) = ... = X_(m−1) = 0, quad X_m != 0
+  X_(m-k-1) != 0, quad X_(m-k) = X_(m-k+1) = ... = X_(m-1) = 0, quad X_m != 0
 $
 Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
 

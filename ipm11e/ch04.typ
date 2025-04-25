@@ -44,11 +44,12 @@
   )
 }
 
+#let th(n) = box[$italic(#n)$th]
 
 == Markov Chains
 
 === 4.1
-Three white and three black balls are distributed in two urns in such a way that each contains three balls. We say that the system is in state $i$, $i = 0,1,2,3$, if the first urn contains $i$ white balls. At each step, we draw one ball from each urn and place the ball drawn from the first urn into the second, and conversely with the ball from the second urn. Let $X_n$ denote the state of the system after the $n$th step. Explain why ${X_n, n = 0,1,2,...}$ is a Markov chain and calculate its transition probability matrix.
+Three white and three black balls are distributed in two urns in such a way that each contains three balls. We say that the system is in state $i$, $i = 0,1,2,3$, if the first urn contains $i$ white balls. At each step, we draw one ball from each urn and place the ball drawn from the first urn into the second, and conversely with the ball from the second urn. Let $X_n$ denote the state of the system after the #th[n] step. Explain why ${X_n, n = 0,1,2,...}$ is a Markov chain and calculate its transition probability matrix.
 
 ====
 It is a Markov chain because $X_(n+1)$ depends only on $X_n$. To see this, note that $X_n$ determines, in turn: #[
@@ -216,19 +217,18 @@ We need to look at the $P^2_(i,j)$ probabilities:
 Reading off the last line, the probability that it will rain tomorrow is $0.1 + 0.16 = 0.26$.
 
 === 4.8
-An urn initially contains 2 balls, one of which is red and the other blue. At each stage a ball is randomly selected. If the selected ball is red, then it is replaced with a red ball with probability 0.7 or with a blue ball with probability 0.3; if
-the selected ball is blue, then it is equally likely to be replaced by either a red or blue ball.
+An urn initially contains 2 balls, one of which is red and the other blue. At each stage a ball is randomly selected. If the selected ball is red, then it is replaced with a red ball with probability 0.7 or with a blue ball with probability 0.3; if the selected ball is blue, then it is equally likely to be replaced by either a red or blue ball.
 
-+ Let $X_n$ equal $1$ if the $n$th ball selected is red, and let it equal $0$ otherwise. Is ${X_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
++ Let $X_n$ equal $1$ if the #th[n] ball selected is red, and let it equal $0$ otherwise. Is ${X_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
 
-+ Let $Y_n$ denote the number of red balls in the urn immediately before the $n$th ball is selected. Is ${Y_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
++ Let $Y_n$ denote the number of red balls in the urn immediately before the #th[n] ball is selected. Is ${Y_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
 
 +  Find the probability that the second ball selected is red.
 
 +  Find the probability that the fourth ball selected is red.
 
 ====
-+ ${X_n}$ is not a Markov chain. Because the color of the $n$th ball selected does not determine the probability of color of the $(n+1)$th.
++ ${X_n}$ is not a Markov chain. Because the color of the #th[n] ball selected does not determine the probability of color of the #th[(n+1)].
 
 + ${Y_n}$ is a Markov chain with transition probabilities $bold(P)$:
   #figure(
@@ -734,7 +734,7 @@ There are 2 states, "good" and "bad", and the transition matrix is
 Consider three urns, one colored red, one white, and one blue. The red urn contains 1 red and 4 blue balls; the white urn contains 3 white balls, 2 red balls, and 2 blue balls; the blue urn contains 4 white balls, 3 red balls, and 2 blue balls. At the initial stage, a ball is randomly selected from the red urn and then returned to that urn. At every subsequent stage, a ball is randomly selected from the urn whose color is the same as that of the ball previously selected and is then returned to that urn. In the long run, what proportion of the selected balls are red? What proportion are white? What proportion are blue?
 
 ====
-Let $X_n$ represent the color of the $n$th ball selected. The state transition probabilities are:
+Let $X_n$ represent the color of the #th[n] ball selected. The state transition probabilities are:
 
 #figure(
   table(
@@ -787,7 +787,7 @@ Let $X_n$ denote the ordering of the deck after $n$ operations. Then ${X_n}$ is 
 
 To show that the chain is irreducible, note that any ordering $S_i$ can be transformed into any other ordering $S_j = j_1, j_2, ... j_n$ by choosing, in turn, the numbers $j_n, j_(n-1) ... j_1$ from $S_i$.
 
-To show that the chain is doubly stochastic, note that $S_j$ can be directly reached, with probability $1\/n$, from each of exactly $n$ states, namely those obtained by moving $j_1$ to the $k$th ($k=1,2,...n$) position within $S_j$. E.g., with $k=3$, the ordering $j_2,j_3,j_1, j_4, j_5 ... j_n$ goes to $S_j$ with probability $1\/n$.
+To show that the chain is doubly stochastic, note that $S_j$ can be directly reached, with probability $1\/n$, from each of exactly $n$ states, namely those obtained by moving $j_1$ to the #th[k] ($k=1,2,...n$) position within $S_j$. E.g., with $k=3$, the ordering $j_2,j_3,j_1, j_4, j_5 ... j_n$ goes to $S_j$ with probability $1\/n$.
 
 Because the chain is both irreducible and doubly stochastic, the stationary distribution is uniform. That is, in the limit, the resultant ordering is equally likely to be any of the $n!$ possible orderings.
 
@@ -1207,7 +1207,7 @@ It is then easy to see that
 
 
 === 4.43
-Each day, one of $n$ possible elements is requested, the $i$th one with probability $P_i,i >= 1, sum^n_1 P_i = 1$. These elements are at all times arranged in an ordered list that is revised as follows: The element selected is moved to the front of the list with the relative positions of all the other elements remaining unchanged. Define the state at any time to be the list ordering at that time and note that there are $n!$ possible states.
+Each day, one of $n$ possible elements is requested, the #th[i] one with probability $P_i,i >= 1, sum^n_1 P_i = 1$. These elements are at all times arranged in an ordered list that is revised as follows: The element selected is moved to the front of the list with the relative positions of all the other elements remaining unchanged. Define the state at any time to be the list ordering at that time and note that there are $n!$ possible states.
 
 + Argue that the preceding is a Markov chain.
 
@@ -1270,7 +1270,7 @@ $
   binom(m,j) (i/m)^j ((m-i)/m)^(m-j), quad j=0,1, ... m
 $
 
-Let $X_n$ denote the number of type 1 genes in the $n$th generation, and assume that $X_0 = i$.
+Let $X_n$ denote the number of type 1 genes in the #th[n] generation, and assume that $X_0 = i$.
 
 + Find $EE[X_n]$.
 
@@ -1394,6 +1394,8 @@ $
 $
 Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
 
+====
+
 
 === 4.49
 Consider a Markov chain with states $1,2,3$ having transition probability matrix
@@ -1416,6 +1418,22 @@ Let $N_i$ denote the number of transitions, starting in state $i$, until the Mar
 
 + Find $Pr(N_1 = 4)$.
 
+====
++ $P^2_(1,2) = 0.27$
+
++ $display(sum^3_(i=1) i^2 pi_i = 69/17 approx 4.059)$
+
++ Let $E_i = EE[N_i]$ and solve the system of equations
+  $
+    E_1 &= 1 + 0.5 E_1 + 0.3 E_2 \
+    E_2 &= 1 + 0.4 E_2 \
+    E_3 &= 1 + 0.8 E_1
+  $
+  to get $E_1 = 3, thick E_2 = 5\/3, thick E_3 = 17\/5$.
+
++ 
+
+
 === 4.50
 A Markov chain with states $1,...,6$ has transition probability matrix
 $ 
@@ -1435,6 +1453,27 @@ $
 + Find $lim_(n->oo) P^n_(5,6)$.
 
 + Find $lim_(n->oo) P^n_(1,3)$.
+
+
+=== 4.51
+In Example 4.3, Gary is in a cheerful mood today. Find the expected number of days until he has been glum for three consecutive days.
+
+
+=== 4.52
+A taxi driver provides service in two zones of a city. Fares picked up in zone $A$ will have destinations in zone $A$ with probability $0.6$ or in zone $B$ with probability $0.4$. Fares picked up in zone $B$ will have destinations in zone $A$ with probability $0.3$ or in zone $B$ with probability $0.7$. The driver's expected profit for a trip entirely in zone $A$ is $6$; for a trip entirely in zone $B$ is $8$; and for a trip that involves both zones is $12$. Find the taxi driver's average profit per trip.
+
+=== 4.53
+Find the average premium received per policyholder of the insurance company of Example 4.29 if $lambda = 1\/4$ for one-third of its clients, and $lambda = 1\/2$ for two-thirds of its clients.
+
+=== 4.54
+Consider the Ehrenfest urn model in which $M$ molecules are distributed between two urns, and at each time point one of the molecules is chosen at random and is then removed from its urn and placed in the other one. Let $X_n$ denote the number of molecules in urn $1$ after the #th[n] switch and let $mu_n = EE[X_n]$. Show that
+
++ $display(mu_(n+1) = 1 + (1 - 2/M) mu_n)$.
+
++ Use (a) to prove that 
+  $
+    mu_n = M/2 + ((M - 2)/M)^n (EE[X_0] - M/2)    
+  $
 
 
 #pagebreak()

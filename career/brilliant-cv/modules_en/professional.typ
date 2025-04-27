@@ -1,6 +1,6 @@
 // Imports
 #import "@preview/brilliant-cv:2.0.5": cvSection, cvEntry
-#let metadata = toml("../metadata.toml")
+#let metadata = toml("../metadata_en.toml")
 #let cvSection = cvSection.with(metadata: metadata)
 #let cvEntry = cvEntry.with(metadata: metadata)
 
@@ -8,38 +8,53 @@
 #cvSection("Professional Experience")
 
 #cvEntry(
-  title: [Director of Data Science],
-  society: [XYZ Corporation],
-  logo: image("../src/logos/xyz_corp.png"),
-  date: [2020 - Present],
-  location: [San Francisco, CA],
+  title: [Data Scientist],
+  society: [Merico DevInsight],
+  logo: image("../src/logos/merico-logo.png"),
+  date: [Dec 2021 - Jun 2023],
+  location: [Beijing],
   description: list(
-    [Lead a team of data scientists and analysts to develop and implement data-driven strategies, develop predictive models and algorithms to support decision-making across the organization],
-    [Collaborate with executive leadership to identify business opportunities and drive growth, implement best practices for data governance, quality, and security],
+    [Developed and maintained an expert system back-end for evaluating development team performance, utilizing Python and Langchain.],
+    [Built a data analysis platform from scratch, conducting data modeling and producing industry benchmark reports.],
+    [Collaborated with sales team to learn the most needed indicators from data, and presenting the data team's findings.]
   ),
-  tags: ("Tags Example here", "Dataiku", "Snowflake", "SparkSQL"),
+  tags: ("Expert System", "LLM", "PostgreSQL", "Python", "Benchmarking"),
 )
 
 #cvEntry(
-  title: [Data Analyst],
-  society: [ABC Company],
-  logo: image("../src/logos/abc_company.png"),
-  date: [2017 - 2020],
-  location: [New York, NY],
+  title: [Data Analysis Team Lead],
+  society: [BigoneLab],
+  logo: image("../src/logos/bigonelab-logo.png"),
+  date: [Apr 2018 - Jul 2021],
+  location: [Beijing],
   description: list(
-    [Analyze large datasets with SQL and Python, collaborate with teams to uncover business insights],
-    [Create data visualizations and dashboards in Tableau, develop and maintain data pipelines with AWS],
+    [Led the creation and maintenance of data analysis projects for e-commerce and streaming video platforms on a tight schedule, focusing on automated calculation and graphical monitoring.],
+    [Introduced cost-effective data infrastructure solutions like Hive on Hadoop and Apache MADlib, managing smooth data migrations.],
+    [Managed data analysis teams, ensuring efficient workflow and data security through role-based access controls.]
   ),
+  tags: ("Greenplum", "MADlib", "metabase", "ETL"),
 )
 
 #cvEntry(
-  title: [Data Analysis Intern],
-  society: [PQR Corporation],
-  logo: image("../src/logos/pqr_corp.png"),
-  date: list(
-    [Summer 2017],
-    [Summer 2016],
-  ),
-  location: [Chicago, IL],
-  description: list([Assisted with data cleaning, processing, and analysis using Python and Excel, participated in team meetings and contributed to project planning and execution]),
+  title: [IT Specialist (VP)],
+  society: [China Securities],
+  logo: image("../src/logos/中信建投-logo.png"),
+  date: [Jul 2016 - Apr 2018],
+  location: [Beijing],
+  description: list(
+    [Designed and developed an in-house accounting system for brokerage business, creating a data platform for user profiling and risk analysis.],
+    [Implemented an Anti-Money Laundering expert system, enhancing the company's compliance capabilities.]),
+  tags: ("Accounting", "SQLServer", "EOD"),
+)
+
+#cvEntry(
+  title: [Senior Consultant],
+  society: [Murex China],
+  logo: image("../src/logos/murex-logo.svg"),
+  date: [Jul 2011 - Jul 2016],
+  location: [Beijing],
+  description: list(
+    [Provided consultation on trade validation, confirmation, and settlement within the MX platform, supporting several banks' capital market business.],
+    [Overhauled and updated the accounting subsystem, ensuring compliance with IFRS9 and other financial accounting standards, while working closely with the bank's accounting staff.]),
+  tags: ("MX.3", "IFRS", "Presale", "Business Travels", "POC", "UAT"),
 )

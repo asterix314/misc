@@ -2,17 +2,17 @@
 
 # Set the output language
 # INFO: value must matches folder suffix; i.e "zh" -> "./modules_zh"
-language = "zh"
+language = "en"
 
 [layout]
     # Optional values: skyblue, red, nephritis, concrete, darknight
     # You can also use a custom color by hex code i.e. "#1E90FF"
-    awesome_color = "skyblue"
+    awesome_color = "darknight"
 
     # Skips are for controlling the spacing between sections and entries
     before_section_skip = "1pt"
-    before_entry_skip = "1pt"
-    before_entry_description_skip = "1pt"
+    before_entry_skip = "2pt"
+    before_entry_description_skip = "2pt"
 
     # Optional: sets paper size and margins. Possible values: a4 (default), us-letter
     paper_size = "a4"
@@ -26,7 +26,7 @@ language = "zh"
 
     [layout.header]
         # Optional values: left, center, right
-        header_align = "left"
+        header_align = "right"
 
         # Decide if you want to display profile photo or not
         display_profile_photo = true
@@ -34,7 +34,7 @@ language = "zh"
 
     [layout.entry]
         # Decide if you want to put your company in bold or your position in bold
-        display_entry_society_first = true
+        display_entry_society_first = false
 
         # Decide if you want to display organisation logo or not
         display_logo = true
@@ -48,16 +48,16 @@ language = "zh"
     injected_keywords_list = ["Data Analyst", "GCP", "Python", "SQL", "Tableau"]
 
 [personal]
-    first_name = "John"
-    last_name = "Doe"
+    first_name = "Robert"
+    last_name = "Zhang"
 
     # The order of this section will affect how the entries are displayed
     # The custom value is for any additional information you want to add, name it as custom-1, custom-2, etc.
     [personal.info]
-        github = "yunanwg"
-        phone = "+33 6 12 34 56 78"
-        email = "john.doe@me.org"
-        linkedin = "johndoe"
+        phone = "+86 1381 194 5582"
+        email = "asterix314@163.com"
+        github = "asterix314"
+        # linkedin = "johndoe"
         # gitlab = "yunanwg"
         # homepage = "jd.me.org"
         # orcid = "0000-0000-0000-0000"
@@ -66,15 +66,18 @@ language = "zh"
         [personal.info.custom-1]
             # image = "" # Example: image("./path/to/image.png")
             awesomeIcon = "graduation-cap" # Example: "graduation-cap" see https://typst.app/universe/package/fontawesome/
-            text = "PhD"
-            link = "https://www.example.com"
+            text = "MCS"
+            link = "https://www.chsi.com.cn/xlcx/bg.do?vcode=AFPP2GVKD2VU7NS2&srcid=bgcx"
+        [personal.info.custom-2]
+            awesomeIcon = "location-dot" # Example: "graduation-cap" see https://typst.app/universe/package/fontawesome/
+            text = "Beijing"
 
 # add a new section if you want to include the language of your choice
 # i.e. [[lang.ru]]
 # each section must contains the following fields
 [lang.en]
-    header_quote = "Experienced Data Analyst looking for a full time job starting from now"
-    cv_footer = "Curriculum vitae"
+    header_quote = "Experienced Data Analyst with a strong background in data modeling, analysis, and machine learning. Looking for a full time job starting immediately"
+    cv_footer = "Resume"
     letter_footer = "Cover letter"
 
 [lang.fr]
@@ -95,5 +98,5 @@ language = "zh"
  # For languages that are not written in Latin script
  # Currently supported non-latin language codes: ("zh", "ja", "ko", "ru")
 [lang.non_latin]
-    name = "王道尔"
+    name = "张晨晖"
     font = "Heiti SC"

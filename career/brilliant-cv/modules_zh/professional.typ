@@ -1,6 +1,6 @@
 // Imports
 #import "@preview/brilliant-cv:2.0.5": cvSection, cvEntry
-#let metadata = toml("../metadata.toml")
+#let metadata = toml("../metadata_zh.toml")
 #let cvSection = cvSection.with(metadata: metadata)
 #let cvEntry = cvEntry.with(metadata: metadata)
 
@@ -8,16 +8,18 @@
 #cvSection("职业经历")
 
 #cvEntry(
-  title: [数据科学主管],
-  society: [XYZ 公司],
-  logo: image("../src/logos/xyz_corp.png"),
-  date: [2020 - 现在],
-  location: [旧金山, CA],
+  title: [数据科学家],
+  society: [思码逸科技],
+  logo: image("../src/logos/merico-logo.png"),
+  date: [2021年12月 - 2023年6月],
+  location: [北京],
   description: list(
-    [领导数据科学家和分析师团队，开发和实施数据驱动的策略，开发预测模型和算法以支持组织内部的决策],
-    [与高级管理团队合作，确定商业机会并推动增长，实施数据治理、质量和安全的最佳实践],
+    [设计并开发了一套高效的后端系统，该系统能够对开发团队的工作效率进行深入评估和解读。利用先进的数据分析技术，为团队提供了定制化的效率提升方案。],
+    [参与了基于ChatGPT的内部项目，开发了资料问答系统，增强了团队的知识管理和信息检索能力。],
+    [从零开始搭建了客户数据分析平台，包括数据建模和指标体系规范化。],
+    [定期产出行业基线报告，为客户提供了宝贵的市场洞察和决策支持。]
   ),
-  tags: ("标签示例", "Dataiku", "Snowflake", "SparkSQL"),
+  tags: ("专家系统", "大语言模型", "PostgreSQL", "Python", "基线报告"),
 )
 
 #cvEntry(

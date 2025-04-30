@@ -1414,9 +1414,9 @@ Let $N_i$ denote the number of transitions, starting in state $i$, until the Mar
 
 3. Find $EE[N_1]$.
 
-+ Find $Pr(N_1 <= 4)$.
++ Find $Pr{N_1 <= 4}$.
 
-+ Find $Pr(N_1 = 4)$.
++ Find $Pr{N_1 = 4}$.
 
 ====
 + $P^2_(1,2) = 0.27$
@@ -1431,8 +1431,69 @@ Let $N_i$ denote the number of transitions, starting in state $i$, until the Mar
   $
   to get $E_1 = 3, thick E_2 = 5\/3, thick E_3 = 17\/5$.
 
-+ 
++ Make state ➂ absorbing, then consider the paths from ➀ to ➂ in exactly 4 steps, and realize that these correspond to the original paths, also from ➀ to ➂, in _no more_ than 4 steps.
 
+  #grid(
+    columns: (auto, 1fr, auto, auto),
+    align: center + horizon,
+    gutter: 1em,
+    figure(diagram(
+      node-stroke: 1.5pt,
+      edge-stroke: .7pt,
+      node-shape: circle,
+      node((0,0), $1$, name: <1>), 
+      edge("->"),
+      edge(<1>, "->", bend: 320deg, loop-angle: 0deg),
+      edge(<3>, "->", bend: 30deg),
+      node((1, 0), $2$, name: <2>),
+      edge("->"), 
+      edge(<2>, "->", bend: 320deg, loop-angle: 180deg),
+      node((1,1), $3$, name: <3>),
+      edge(<3>, "->", bend: 320deg),
+      edge(<1>, "->", bend: 30deg)),
+      caption:[original chain]
+    ),
+    $=>$,
+    figure(diagram(
+      node-stroke: 1.5pt,
+      edge-stroke: .7pt,
+      node-shape: circle,
+      node((0,0), $1$, name: <1>), 
+      edge("->"),
+      edge(<1>, "->", bend: 320deg, loop-angle: 0deg),
+      edge(<3>, "->"),
+      node((1, 0), $2$, name: <2>),
+      edge("->"), 
+      edge(<2>, "->", bend: 320deg, loop-angle: 180deg),
+      node((1,1), $3$, name: <3>),
+      edge(<3>, "->", bend: 320deg)),
+      caption: [state $3$ made absorbing]
+    ),
+    $
+      bold(P) = mat(
+        0.5, 0.3,0.2;
+        0, 0.4, 0.6;
+        0, 0, 1)
+    $
+)
+
+  Therefore
+  $
+    Pr{N_1 <= 4} &= P^4_(1,3) thick "(of the transformed chain)" \
+      &= 0.8268
+  $
+
++ $Pr{N_1 = 4} &= P^4_(1,3) - P^3_(1,3) = 0.1348$.
+
+  To verify, note in the original chain there are 4 paths going from ➀ to ➂ in exactly 4 step:
+
+  - $Pr{➀➀➀➀➂} = 0.5^3 times 0.2 = 0.025$
+  - $Pr{➀➀➀➁➂} = 0.5^2 times 0.3 times 0.6 = 0.045$
+  - $Pr{➀➀➁➁➂} = 0.5 times 0.3 times 0.4 times 0.6 = 0.036$
+  - $Pr{➀➁➁➁➂} = 0.3 times 0.4^2 times 0.6 = 0.0288$
+
+  These probabilities indeed add up to $0.1348$.
+  
 
 === 4.50
 A Markov chain with states $1,...,6$ has transition probability matrix

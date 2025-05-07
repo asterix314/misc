@@ -1395,7 +1395,7 @@ $
 Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
 
 ====
-
+TODO
 
 === 4.49
 Consider a Markov chain with states $1,2,3$ having transition probability matrix
@@ -1515,9 +1515,38 @@ $
 
 + Find $lim_(n->oo) P^n_(1,3)$.
 
+====
++ Reading off the transition matrix, there are 3 cliques: ${1,2}$, ${3,4}$, and ${5,6}$, with ${1,2}$ being drained to state $4$ and $6$. So class ${1,2}$ is transient and classes ${3,4}$ and ${5,6}$ are recurrent.
+
++ ${1,2}$ is transient so $lim_(n->oo) P^n_(1,2) = 0$.
+
++ ${5,6}$ is recurrent and aperiodic. So just solve the limiting equations locally for class ${5,6}$
+  $
+    mat(pi_5,pi_6) mat(.5,.5;.2,.8) = mat(pi_5,pi_6)
+  $
+  to get $pi_5 = 2\/7$ and $pi_6 = 5\/7$. And $lim_(n->oo) P^n_(5,6) = pi_6 = 5\/7$.
+
++ TODO
+
 
 === 4.51
 In Example 4.3, Gary is in a cheerful mood today. Find the expected number of days until he has been glum for three consecutive days.
+
+====
+Recall that Gary's mood swings are
+
+#figure(
+  table(
+    columns: 4,
+    stroke: none,
+    $X_n without X_(n+1)$, table.vline(), table.hline(), 
+            [*C*], [*S*], [*G*],
+    [*C*],  $.5$,  $.4$,  $.1$,
+    [*S*],  $.3$,  $.4$,  $.3$,
+    [*G*],  $.2$,  $.3$,  $.5$,),
+  caption: [C=cheerful, S=so so, G=glum]
+)
+
 
 
 === 4.52
@@ -1536,6 +1565,39 @@ Consider the Ehrenfest urn model in which $M$ molecules are distributed between 
     mu_n = M/2 + ((M - 2)/M)^n (EE[X_0] - M/2)    
   $
 
+
+=== 4.55
+Consider a population of individuals each of whom possesses two genes that can be either type $A$ or type $a$. Suppose that in outward appearance type $A$ is dominant and type $a$ is recessive. (That is, an individual will have only the outward characteristics of the recessive gene if its pair is $a a$.) Suppose that the population has stabilized, and the percentages of individuals having respective gene pairs $A A$, $a a$, and $A a$ are $p$,$q$, and $r$. Call an individual dominant or recessive depending on the outward characteristics it exhibits. Let $S_(11)$ denote the probability that an offspring of two dominant parents will be recessive; and let $S_(10)$ denote the probability that the offspring of one dominant and one recessive parent will be recessive. Compute $S_(11)$ and $S_(10)$ to show that $S_(11) = S_(10)$. (The quantities $S_(10)$ and $S_(11)$ are known in the genetics literature as Snyder’s ratios.)
+
+
+=== 4.56
+Suppose that on each play of the game a gambler either wins 1 with probability $p$ or loses 1 with probability $1 - p$. The gambler continues betting until she or he is either up $n$ or down $m$. What is the probability that the gambler quits a winner?
+
+
+=== 4.57.
+A particle moves among $n + 1$ vertices that are situated on a circle in the following manner. At each step it moves one step either in the clockwise direction with probability $p$ or the counterclockwise direction with probability $q = 1 - p$. Starting at a specified state, call it state $0$, let $T$ be the time of the first return to state $0$. Find the probability that all states have been visited by
+time $T$. 
+
+#hint[Condition on the initial transition and then use results from the gambler’s ruin problem.]
+
+
+
+=== 4.58
+In the gambler's ruin problem of Section 4.5.1, suppose the gambler's fortune is presently $i$, and suppose that we know that the gambler's fortune will eventually reach $N$ (before it goes to $0$). Given this information, show that the probability he wins the next gamble is
+
+$ 
+  cases(
+  (p[1 - (q\/p)^(i+1)])/(1 - (q\/p)^i)\, &quad "if" p != 1/2,
+  (i +1)/(2i)\, &quad "if" p = 1)
+$
+
+#hint[
+  The probability we want is
+  $
+    &Pr{X_(n+1) = i + 1 | X_n = i, lim_(m -> oo) X_m = N} \
+  = &Pr{X_(n+1) = i + 1, lim_m X_m = N | X_n = i} / Pr{lim_m X_m = N | X_n = i}
+  $
+]
 
 #pagebreak()
 

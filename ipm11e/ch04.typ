@@ -1089,7 +1089,7 @@ Show that the stationary probabilities for the Markov chain having transition pr
 
 ====
 $
-   pi(bold(P)) dot bold(Q) = pi(bold(P)) dot bold(P)^k = pi(bold(P)) dot bold(P)^(k-1) = ... = pi(bold(P)).
+   pi(bold(P)) dot bold(Q) = pi(bold(P)) dot bold(P)^k = pi(bold(P)) dot bold(P)^(k-1) = dots.c = pi(bold(P)).
 $
 
 === 4.38
@@ -1213,7 +1213,7 @@ Each day, one of $n$ possible elements is requested, the #th[i] one with probabi
 
 + For any state $i_1,...,i_n$ (which is a permutation of $1,2,...,n$), let $pi(i_1,...,i_n)$ denote the limiting probability. In order for the state to be $i_1,...,i_n$, it is necessary for the last request to be for $i_1$, the last non-$i_1$ request for $i_2$, the last non-$i_1$ or $i_2$ request for $i_3$, and so on. Hence, it appears intuitive that
   $
-  pi(i_1,...,i_n) = P_(i_1) P_(i_2)/(1 - P_(i_1)) P_(i_3)/(1 - P_(i_1) - P_(i_2)) ... P_(i_(n-1))/(1 - P_(i_1) - ... - P_(i_(n-2)))
+  pi(i_1,...,i_n) = P_(i_1) P_(i_2)/(1 - P_(i_1)) thick P_(i_3)/(1 - P_(i_1) - P_(i_2)) thick dots.c thick P_(i_(n-1))/(1 - P_(i_1) - dots.c - P_(i_(n-2)))
   $
   Verify when $n = 3$ that the preceding are indeed the limiting probabilities.
 
@@ -1283,7 +1283,7 @@ Let $X_n$ denote the number of type 1 genes in the #th[n] generation, and assume
   $
   Therefore
   $
-    EE[X_n] = EE[X_(n-1)] = ... = EE[X_0] = i
+    EE[X_n] = EE[X_(n-1)] = dots.c = EE[X_0] = i
   $
 
 + Eventually all the gnenes will be either type 1 or type 2, for these are the absorbing states. Ans so starting from state $i$,
@@ -1390,7 +1390,7 @@ $
 === 4.48
 Consider a Markov chain in steady state. Say that a $k$ length run of zeroes ends at time $m$ if
 $
-  X_(m-k-1) != 0, quad X_(m-k) = X_(m-k+1) = ... = X_(m-1) = 0, quad X_m != 0
+  X_(m-k-1) != 0, quad X_(m-k) = X_(m-k+1) = dots.c = X_(m-1) = 0, quad X_m != 0
 $
 Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
 
@@ -1526,15 +1526,27 @@ $
   $
   to get $pi_5 = 2\/7$ and $pi_6 = 5\/7$. And $lim_(n->oo) P^n_(5,6) = pi_6 = 5\/7$.
 
-+ TODO
++ First calculate $p_i$ ($i = 1,2$) which is the probability  that starting from state $i$, the chain will finally end up in the communication class ${3,4}$. Then $P^oo_(1,3)$ is $p_1$ redistributed to state $3$ according to the long-run proportions of that class.
+
+  By the first 2 rows of the transition matrix we can write
+  $
+    p_1 &= .2 p_1 + .4 p_2 + .3 \
+    p_2 &= .1 p_1 + .3 p_2 + .4  
+  $
+  to get $p_1 = 37\/52$ and $p_2 = 35\/52$.
+
+  On the other hand 
+  $ 
+    pi mat(.3,.7;.6,.4) = mat(6\/13, 7\/13)
+  $
+  hence $lim_(n->oo) P^n_(1,3) = 37\/52 dot 6\/13 = 111\/338 approx 0.328$.
 
 
 === 4.51
 In Example 4.3, Gary is in a cheerful mood today. Find the expected number of days until he has been glum for three consecutive days.
 
 ====
-Recall that Gary's mood swings are
-
+Recall that Gary's mood swings were
 #figure(
   table(
     columns: 4,
@@ -1547,6 +1559,11 @@ Recall that Gary's mood swings are
   caption: [C=cheerful, S=so so, G=glum]
 )
 
+$
+  x_C &= 1 + .5 x_C + .4 x_S + .1 x_G \
+  x_S &= 1 + .3 x_C + .4 x_S + .3 x_G \
+  x_G &= 1 +
+$
 
 
 === 4.52

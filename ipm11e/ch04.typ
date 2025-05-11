@@ -44,11 +44,12 @@
   )
 }
 
+#let th(n) = box[$italic(#n)$th]
 
 == Markov Chains
 
 === 4.1
-Three white and three black balls are distributed in two urns in such a way that each contains three balls. We say that the system is in state $i$, $i = 0,1,2,3$, if the first urn contains $i$ white balls. At each step, we draw one ball from each urn and place the ball drawn from the first urn into the second, and conversely with the ball from the second urn. Let $X_n$ denote the state of the system after the $n$th step. Explain why ${X_n, n = 0,1,2,...}$ is a Markov chain and calculate its transition probability matrix.
+Three white and three black balls are distributed in two urns in such a way that each contains three balls. We say that the system is in state $i$, $i = 0,1,2,3$, if the first urn contains $i$ white balls. At each step, we draw one ball from each urn and place the ball drawn from the first urn into the second, and conversely with the ball from the second urn. Let $X_n$ denote the state of the system after the #th[n] step. Explain why ${X_n, n = 0,1,2,...}$ is a Markov chain and calculate its transition probability matrix.
 
 ====
 It is a Markov chain because $X_(n+1)$ depends only on $X_n$. To see this, note that $X_n$ determines, in turn: #[
@@ -216,19 +217,18 @@ We need to look at the $P^2_(i,j)$ probabilities:
 Reading off the last line, the probability that it will rain tomorrow is $0.1 + 0.16 = 0.26$.
 
 === 4.8
-An urn initially contains 2 balls, one of which is red and the other blue. At each stage a ball is randomly selected. If the selected ball is red, then it is replaced with a red ball with probability 0.7 or with a blue ball with probability 0.3; if
-the selected ball is blue, then it is equally likely to be replaced by either a red or blue ball.
+An urn initially contains 2 balls, one of which is red and the other blue. At each stage a ball is randomly selected. If the selected ball is red, then it is replaced with a red ball with probability 0.7 or with a blue ball with probability 0.3; if the selected ball is blue, then it is equally likely to be replaced by either a red or blue ball.
 
-+ Let $X_n$ equal $1$ if the $n$th ball selected is red, and let it equal $0$ otherwise. Is ${X_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
++ Let $X_n$ equal $1$ if the #th[n] ball selected is red, and let it equal $0$ otherwise. Is ${X_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
 
-+ Let $Y_n$ denote the number of red balls in the urn immediately before the $n$th ball is selected. Is ${Y_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
++ Let $Y_n$ denote the number of red balls in the urn immediately before the #th[n] ball is selected. Is ${Y_n,n >= 1}$ a Markov chain? If so, give its transition probability matrix.
 
 +  Find the probability that the second ball selected is red.
 
 +  Find the probability that the fourth ball selected is red.
 
 ====
-+ ${X_n}$ is not a Markov chain. Because the color of the $n$th ball selected does not determine the probability of color of the $(n+1)$th.
++ ${X_n}$ is not a Markov chain. Because the color of the #th[n] ball selected does not determine the probability of color of the #th[(n+1)].
 
 + ${Y_n}$ is a Markov chain with transition probabilities $bold(P)$:
   #figure(
@@ -734,7 +734,7 @@ There are 2 states, "good" and "bad", and the transition matrix is
 Consider three urns, one colored red, one white, and one blue. The red urn contains 1 red and 4 blue balls; the white urn contains 3 white balls, 2 red balls, and 2 blue balls; the blue urn contains 4 white balls, 3 red balls, and 2 blue balls. At the initial stage, a ball is randomly selected from the red urn and then returned to that urn. At every subsequent stage, a ball is randomly selected from the urn whose color is the same as that of the ball previously selected and is then returned to that urn. In the long run, what proportion of the selected balls are red? What proportion are white? What proportion are blue?
 
 ====
-Let $X_n$ represent the color of the $n$th ball selected. The state transition probabilities are:
+Let $X_n$ represent the color of the #th[n] ball selected. The state transition probabilities are:
 
 #figure(
   table(
@@ -787,7 +787,7 @@ Let $X_n$ denote the ordering of the deck after $n$ operations. Then ${X_n}$ is 
 
 To show that the chain is irreducible, note that any ordering $S_i$ can be transformed into any other ordering $S_j = j_1, j_2, ... j_n$ by choosing, in turn, the numbers $j_n, j_(n-1) ... j_1$ from $S_i$.
 
-To show that the chain is doubly stochastic, note that $S_j$ can be directly reached, with probability $1\/n$, from each of exactly $n$ states, namely those obtained by moving $j_1$ to the $k$th ($k=1,2,...n$) position within $S_j$. E.g., with $k=3$, the ordering $j_2,j_3,j_1, j_4, j_5 ... j_n$ goes to $S_j$ with probability $1\/n$.
+To show that the chain is doubly stochastic, note that $S_j$ can be directly reached, with probability $1\/n$, from each of exactly $n$ states, namely those obtained by moving $j_1$ to the #th[k] ($k=1,2,...n$) position within $S_j$. E.g., with $k=3$, the ordering $j_2,j_3,j_1, j_4, j_5 ... j_n$ goes to $S_j$ with probability $1\/n$.
 
 Because the chain is both irreducible and doubly stochastic, the stationary distribution is uniform. That is, in the limit, the resultant ordering is equally likely to be any of the $n!$ possible orderings.
 
@@ -827,7 +827,7 @@ of individuals that are active in period $n$.
 
 + For the number of active individuals to change from $i$ to $j$ in one step, it must be the case that
   - $k$ of the $i$ active individuals remain active, for some $k tilde "Bin"(i, alpha)$; and
-  - $j-k$ of the $N-i$ inactive individuals become active, for some $(j-k) tilde.op "Bin"(N-i, 1-beta)$.
+  - $j-k$ of the $N-i$ inactive individuals become active, for some $(j-k) tilde "Bin"(N-i, 1-beta)$.
 
   And so the total probability is to sum up all the $k$:
   $
@@ -1008,8 +1008,7 @@ Let $X_n$ denote the vertex the flea has arrived after $n$ moves.
       &&3
       edge("ul", ->, q_3, label-side: #center)
       edge("ll", ->, p_3, bend: #40deg, label-side: #center) 
-    $
-    )
+    $)
 )
 
 + The proportions of time are the stationary probabilities
@@ -1090,7 +1089,7 @@ Show that the stationary probabilities for the Markov chain having transition pr
 
 ====
 $
-   pi(bold(P)) dot bold(Q) = pi(bold(P)) dot bold(P)^k = pi(bold(P)) dot bold(P)^(k-1) = ... = pi(bold(P)).
+   pi(bold(P)) dot bold(Q) = pi(bold(P)) dot bold(P)^k = pi(bold(P)) dot bold(P)^(k-1) = dots.c = pi(bold(P)).
 $
 
 === 4.38
@@ -1154,40 +1153,468 @@ $
 If $P_(i,i+k) = 1\/3, thick k = 1,2,3$, find $e_i$ for $i = 1, ..., 10$.
 
 ====
-It is obvious that $ e_j = sum^(j-1)_(i=0) e_i P_(i,j)$. And from $e_0 = 1$, we have 
+It is obvious that $ e_j = sum^(j-1)_(i=0) e_i P_(i,j)$. And from $e_0 = 1$, we have the recurrence
 $
 e_1 &= 1\/3 \
 e_2 &= 1/3 (1+1/3) = 4/9 \
-e_3 &= 1/3 (1 + 1/3 + 4/9) = 16/27 \
-&...
+e_i &= 1/3(e_(i-1) + e_(i-2) + e_(i-3))
 $
-and so on. ($e_i$ is $1\/3$ of the sum of its 3 predecessors)
-
+which has the solution
+$
+  e_n = 1/4 ((-1/3 - (i sqrt(2))/3)^n + (-1/3 + (i sqrt(2))/3)^n + 2)
+$
+And
+$
+  {e_n} = {1, 1/3, 4/9, 16/27, 37/81, 121/243, 376/729, 1072/2187, 3289/6561, 9889/19683, 29404/59049, ...}
+$
 
 
 === 4.42
 Let $A$ be a set of states, and let $A^c$ be the remaining states.
 
-+ What is the interpretation of $sum_(i in A) sum_(j in A^c) pi_i P_(i,j)$?
++ What is the interpretation of $sum_(i in A) sum_(j in A^c) pi_i P_(i,j)$ ?
 
 + What is the interpretation of $sum_(i in A^c) sum_(j in A) pi_i P_(i,j)$ ?
 
 + Explain the identity
   $ sum_(i in A) sum_(j in A^c) pi_i P_(i,j) = sum_(i in A^c) sum_(j in A) pi_i P_(i,j) $
 
+====
+If we the states in $A$ are collapsed into a single state and the rest into another state $A^c$, the Markov chain simplifies to:
+
+#figure(
+  diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    node-shape: circle,
+    node((1,0), $A^c$, name: <Ac>),
+    edge("->", label-side: center, bend: 40deg),
+    edge(<Ac>, "->", label-side: center, bend: -320deg, loop-angle: 0deg),
+    node((0, 0), $A$, name: <A>),
+    edge(<Ac>, "->", label-side: center, bend: 40deg),
+    edge(<A>, "->", label-side: center, bend: 320deg, loop-angle: 0deg)
+  ),
+  caption: [collapsed Markov chain]
+)
+
+It is then easy to see that
+
++ $sum_(i in A) sum_(j in A^c) pi_i P_(i,j) = pi_A P_(A, A^c)$ is the long-run rate of transitions from $A$ to $A^c$.
+
++ $sum_(i in A^c) sum_(j in A) pi_i P_(i,j) = pi_(A^c) P_(A^c,A)$ is the long-run rate of transitions from $A^c$ to $A$.
+
++ The above 2 rates must be equal for the static proportions $pi_A$ and $pi_(A^c)$ to remain constant --- whatever goes out must be replenished fully by what comes in.
+
 
 === 4.43
-Each day, one of $n$ possible elements is requested, the $i$th one with probability $P_i,i >= 1, sum^n_1 P_i = 1$. These elements are at all times arranged in an ordered list that is revised as follows: The element selected is moved to the front of the list with the relative positions of all the other elements remaining unchanged. Define the state at any time to be the list ordering at that time and note that there are $n!$ possible states.
+Each day, one of $n$ possible elements is requested, the #th[i] one with probability $P_i,i >= 1, sum^n_1 P_i = 1$. These elements are at all times arranged in an ordered list that is revised as follows: The element selected is moved to the front of the list with the relative positions of all the other elements remaining unchanged. Define the state at any time to be the list ordering at that time and note that there are $n!$ possible states.
 
 + Argue that the preceding is a Markov chain.
 
 + For any state $i_1,...,i_n$ (which is a permutation of $1,2,...,n$), let $pi(i_1,...,i_n)$ denote the limiting probability. In order for the state to be $i_1,...,i_n$, it is necessary for the last request to be for $i_1$, the last non-$i_1$ request for $i_2$, the last non-$i_1$ or $i_2$ request for $i_3$, and so on. Hence, it appears intuitive that
   $
-  pi(i_1,...,i_n) = P_(i_1) P_(i_2)/(1 - P_(i_1)) P_(i_3)/(1 - P_(i_1) - P_(i_2)) ... P_(i_(n-1))/(1 - P_(i_1) - ... - P_(i_(n-2)))
+  pi(i_1,...,i_n) = P_(i_1) P_(i_2)/(1 - P_(i_1)) thick P_(i_3)/(1 - P_(i_1) - P_(i_2)) thick dots.c thick P_(i_(n-1))/(1 - P_(i_1) - dots.c - P_(i_(n-2)))
   $
   Verify when $n = 3$ that the preceding are indeed the limiting probabilities.
 
+====
++ It is a Markov chain because the next state (list) depends only on the current state (and the element chosen) and not any previous states.
 
++ For $n=3$, the transition matrix $bold(P)$ is
+
+  #figure(
+  table(
+    columns: 7,
+    stroke: none,
+    $X_n without X_(n+1)$, table.hline(), table.vline(),
+              [*123*], [*132*], [*213*], [*231*], [*312*], [*321*],
+    [*123*],  $P_1$,   $0$,     $P_2$,   $0$,     $P_3$,   $0$,
+    [*132*],  $0$,     $P_1$,   $P_2$,   $0$,     $P_3$,   $0$,
+    [*213*],  $P_1$,   $0$,     $P_2$,   $0$,     $0$,     $P_3$,
+    [*231*],  $P_1$,   $0$,     $0$,     $P_2$,   $0$,     $P_3$,
+    [*312*],  $0$,     $P_1$,   $0$,     $P_2$,   $P_3$,   $0$,
+    [*321*],  $0$,     $P_1$,   $0$,     $P_2$,   $0$,     $P_3$)  
+  )
+
+  On the other hand $pi(i_1,i_2,i_3) = (P_(i_1) P_(i_2))\/(1 - P_(i_1))$. Therefore
+  $
+    bold(pi) dot bold(P) &= mat(
+      (P_1 P_2)/(1 - P_1), 
+      (P_1 P_3)/(1 - P_1),
+      (P_2 P_1)/(1 - P_2),
+      (P_2 P_3)/(1 - P_2),
+      (P_3 P_1)/(1 - P_3),
+      (P_3 P_2)/(1 - P_3)) dot mat(
+        P_1, 0,   P_2,  0,  P_3, 0;
+        0,   P_1, P_2,  0,  P_3, 0;
+        P_1, 0,   P_2,  0,  0,   P_3;
+        P_1, 0,   0,    P_2,0,   P_3;
+        0,   P_1, 0,    P_2,P_3, 0;
+        0,   P_1, 0,    P_2,0,   P_3) \
+    &= mat(
+      (P_1 P_2)/(1 - P_1), 
+      (P_1 P_3)/(1 - P_1),
+      (P_2 P_1)/(1 - P_2),
+      (P_2 P_3)/(1 - P_2),
+      (P_3 P_1)/(1 - P_3),
+      (P_3 P_2)/(1 - P_3)) \
+    &= bold(pi)
+  $
+
+  So $bold(pi)$ is indeed the limiting probabilities.
+
+
+=== 4.44
+Suppose that a population consists of a fixed number, say, $m$, of genes in any generation. Each gene is one of two possible genetic types. If exactly $i$ (of the $m$) genes of any generation are of type 1, then the next generation will have $j$ type 1 (and $m-j$ type 2) genes with probability
+$
+  binom(m,j) (i/m)^j ((m-i)/m)^(m-j), quad j=0,1, ... m
+$
+
+Let $X_n$ denote the number of type 1 genes in the #th[n] generation, and assume that $X_0 = i$.
+
++ Find $EE[X_n]$.
+
++ What is the probability that eventually all the genes will be type 1?
+
+====
++ Given $X_n = k$, $X_(n+1) tilde "Bin"(m, k\/m)$,
+  $
+    EE[X_n | X_(n-1) = i] = m dot i/m = i = X_(n-1)
+  $
+  Therefore
+  $
+    EE[X_n] = EE[X_(n-1)] = dots.c = EE[X_0] = i
+  $
+
++ Eventually all the gnenes will be either type 1 or type 2, for these are the absorbing states. Ans so starting from state $i$,
+  $
+    EE[X_oo] &= Pr{"eventually all type 1"} dot m + Pr{"eventually all type 2"} dot 0 \
+    &= m Pr{"eventually all type 1"}
+  $
+  On the other hand $EE[X_oo] = i$, so $Pr{"eventually all type 1"} = i\/m$.
+
+=== 4.45
+Consider an irreducible finite Markov chain with states $0,1,...,N$.
+
++ Starting in state $i$, what is the probability the process will ever visit state $j$? Explain!
+
++ Let $x_i = Pr{"visit state" N "before state" 0 | "start in" i}$. Compute a set of linear equations that the $x_i$ satisfy, $i = 0,1,...,N$.
+
++ If $sum_j j thin P_(i j) = i$ for $i = 1,...,N - 1$, show that $x_i = i\/N$ is a solution to the equations in part (b).
+
+====
++ An irreducible, finite Markov chain is recurrent, and any two states communicate. So the probability of $j$ reachable from $i$ is $1$.
+
++ Immediately, $x_0 = 0$ and $x_N = 1$. For the rest, condition on $x_i$'s forward neighbors.
+  $
+    x_i = sum^N_(j=1) P_(i,j) x_j, thick i = 1, 2, ..., N-1
+  $
+
++ Substituting $x_j = j\/N$:
+  $
+    sum^N_(j=1) P_(i,j) x_j &= sum^N_(j=1) P_(i,j) j/N \
+    &=1/N sum^N_(j=0) j thin P_(i,j) \
+    &= i/N \
+    &= x_i quad "for" i=1,2,..., N-1
+  $
+  But $i\/N$ also satisfies $x_0 = 0$ and $x_N = 1$, so $x_i = i\/N$ is a solution to the equations in part (b).
+
+=== 4.46
+An individual possesses $r$ umbrellas that he employs in going from his home to office, and vice versa. If he is at home (the office) at the beginning (end) of a day and it is raining, then he will take an umbrella with him to the office (home), provided there is one to be taken. If it is not raining, then he never takes an umbrella. Assume that, independent of the past, it rains at the beginning (end) of a day with probability $p$.
+
++ Define a Markov chain with $r + 1$ states, which will help us to determine the proportion of time that our man gets wet. (_Note_: He gets wet if it is raining, and all umbrellas are at his other location.)
+
++ Show that the limiting probabilities are given by
+  $
+    pi_i = cases(
+      q/(r+q)\, quad "if" i = 0,
+      1/(r+q)\, quad "if" i = 1\,2\,...\,r
+    )
+  $
+  where $q = 1-p$.
+
++ What fraction of time does our man get wet?
+
++ When $r = 3$, what value of $p$ maximizes the fraction of time he gets wet?
+
+====
++ Define a Markov chain with states ${i, i = 0, 1, ..., r}$ as the number of umbrellas at the individual's disposal at either location (home or office). The transition matrix is (zeros not shown)
+  #grid(
+    columns: 2,
+    align: center + horizon,
+    table(
+      columns: 7,
+      stroke: none,
+      $X_n without X_(n+1)$, table.hline(), table.vline(),
+            $0$, $1$, $2$, $dots.c$, $r-1$, $r$,
+      $0$,  $$,  $$,  $$,  $dots.c$, $$,    $1$,
+      $1$,  $$,  $$,  $$,  $dots.c$, $q$,   $p$,
+      $2$,  $$,  $$,  $$,  $dots.c$, $p$,   $$,
+      $dots.v$,  $dots.v$, $dots.v$, $dots.v$, $dots.down$, $dots.v$, $dots.v$,
+      $r-1$,$$,  $q$, $p$, $dots.c$, $$,    $$,
+      $r$,  $q$, $p$, $$,  $dots.c$, $$,    $$),
+      $ quad "or" quad
+      P_(i,j) = cases(
+        1\, quad (i,j) = (0,r),
+        q\, quad i + j = r,
+        p\, quad i + j = r+1,
+        0\, quad "otherwise"
+      ) $
+  )
+
++ It is easy to check that $bold(pi) dot bold(P) = bold(pi)$.
+
++ $display(p thin pi_0 = (p thin q)/(r+q))$.
+
++ $display(op("argmax", limits: #true)_p (p(1-p))/(3+1-p)) = 4 - 2 sqrt(3) approx 0.5359, thick "maximum" = 7 - 4 sqrt(3) approx 0.0718$.
+
+=== 4.47
+Let ${X_n,n >= 0}$ denote an ergodic Markov chain with limiting probabilities $pi_i$. Define the process ${Y_n,n >= 1}$ by $Y_n = (X_(n-1),X_n)$. That is, $Y_n$ keeps track of the last two states of the original chain. Is ${Y_n,n >= 1}$ a Markov chain? If so, determine its transition probabilities and find $ lim_(n -> oo) Pr{Y_n = (i,j)} $
+
+====
+${Y_n,n >= 1}$ is a Markov chain because $Y_(n+1)$ depends only on $Y_n$ through the transition probabilities
+$
+  P_(i j, k l) = cases(
+    P_(j l) quad &j=k,
+    0 quad &"otherwise"
+  ) 
+$
+where $P_(j l)$ are the transition probabilities of ${X_n}$.
+
+The $lim_(n -> oo) Pr{Y_n = (i,j)}$ are the long-run proportions of ${Y_n}$, or simply $pi_(i j)$. They can be derived by noting that the sequence $(i, j)$ is accomplished whenever the ${X_n}$ chain arrives at $i$ (with probability $pi_i$) and then goes to $j$ (with conditional probability $P_(i j)$). So
+$
+  pi_(i j) = pi_i P_(i j)
+$
+
+
+=== 4.48
+Consider a Markov chain in steady state. Say that a $k$ length run of zeroes ends at time $m$ if
+$
+  X_(m-k-1) != 0, quad X_(m-k) = X_(m-k+1) = dots.c = X_(m-1) = 0, quad X_m != 0
+$
+Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
+
+====
+TODO
+
+=== 4.49
+Consider a Markov chain with states $1,2,3$ having transition probability matrix
+$
+  mat(
+    0.5, 0.3,0.2;
+    0, 0.4, 0.6;
+    0.8, 0, 0.2)
+$
+
+1. If the chain is currently in state $1$, find the probability that after two transitions it will be in state $2$.
+
+2. Suppose you receive a reward $r(i) = i^2$ whenever the Markov chain is in state $i, i = 1,2,3$. Find your long run average reward per unit time.
+
+Let $N_i$ denote the number of transitions, starting in state $i$, until the Markov chain enters state $3$.
+
+3. Find $EE[N_1]$.
+
++ Find $Pr{N_1 <= 4}$.
+
++ Find $Pr{N_1 = 4}$.
+
+====
++ $P^2_(1,2) = 0.27$
+
++ $display(sum^3_(i=1) i^2 pi_i = 69/17 approx 4.059)$
+
++ Let $E_i = EE[N_i]$ and solve the system of equations
+  $
+    E_1 &= 1 + 0.5 E_1 + 0.3 E_2 \
+    E_2 &= 1 + 0.4 E_2 \
+    E_3 &= 1 + 0.8 E_1
+  $
+  to get $E_1 = 3, thick E_2 = 5\/3, thick E_3 = 17\/5$.
+
++ Make state ➂ absorbing, then consider the paths from ➀ to ➂ in exactly 4 steps, and realize that these correspond to the original paths, also from ➀ to ➂, in _no more_ than 4 steps.
+
+  #grid(
+    columns: (auto, 1fr, auto, auto),
+    align: center + horizon,
+    gutter: 1em,
+    figure(diagram(
+      node-stroke: 1.5pt,
+      edge-stroke: .7pt,
+      node-shape: circle,
+      node((0,0), $1$, name: <1>), 
+      edge("->"),
+      edge(<1>, "->", bend: 320deg, loop-angle: 0deg),
+      edge(<3>, "->", bend: 30deg),
+      node((1, 0), $2$, name: <2>),
+      edge("->"), 
+      edge(<2>, "->", bend: 320deg, loop-angle: 180deg),
+      node((1,1), $3$, name: <3>),
+      edge(<3>, "->", bend: 320deg),
+      edge(<1>, "->", bend: 30deg)),
+      caption:[original chain]
+    ),
+    $=>$,
+    figure(diagram(
+      node-stroke: 1.5pt,
+      edge-stroke: .7pt,
+      node-shape: circle,
+      node((0,0), $1$, name: <1>), 
+      edge("->"),
+      edge(<1>, "->", bend: 320deg, loop-angle: 0deg),
+      edge(<3>, "->"),
+      node((1, 0), $2$, name: <2>),
+      edge("->"), 
+      edge(<2>, "->", bend: 320deg, loop-angle: 180deg),
+      node((1,1), $3$, name: <3>),
+      edge(<3>, "->", bend: 320deg)),
+      caption: [state $3$ made absorbing]
+    ),
+    $
+      bold(P) = mat(
+        0.5, 0.3,0.2;
+        0, 0.4, 0.6;
+        0, 0, 1)
+    $
+)
+
+  Therefore
+  $
+    Pr{N_1 <= 4} &= P^4_(1,3) thick "(of the transformed chain)" \
+      &= 0.8268
+  $
+
++ $Pr{N_1 = 4} &= P^4_(1,3) - P^3_(1,3) = 0.1348$.
+
+  To verify, note in the original chain there are 4 paths going from ➀ to ➂ in exactly 4 step:
+
+  - $Pr{➀➀➀➀➂} = 0.5^3 times 0.2 = 0.025$
+  - $Pr{➀➀➀➁➂} = 0.5^2 times 0.3 times 0.6 = 0.045$
+  - $Pr{➀➀➁➁➂} = 0.5 times 0.3 times 0.4 times 0.6 = 0.036$
+  - $Pr{➀➁➁➁➂} = 0.3 times 0.4^2 times 0.6 = 0.0288$
+
+  These probabilities indeed add up to $0.1348$.
+  
+
+=== 4.50
+A Markov chain with states $1,...,6$ has transition probability matrix
+$ 
+  mat(
+    0.2, 0.4, 0, 0.3, 0, 0.1;
+    0.1, 0.3, 0, 0.4, 0, 0.2;
+    0, 0, 0.3, 0.7, 0, 0;
+    0, 0, 0.6, 0.4, 0, 0;
+    0, 0, 0, 0, 0.5, 0.5;
+    0, 0, 0, 0, 0.2,0.8)
+$
+
++ Give the classes and tell which are recurrent and which are transient.
+
++ Find $lim_(n->oo) P^n_(1,2)$.
+
++ Find $lim_(n->oo) P^n_(5,6)$.
+
++ Find $lim_(n->oo) P^n_(1,3)$.
+
+====
++ Reading off the transition matrix, there are 3 cliques: ${1,2}$, ${3,4}$, and ${5,6}$, with ${1,2}$ being drained to state $4$ and $6$. So class ${1,2}$ is transient and classes ${3,4}$ and ${5,6}$ are recurrent.
+
++ ${1,2}$ is transient so $lim_(n->oo) P^n_(1,2) = 0$.
+
++ ${5,6}$ is recurrent and aperiodic. So just solve the limiting equations locally for class ${5,6}$
+  $
+    mat(pi_5,pi_6) mat(.5,.5;.2,.8) = mat(pi_5,pi_6)
+  $
+  to get $pi_5 = 2\/7$ and $pi_6 = 5\/7$. And $lim_(n->oo) P^n_(5,6) = pi_6 = 5\/7$.
+
++ First calculate $p_i$ ($i = 1,2$) which is the probability  that starting from state $i$, the chain will finally end up in the communication class ${3,4}$. Then $P^oo_(1,3)$ is $p_1$ redistributed to state $3$ according to the long-run proportions of that class.
+
+  By the first 2 rows of the transition matrix we can write
+  $
+    p_1 &= .2 p_1 + .4 p_2 + .3 \
+    p_2 &= .1 p_1 + .3 p_2 + .4  
+  $
+  to get $p_1 = 37\/52$ and $p_2 = 35\/52$.
+
+  On the other hand 
+  $ 
+    pi mat(.3,.7;.6,.4) = mat(6\/13, 7\/13)
+  $
+  hence $lim_(n->oo) P^n_(1,3) = 37\/52 dot 6\/13 = 111\/338 approx 0.328$.
+
+
+=== 4.51
+In Example 4.3, Gary is in a cheerful mood today. Find the expected number of days until he has been glum for three consecutive days.
+
+====
+Recall that Gary's mood swings were
+#figure(
+  table(
+    columns: 4,
+    stroke: none,
+    $X_n without X_(n+1)$, table.vline(), table.hline(), 
+            [*C*], [*S*], [*G*],
+    [*C*],  $.5$,  $.4$,  $.1$,
+    [*S*],  $.3$,  $.4$,  $.3$,
+    [*G*],  $.2$,  $.3$,  $.5$,),
+  caption: [C=cheerful, S=so so, G=glum]
+)
+
+$
+  x_C &= 1 + .5 x_C + .4 x_S + .1 x_G \
+  x_S &= 1 + .3 x_C + .4 x_S + .3 x_G \
+  x_G &= 1 +
+$
+
+
+=== 4.52
+A taxi driver provides service in two zones of a city. Fares picked up in zone $A$ will have destinations in zone $A$ with probability $0.6$ or in zone $B$ with probability $0.4$. Fares picked up in zone $B$ will have destinations in zone $A$ with probability $0.3$ or in zone $B$ with probability $0.7$. The driver's expected profit for a trip entirely in zone $A$ is $6$; for a trip entirely in zone $B$ is $8$; and for a trip that involves both zones is $12$. Find the taxi driver's average profit per trip.
+
+=== 4.53
+Find the average premium received per policyholder of the insurance company of Example 4.29 if $lambda = 1\/4$ for one-third of its clients, and $lambda = 1\/2$ for two-thirds of its clients.
+
+=== 4.54
+Consider the Ehrenfest urn model in which $M$ molecules are distributed between two urns, and at each time point one of the molecules is chosen at random and is then removed from its urn and placed in the other one. Let $X_n$ denote the number of molecules in urn $1$ after the #th[n] switch and let $mu_n = EE[X_n]$. Show that
+
++ $display(mu_(n+1) = 1 + (1 - 2/M) mu_n)$.
+
++ Use (a) to prove that 
+  $
+    mu_n = M/2 + ((M - 2)/M)^n (EE[X_0] - M/2)    
+  $
+
+
+=== 4.55
+Consider a population of individuals each of whom possesses two genes that can be either type $A$ or type $a$. Suppose that in outward appearance type $A$ is dominant and type $a$ is recessive. (That is, an individual will have only the outward characteristics of the recessive gene if its pair is $a a$.) Suppose that the population has stabilized, and the percentages of individuals having respective gene pairs $A A$, $a a$, and $A a$ are $p$,$q$, and $r$. Call an individual dominant or recessive depending on the outward characteristics it exhibits. Let $S_(11)$ denote the probability that an offspring of two dominant parents will be recessive; and let $S_(10)$ denote the probability that the offspring of one dominant and one recessive parent will be recessive. Compute $S_(11)$ and $S_(10)$ to show that $S_(11) = S_(10)$. (The quantities $S_(10)$ and $S_(11)$ are known in the genetics literature as Snyder’s ratios.)
+
+
+=== 4.56
+Suppose that on each play of the game a gambler either wins 1 with probability $p$ or loses 1 with probability $1 - p$. The gambler continues betting until she or he is either up $n$ or down $m$. What is the probability that the gambler quits a winner?
+
+
+=== 4.57.
+A particle moves among $n + 1$ vertices that are situated on a circle in the following manner. At each step it moves one step either in the clockwise direction with probability $p$ or the counterclockwise direction with probability $q = 1 - p$. Starting at a specified state, call it state $0$, let $T$ be the time of the first return to state $0$. Find the probability that all states have been visited by
+time $T$. 
+
+#hint[Condition on the initial transition and then use results from the gambler’s ruin problem.]
+
+
+
+=== 4.58
+In the gambler's ruin problem of Section 4.5.1, suppose the gambler's fortune is presently $i$, and suppose that we know that the gambler's fortune will eventually reach $N$ (before it goes to $0$). Given this information, show that the probability he wins the next gamble is
+
+$ 
+  cases(
+  (p[1 - (q\/p)^(i+1)])/(1 - (q\/p)^i)\, &quad "if" p != 1/2,
+  (i +1)/(2i)\, &quad "if" p = 1)
+$
+
+#hint[
+  The probability we want is
+  $
+    &Pr{X_(n+1) = i + 1 | X_n = i, lim_(m -> oo) X_m = N} \
+  = &Pr{X_(n+1) = i + 1, lim_m X_m = N | X_n = i} / Pr{lim_m X_m = N | X_n = i}
+  $
+]
 
 #pagebreak()
 

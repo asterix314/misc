@@ -1559,12 +1559,16 @@ Recall that Gary's mood swings were
   caption: [C=cheerful, S=so so, G=glum]
 )
 
+Let $x_"mood"$ equal the expected number of days until Gary has been glum for 3 consecutive days, starting from a "mood" day today. By conditioning on the next day's mood, we have a system of equations:
+
 $
   x_C &= 1 + .5 x_C + .4 x_S + .1 x_G \
   x_S &= 1 + .3 x_C + .4 x_S + .3 x_G \
-  x_G &= 1 +
+  x_G &= 1 + .2 x_C + .3 x_S + .5 x_(G G) \
+  x_(G G) &= 1 + .2 x_C + .3 x_S
 $
 
+where $x_(G G)$ is starting from 2 consecutive glum days already. The answer is $x_C = 236\/9 approx 26.22$ days.
 
 === 4.52
 A taxi driver provides service in two zones of a city. Fares picked up in zone $A$ will have destinations in zone $A$ with probability $0.6$ or in zone $B$ with probability $0.4$. Fares picked up in zone $B$ will have destinations in zone $A$ with probability $0.3$ or in zone $B$ with probability $0.7$. The driver's expected profit for a trip entirely in zone $A$ is $6$; for a trip entirely in zone $B$ is $8$; and for a trip that involves both zones is $12$. Find the taxi driver's average profit per trip.
@@ -1615,6 +1619,40 @@ $
   = &Pr{X_(n+1) = i + 1, lim_m X_m = N | X_n = i} / Pr{lim_m X_m = N | X_n = i}
   $
 ]
+
+=== 4.59
+For the gambler's ruin model of Section 4.5.1, let $M_i$ denote the mean number of games that must be played until the gambler either goes broke or reaches a fortune of $N$, given that he starts with $i$,$i = 0,1,...,N$. Show that $M_i$ satisfies
+
+$
+  M_0 &= M_N = 0;\
+  M_i &= 1 + p M_(i+1) + q M_(i-1), quad i = 1,...,N - 1
+$
+
+Solve these equations to obtain
+
+$
+  M_i = cases(
+    i(N - i)\, 
+    &"if" p = 1/2,
+    i/(q-p) - N / (q-p) thick (1-(q\/p)^i) / (1-(q\/p)^N)\, 
+    &"if" p != 1/2)
+$
+
+=== 4.60
+The following is the transition probability matrix of a Markov chain with states $1,2,3,4$
+$
+  P = mat(
+    0.4,0.3,0.2,0.1;
+    0.2,0.2,0.2,0.4;
+    0.25,0.25,0.5,0;
+    0.2,0.1,0.4,0.3)
+$
+
+If $X_0 = 1$
+
++ find the probability that state $3$ is entered before state $4$;
+
++ find the mean number of transitions until either state $3$ or state $4$ is entered.
 
 #pagebreak()
 

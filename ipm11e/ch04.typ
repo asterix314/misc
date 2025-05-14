@@ -28,6 +28,7 @@
 #set enum(numbering: "(a)")
 #set figure(numbering: none)
 #set math.mat(gap: 1em)
+#set math.cases(gap: 0.5em)
 
 #let hint(content) = {
   set text(style: "italic")
@@ -521,8 +522,8 @@ For the random walk of Example 4.19 use the strong law of large numbers to give 
 Let's take the hint and define $Y_i$ as 
 $
   Y_i = cases(
-    1\, quad &"if" X_i "takes a right step",
-    -1\, quad &"otherwise"
+    1 quad &"if" X_i "takes a right step",
+    -1 quad &"otherwise"
   )
 $
 so that $X_n = sum_(i<=n) Y_i$. Then, by the strong law of large numbers,
@@ -641,8 +642,8 @@ A DNA nucleotide has any of four values. A standard model for a mutational chang
 + The transition probabilities are
   $
     P_(i,j) = cases(
-      1 - 3 alpha\, & "if" i = j, \
-      alpha\, & "if" i != j.
+      1 - 3 alpha quad & "if" i = j,
+      alpha quad & "if" i != j
     )
   $
   For $n=1$, the result is apparent. Now assume that the result holds for $n$, then by symmetry,
@@ -672,8 +673,8 @@ $ lim_(n -> oo) Pr{Y_n "is a multiple of 13"} $
 Let $X_n$ be $Y_n$ modulo $13$. Then $X_n$ is a Markov chain with long-run proportions $pi_i, i = 0,1,2,...,12$ and transition probabilities
 $
   P_(i,j) = cases(
-    1\/6\, quad & i + k equiv j mod 13\, thick k = 1\, 2\, ... 6,
-    0\, quad & "otherwise"
+    1\/6 quad & i + k equiv j mod 13\, thick k = 1\, 2\, ... 6,
+    0 quad & "otherwise"
     )
 $
 and
@@ -1131,8 +1132,8 @@ Consider the one-dimensional symmetric random walk of Example 4.19, which was sh
 + $pi_i = pi_0$ follows from the standpoint of symmetry.
 
 + $display(sum_i pi_i = sum_i pi_0 = cases(
-    0\, quad &"if" pi_0 = 0,
-    oo\, quad &"if" pi_0 > 0
+    0 quad &"if" pi_0 = 0,
+    oo quad &"if" pi_0 > 0
   ))$
 
 + Because there is no solution to $sum_i pi_i =1$ and the Markov chain is clearly recurrent, by Theorem 4.1 we conclude that it is null recurrent and all $pi_i = 0$. 
@@ -1327,8 +1328,8 @@ An individual possesses $r$ umbrellas that he employs in going from his home to 
 + Show that the limiting probabilities are given by
   $
     pi_i = cases(
-      q/(r+q)\, quad "if" i = 0,
-      1/(r+q)\, quad "if" i = 1\,2\,...\,r
+      q\/(r+q) quad "if" i = 0,
+      1\/(r+q) quad "if" i = 1\,2\,...\,r
     )
   $
   where $q = 1-p$.
@@ -1355,10 +1356,10 @@ An individual possesses $r$ umbrellas that he employs in going from his home to 
       $r$,  $q$, $p$, $$,  $dots.c$, $$,    $$),
       $ quad "or" quad
       P_(i,j) = cases(
-        1\, quad (i,j) = (0,r),
-        q\, quad i + j = r,
-        p\, quad i + j = r+1,
-        0\, quad "otherwise"
+        1 quad & (i,j) = (0,r),
+        q quad & i + j = r,
+        p quad & i + j = r+1,
+        0 quad &"otherwise"
       ) $
   )
 
@@ -1605,6 +1606,45 @@ $
 === 4.53
 Find the average premium received per policyholder of the insurance company of Example 4.29 if $lambda = 1\/4$ for one-third of its clients, and $lambda = 1\/2$ for two-thirds of its clients.
 
+====
+Recall that the Bonus Malus system was
+#figure(
+  table(
+    columns:6,
+    stroke: none,
+    table.hline(),
+    [],[],table.cell(colspan:4, [*Next state if*]),
+    table.hline(),
+    [*State*], table.vline(), [*Annual Premium*], table.vline(), [*0 claims*], [*1 claims*], [*2 claims*], [*$>=$ 3 claims*],
+    table.hline(),
+    $1$, $200$, $1$, $2$, $3$, $4$,
+    $2$, $250$, $1$, $3$, $4$, $4$,
+    $3$, $400$, $2$, $4$, $4$, $4$,
+    $4$, $600$, $3$, $4$, $4$, $4$,
+    table.hline()
+  )
+)
+leading to the transition matrix
+$
+  bold(P) = mat(align:#left,
+    a_0, a_1, a_2, 1 - a_0 - a_1 - a_2;
+    a_0, 0, a_1, 1 - a_0 - a_1;
+    0, a_0, 0, 1 - a_0;
+    0, 0, a_0, 1 - a_0)
+  quad "where" a_k = e^(-lambda) lambda^k\/k!
+$
+
+The average premium as a function of $lambda$ is therefore
+$
+  f(lambda) &= pi(bold(P)) dot vec(200,250,400,600) \
+  &= 600 - (100 (1 + e^lambda (3 + 4 e^lambda) - 4 lambda))/(2 e^(3 lambda) - 4 e^lambda lambda - lambda^2)
+$
+
+Hence the average premium for different $lambda$'s is
+$
+  1/3 f(1/4) + 2/3 f(1/2) approx 296.98
+$
+
 === 4.54
 Consider the Ehrenfest urn model in which $M$ molecules are distributed between two urns, and at each time point one of the molecules is chosen at random and is then removed from its urn and placed in the other one. Let $X_n$ denote the number of molecules in urn $1$ after the #th[n] switch and let $mu_n = EE[X_n]$. Show that
 
@@ -1627,8 +1667,8 @@ Suppose that on each play of the game a gambler either wins 1 with probability $
 The problem is equivalent to the Gambler's Ruin problem starting with $m$ and quits at $m+n$ and
 $
   Pr{"quits a winner"} &= cases(
-    (1-(q\/p)^m)/(1-(q\/p)^(m+n))\, &"if" p != 1/2,
-    m/(m+n)\, &"if" p = 1/2
+    display((1-(q\/p)^m)/(1-(q\/p)^(m+n))) quad &"if" p != 1/2,
+    display(m/(m+n)) quad &"if" p = 1/2
   )
 $
 
@@ -1645,8 +1685,8 @@ In the gambler's ruin problem of Section 4.5.1, suppose the gambler's fortune is
 
 $ 
   cases(
-  (p[1 - (q\/p)^(i+1)])/(1 - (q\/p)^i)\, &quad "if" p != 1/2,
-  (i +1)/(2i)\, &quad "if" p = 1)
+    display((p[1 - (q\/p)^(i+1)])/(1 - (q\/p)^i)) quad& "if" p != 1/2,
+    display((i+1)/(2i)) quad& "if" p = 1)
 $
 
 #hint[
@@ -1669,10 +1709,8 @@ Solve these equations to obtain
 
 $
   M_i = cases(
-    i(N - i)\, 
-    &"if" p = 1/2,
-    i/(q-p) - N / (q-p) thick (1-(q\/p)^i) / (1-(q\/p)^N)\, 
-    &"if" p != 1/2)
+    i(N - i) quad& "if" p = 1/2,
+    display(i/(q-p) - N / (q-p) thick (1-(q\/p)^i) / (1-(q\/p)^N)) quad& "if" p != 1/2)
 $
 
 === 4.60

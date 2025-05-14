@@ -1395,7 +1395,18 @@ $
 Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
 
 ====
-First we 
+First consider the probability $P$ of a $>=k$ run that ends at time $m$
+$
+  P = pi_0 P^(k-1)_(0,0) (1-P_(0,0))
+$
+
+An exact $k$ run is $P$ times the proportion of all $i -> 0$ contributions ($i>0$) among all transitions to $0$, which is $(sum_(i>0) pi_i P_(i,0))\/(sum_i pi_i P_(i,0))$. But $sum_i pi_i P_(i,0) = pi_0$, so
+
+$
+  &P thick (sum_(i>0) pi_i P_(0,0))/(sum_i pi_i P_(0,0)) \
+  = &P thick (pi_0 - pi_0 P_(0,0)) / pi_0 \
+  = &pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2
+$
 
 === 4.49
 Consider a Markov chain with states $1,2,3$ having transition probability matrix

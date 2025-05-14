@@ -1612,6 +1612,14 @@ Consider a population of individuals each of whom possesses two genes that can b
 === 4.56
 Suppose that on each play of the game a gambler either wins 1 with probability $p$ or loses 1 with probability $1 - p$. The gambler continues betting until she or he is either up $n$ or down $m$. What is the probability that the gambler quits a winner?
 
+====
+The problem is equivalent to the Gambler's Ruin problem starting with $m$ and quits at $m+n$ and
+$
+  Pr{"quits a winner"} &= cases(
+    (1-(q\/p)^m)/(1-(q\/p)^(m+n))\, &"if" p != 1/2,
+    m/(m+n)\, &"if" p = 1/2
+  )
+$
 
 === 4.57.
 A particle moves among $n + 1$ vertices that are situated on a circle in the following manner. At each step it moves one step either in the clockwise direction with probability $p$ or the counterclockwise direction with probability $q = 1 - p$. Starting at a specified state, call it state $0$, let $T$ be the time of the first return to state $0$. Find the probability that all states have been visited by

@@ -1395,7 +1395,7 @@ $
 Show that the probability of this event is $pi_0 P^(k-1)_(0,0) (1 - P_(0,0))^2$, where $pi_0$ is the limiting probability of state $0$.
 
 ====
-TODO
+First we 
 
 === 4.49
 Consider a Markov chain with states $1,2,3$ having transition probability matrix
@@ -1572,6 +1572,24 @@ where $x_(G G)$ is starting from 2 consecutive glum days already. The answer is 
 
 === 4.52
 A taxi driver provides service in two zones of a city. Fares picked up in zone $A$ will have destinations in zone $A$ with probability $0.6$ or in zone $B$ with probability $0.4$. Fares picked up in zone $B$ will have destinations in zone $A$ with probability $0.3$ or in zone $B$ with probability $0.7$. The driver's expected profit for a trip entirely in zone $A$ is $6$; for a trip entirely in zone $B$ is $8$; and for a trip that involves both zones is $12$. Find the taxi driver's average profit per trip.
+
+====
+Assuming new fares are always picked up in the same zone where the last fare ended, a taxi driver's pick-up zone is a Markov chain with stationary distribution
+$
+  pi mat(.6,.4;.3,.7) = mat(3\/7,4\/7)
+$
+
+Hence
+$
+  EE["profit"] &= mat(3\/7, 4\/7) dot 
+  vec(EE["profit" | "pick up in" A], EE["profit" | "pick up in" B]) \
+  &= mat(3\/7, 4\/7) dot vec(
+    .6 times 6 + .4 times 12,
+    .3 times 12 + .7 times 8
+  ) \
+  &= 62/7
+$
+
 
 === 4.53
 Find the average premium received per policyholder of the insurance company of Example 4.29 if $lambda = 1\/4$ for one-third of its clients, and $lambda = 1\/2$ for two-thirds of its clients.

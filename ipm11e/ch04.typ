@@ -1636,8 +1636,8 @@ $
 
 The average premium as a function of $lambda$ is therefore
 $
-  f(lambda) &= pi(bold(P)) dot vec(200,250,400,600) \
-  &= 600 - (100 (1 + e^lambda (3 + 4 e^lambda) - 4 lambda))/(2 e^(3 lambda) - 4 e^lambda lambda - lambda^2)
+  f(lambda) = pi(bold(P)) dot vec(200,250,400,600) 
+  = 600 - (100 (1 + e^lambda (3 + 4 e^lambda) - 4 lambda))/(2 e^(3 lambda) - 4 e^lambda lambda - lambda^2)
 $
 
 Hence the average premium for different $lambda$'s is
@@ -1646,7 +1646,7 @@ $
 $
 
 === 4.54
-Consider the Ehrenfest urn model in which $M$ molecules are distributed between two urns, and at each time point one of the molecules is chosen at random and is then removed from its urn and placed in the other one. Let $X_n$ denote the number of molecules in urn $1$ after the #th[n] switch and let $mu_n = EE[X_n]$. Show that
+Consider the Ehrenfest urn model in which $M$ molecules are distributed between two urns, and at each time point one of the molecules is chosen at random and is then removed from its urn and placed in the other one. Let $X_n$ denote the number of molecules in urn 1 after the #th[n] switch and let $mu_n = EE[X_n]$. Show that
 
 + $display(mu_(n+1) = 1 + (1 - 2/M) mu_n)$.
 
@@ -1655,6 +1655,32 @@ Consider the Ehrenfest urn model in which $M$ molecules are distributed between 
     mu_n = M/2 + ((M - 2)/M)^n (EE[X_0] - M/2)    
   $
 
+====
++ After the #th[(n+1)] switch,
+  $
+    X_(n+1) = cases(
+      X_n - 1 quad& "with probability" X_n\/M,
+      X_n + 1 quad& "with probability" 1-X_n\/M,
+    )
+  $
+  Hence
+  $
+    EE[X_(n+1)] &= X_n/M thin EE[X_n - 1] + (1-X_n/M) thin EE[X_n + 1] \
+    &= EE[X_n] + 1 - (2X_n)/M
+  $
+
+  Take expectation again:
+  $
+    EE[X_(n+1)] &= EE[X_n] + 1 - 2/M thin EE[X_n]\
+    &= 1 + (1-2/M)EE[X_n]
+  $
+
++ By (a), we have $mu_n = 1 + (1-2\/M) mu_(n-1)$. Rearranging,
+  $
+    mu_n - M/2 &= (1-2/M)(mu_(n-1) - M/2)\
+    &= (1-2/M)^n (mu_0 - M/2)
+  $
+  which is equivalent to the result.
 
 === 4.55
 Consider a population of individuals each of whom possesses two genes that can be either type $A$ or type $a$. Suppose that in outward appearance type $A$ is dominant and type $a$ is recessive. (That is, an individual will have only the outward characteristics of the recessive gene if its pair is $a a$.) Suppose that the population has stabilized, and the percentages of individuals having respective gene pairs $A A$, $a a$, and $A a$ are $p$,$q$, and $r$. Call an individual dominant or recessive depending on the outward characteristics it exhibits. Let $S_(11)$ denote the probability that an offspring of two dominant parents will be recessive; and let $S_(10)$ denote the probability that the offspring of one dominant and one recessive parent will be recessive. Compute $S_(11)$ and $S_(10)$ to show that $S_(11) = S_(10)$. (The quantities $S_(10)$ and $S_(11)$ are known in the genetics literature as Snyder’s ratios.)

@@ -1685,6 +1685,8 @@ Consider the Ehrenfest urn model in which $M$ molecules are distributed between 
 === 4.55
 Consider a population of individuals each of whom possesses two genes that can be either type $A$ or type $a$. Suppose that in outward appearance type $A$ is dominant and type $a$ is recessive. (That is, an individual will have only the outward characteristics of the recessive gene if its pair is $a a$.) Suppose that the population has stabilized, and the percentages of individuals having respective gene pairs $A A$, $a a$, and $A a$ are $p$,$q$, and $r$. Call an individual dominant or recessive depending on the outward characteristics it exhibits. Let $S_(11)$ denote the probability that an offspring of two dominant parents will be recessive; and let $S_(10)$ denote the probability that the offspring of one dominant and one recessive parent will be recessive. Compute $S_(11)$ and $S_(10)$ to show that $S_(11) = S_(10)$. (The quantities $S_(10)$ and $S_(11)$ are known in the genetics literature as Snyder’s ratios.)
 
+====
+TODO
 
 === 4.56
 Suppose that on each play of the game a gambler either wins 1 with probability $p$ or loses 1 with probability $1 - p$. The gambler continues betting until she or he is either up $n$ or down $m$. What is the probability that the gambler quits a winner?
@@ -1698,13 +1700,41 @@ $
   )
 $
 
-=== 4.57.
+=== 4.57
 A particle moves among $n + 1$ vertices that are situated on a circle in the following manner. At each step it moves one step either in the clockwise direction with probability $p$ or the counterclockwise direction with probability $q = 1 - p$. Starting at a specified state, call it state $0$, let $T$ be the time of the first return to state $0$. Find the probability that all states have been visited by
 time $T$. 
 
-#hint[Condition on the initial transition and then use results from the gambler’s ruin problem.]
+#hint[Condition on the initial transition and then use results from the gambler's ruin problem.]
 
+====
+If the first step is clockwise (with probability $p$), then the rest is equivalent to the gambler'r ruin problem starting with $1$ to reach $n+1$. The same can be said of the counterclockwise case.
 
+#figure(diagram(
+    node-stroke: 1.5pt,
+    edge-stroke: .7pt,
+    node-shape: circle,
+    $ 
+      0
+      edge(->, p, label-side: #center, bend: #40deg)
+      edge(<-, q, label-side: #center, bend: #(-40deg))
+      &1
+      edge("..")
+      &n
+      edge(->)
+      &0'
+    $),
+    caption: [Equivalent gambler's ruin problem]
+)
+
+Therefore
+$
+  Pr{"all states visited by" T} &= p dot  (1-q/p)/(1-(q/p)^(n+1)) + q dot  (1-p/q)/(1-(p/q)^(n+1))\
+  &= cases(
+    display((p - q) (q/(p (p/q)^n - q) + p/(p - q (q/p)^n))) quad& p != 1/2,
+    display(1/(n+1)) quad& p=1/2
+
+  )
+$
 
 === 4.58
 In the gambler's ruin problem of Section 4.5.1, suppose the gambler's fortune is presently $i$, and suppose that we know that the gambler's fortune will eventually reach $N$ (before it goes to $0$). Given this information, show that the probability he wins the next gamble is
@@ -1754,6 +1784,16 @@ If $X_0 = 1$
 + find the probability that state $3$ is entered before state $4$;
 
 + find the mean number of transitions until either state $3$ or state $4$ is entered.
+
+=== 4.61
+Suppose in the gambler's ruin problem that the probability of winning a bet depends on the gambler's present fortune. Specifically, suppose that $α_i$ is the probability that the gambler wins a bet when his or her fortune is $i$. Given that the gambler's initial fortune is $i$, let $P(i)$ denote the probability that the gambler's fortune reaches $N$ before $0$.
+
++ Derive a formula that relates $P(i)$ to $P(i - 1)$ and $P(i + 1)$.
+
++ Using the same approach as in the gambler's ruin problem, solve the equation of part (a) for $P(i)$.
+
++ Suppose that $i$ balls are initially in urn 1 and $N - i$ are in urn 2, and suppose that at each stage one of the $N$ balls is randomly chosen, taken from whichever urn it is in, and placed in the other urn. Find the probability that the first urn becomes empty before the second.
+
 
 #pagebreak()
 
